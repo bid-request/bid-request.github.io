@@ -1,0 +1,10 @@
+.input-default-value {
+    color: lightgray;
+    font-style: italic;
+}
+
+.feature-unsupported {
+    color: lightgray;
+    font-style: italic;
+    text-decoration: line-through;
+}
