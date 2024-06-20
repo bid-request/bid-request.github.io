@@ -1,5 +1,5 @@
 // Default values
-const openRTBDefaults = {
+const defaultData = {
     // Impression Object
     "imp-id": "1",              // Impression ID
     "imp-bidfloor": 0.1,        // Default bid floor price
@@ -308,8 +308,8 @@ const openRTBDefaults = {
     // Additional Objects and Attributes
     // Add more attributes for video, native, PMP (private marketplace), etc.
 };
-
-
+// User input
+const inputData = {}
 
 class BidRequest {
     constructor(id, imp, site, app, device, user, test, at, tmax, wseat, allimps, cur, bcat, badv, regs) {
@@ -707,12 +707,12 @@ function createImpObject() {
     const imp = imps[0]
     
     // Basic Attributes
-    Object.keys(openRTBDefaults).forEach(key => {
+    Object.keys(inputData).forEach(key => {
         if (key.startsWith('imp') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-');
-                imp[field] = openRTBDefaults[key];
+                imp[field] = inputData[key];
             }
         }
 
@@ -722,7 +722,7 @@ function createImpObject() {
             if (element && element.type === 'checkbox' && element.checked) {
                 imp.metric = [new Metric()];
                 const [, , field] = key.split('-');
-                imp.metric[0][field] = openRTBDefaults[key];
+                imp.metric[0][field] = inputData[key];
             }
         }
 
@@ -732,12 +732,12 @@ function createImpObject() {
             imp.pmp.private_auction = document.getElementById('imp-pmp-private-auction').checked ? 1 : 0;
             imp.pmp.deals = [new Deal()];
             deal = imp.pmp.deals[0]
-            Object.keys(openRTBDefaults).forEach(key => {
+            Object.keys(inputData).forEach(key => {
                 if (key.startsWith('imp-pmp-private-auction-deal-')) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
                         const [ ,field] = key.split('deal-');
-                        deal[field] = openRTBDefaults[key];
+                        deal[field] = inputData[key];
                     }
                 }
             })
@@ -752,12 +752,12 @@ function createImpObject() {
     switch (selectedType) {
         case 'banner':
             imp.banner = new Banner();
-            Object.keys(openRTBDefaults).forEach(key => {
+            Object.keys(inputData).forEach(key => {
                 if (key.startsWith('imp-banner') && key.split('-').length === 3) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
                         const [, second, third] = key.split('-');
-                        imp.banner[third] = openRTBDefaults[key];
+                        imp.banner[third] = inputData[key];
                     }
                 }
                 if (key.startsWith('imp-banner-format')) {
@@ -768,31 +768,31 @@ function createImpObject() {
                             imp.banner.format[0] = new Format();
                         }
                         const [, , , field] = key.split('-');
-                        imp.banner.format[0][field] = openRTBDefaults[key];
+                        imp.banner.format[0][field] = inputData[key];
                     }
                 }
             });
             break;
         case 'video':
             imp.video = new Video();
-            Object.keys(openRTBDefaults).forEach(key => {
+            Object.keys(inputData).forEach(key => {
                 if (key.startsWith('imp-video') && key.split('-').length === 3) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
                         const [, second, third] = key.split('-');
-                        imp.video[third] = openRTBDefaults[key];
+                        imp.video[third] = inputData[key];
                     }
                 }
             })
             break;
         case 'audio':
             imp.audio = new Audio();
-            Object.keys(openRTBDefaults).forEach(key => {
+            Object.keys(inputData).forEach(key => {
                 if (key.startsWith('imp-audio') && key.split('-').length === 3) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
                         const [, second, third] = key.split('-');
-                        imp.audio[third] = openRTBDefaults[key];
+                        imp.audio[third] = inputData[key];
                     }
                 }
             })
@@ -806,12 +806,12 @@ function createImpObject() {
 
 function createSiteObject() {
     const site = new Site();
-    Object.keys(openRTBDefaults).forEach(key => {
+    Object.keys(inputData).forEach(key => {
         if (key.startsWith('site') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-');
-                site[field] = openRTBDefaults[key];
+                site[field] = inputData[key];
             }
         }
     })
@@ -819,12 +819,12 @@ function createSiteObject() {
     // site.publisher
     if (document.getElementById('site-publisher').checked) {
         site.publisher = new Publisher();
-        Object.keys(openRTBDefaults).forEach(key => {
+        Object.keys(inputData).forEach(key => {
             if (key.startsWith('site-publisher-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
                     const [, field] = key.split('pubslisher-');
-                    site.publisher[field] = openRTBDefaults[key];
+                    site.publisher[field] = inputData[key];
                 }
             }
         })
@@ -833,12 +833,12 @@ function createSiteObject() {
     // site.content
     if (document.getElementById('site-content').checked) {
         site.content = new Content();
-        Object.keys(openRTBDefaults).forEach(key => {
+        Object.keys(inputData).forEach(key => {
             if (key.startsWith('site-content-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
                     const [, field] = key.split('content-');
-                    site.content[field] = openRTBDefaults[key];
+                    site.content[field] = inputData[key];
                 }
             }
         })
@@ -848,12 +848,12 @@ function createSiteObject() {
 
 function createAppObject() {
     const app = new App();
-    Object.keys(openRTBDefaults).forEach(key => {
+    Object.keys(inputData).forEach(key => {
         if (key.startsWith('app') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-');
-                app[field] = openRTBDefaults[key];
+                app[field] = inputData[key];
             }
         }
     })
@@ -861,12 +861,12 @@ function createAppObject() {
     // app.publisher
     if (document.getElementById('app-publisher').checked) {
         app.publisher = new Publisher();
-        Object.keys(openRTBDefaults).forEach(key => {
+        Object.keys(inputData).forEach(key => {
             if (key.startsWith('app-publisher-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
                     const [, field] = key.split('publisher-');
-                    app.publisher[field] = openRTBDefaults[key];
+                    app.publisher[field] = inputData[key];
                 }
             }
         })
@@ -875,12 +875,12 @@ function createAppObject() {
     // app.content
     if (document.getElementById('app-content').checked) {
         app.content = new Content();
-        Object.keys(openRTBDefaults).forEach(key => {
+        Object.keys(inputData).forEach(key => {
             if (key.startsWith('app-content-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
                     const [, field] = key.split('content-');
-                    app.content[field] = openRTBDefaults[key];
+                    app.content[field] = inputData[key];
                 }
             }
         })
@@ -890,12 +890,12 @@ function createAppObject() {
 
 function createDeviceObject() {
     const device = new Device();
-    Object.keys(openRTBDefaults).forEach(key => {
+    Object.keys(inputData).forEach(key => {
         if (key.startsWith('device') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-');
-                device[field] = openRTBDefaults[key];
+                device[field] = inputData[key];
             }
         }
 
@@ -907,7 +907,7 @@ function createDeviceObject() {
                     device.geo = new Geo();
                 }
                 const [, ,field] = key.split('-');
-                device.geo[field] = openRTBDefaults[key];
+                device.geo[field] = inputData[key];
             }
         }
     })
@@ -916,12 +916,12 @@ function createDeviceObject() {
 
 function createUserObject() {
     const user = new User();
-    Object.keys(openRTBDefaults).forEach(key => {
+    Object.keys(inputData).forEach(key => {
         if (key.startsWith('user') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-');
-                user[field] = openRTBDefaults[key];
+                user[field] = inputData[key];
             }
         }
         // geo
@@ -932,7 +932,7 @@ function createUserObject() {
                     user.geo = new Geo();
                 }
                 const [, ,field] = key.split('-');
-                user.geo[field] = openRTBDefaults[key];
+                user.geo[field] = inputData[key];
             }
         }
     })
@@ -941,12 +941,12 @@ function createUserObject() {
 
 function createSourceObject() {
     const source = new Source();
-    Object.keys(openRTBDefaults).forEach(key => {
+    Object.keys(inputData).forEach(key => {
         if (key.startsWith('source') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-');
-                source[field] = openRTBDefaults[key];
+                source[field] = inputData[key];
             }
         }
     })
@@ -955,12 +955,12 @@ function createSourceObject() {
 
 function createRegsObject() {
     const regs = new Regs();
-    Object.keys(openRTBDefaults).forEach(key => {
+    Object.keys(inputData).forEach(key => {
         if (key.startsWith('regs') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-');
-                regs[field] = openRTBDefaults[key];
+                regs[field] = inputData[key];
             }
         }
     })
@@ -1019,11 +1019,11 @@ function createBidRequest() {
     bidRequest.source = source;
 
     // Apply top level attributes
-    Object.keys(openRTBDefaults).forEach(key => {
+    Object.keys(inputData).forEach(key => {
         if (!key.includes('-')) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                bidRequest[key] = openRTBDefaults[key];
+                bidRequest[key] = inputData[key];
             }
         }
     })

@@ -537,21 +537,28 @@
             if (!checkbox) {
                 return;
             }
-            const hasDefault = openRTBDefaults.hasOwnProperty(checkbox.id.toString());
-            if (!hasDefault) {
-                return;
+            inputDataValue = inputData.hasOwnProperty(checkbox.id.toString()) ? inputData[checkbox.id.toString()] : null;
+            if (!inputDataValue) {
+                if (!defaultData.hasOwnProperty(checkbox.id.toString())) {
+                    return;
+                }
+                inputDataValue = defaultData[checkbox.id.toString()];
             }
-            const rtbdefaultvalue = openRTBDefaults[checkbox.id.toString()];
+
             const parent = checkbox.parentNode;
             
             if (!checkbox.checked) {
-                const spans = parent.querySelectorAll('.input-default-value');
-                spans.forEach(span => span.remove());
+                inputbox = parent.querySelectorAll('.input-default-value');
+                inputbox.forEach(box => box.remove());
+                inputData[checkbox.id] = null;
             } else {
-                const span = document.createElement('span');
-                span.className = 'input-default-value';
-                span.textContent = ' :' + rtbdefaultvalue;
-                parent.appendChild(span);
+                const inputbox = document.createElement('input');
+                inputbox.className = 'input-default-value';
+                inputbox.value = inputDataValue;
+                inputbox.addEventListener('input', function() {
+                    inputData[checkbox.id] = inputbox.value;
+                });
+                parent.appendChild(inputbox);
             }
         }
 
@@ -565,5 +572,9 @@
     </script>
     <textarea id="output" style="display:none;"></textarea>
     <button id="output-json-prettify-button" type="button" style="display:none;" onclick="document.getElementById('output').value = JSON.stringify(JSON.parse(document.getElementById('output').value), null, 2)">Prettify JSON</button>
+    
+    <footer>
+        <p>Made in <span style="color: #1DA1F2;">🗽</span> NY | Version 0.0.1</p>
+    </footer>
 </body>
 </html>

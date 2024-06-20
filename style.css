@@ -1,6 +1,17 @@
 .input-default-value {
-    color: lightgray;
+    border-bottom: 1px solid black;
+    width: 80%;
+    box-sizing: border-box;
+    margin-left: 5px;
+    border: none;
+    outline: none;
     font-style: italic;
+    color: darkgray;
+    transition: color 0.2s ease-in-out;
+}
+
+.input-default-value:hover {
+    color: darkblue;
 }
 
 .feature-unsupported {
