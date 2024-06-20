@@ -8,3 +8,12 @@
     font-style: italic;
     text-decoration: line-through;
 }
+
+
+@media (min-width: 600px) {
+    body {
+        max-width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
