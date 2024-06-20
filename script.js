@@ -707,7 +707,7 @@ function createImpObject() {
     const imp = imps[0]
     
     // Basic Attributes
-    Object.keys(inputData).forEach(key => {
+    Object.keys(defaultData).forEach(key => {
         if (key.startsWith('imp') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
@@ -732,7 +732,7 @@ function createImpObject() {
             imp.pmp.private_auction = document.getElementById('imp-pmp-private-auction').checked ? 1 : 0;
             imp.pmp.deals = [new Deal()];
             deal = imp.pmp.deals[0]
-            Object.keys(inputData).forEach(key => {
+            Object.keys(defaultData).forEach(key => {
                 if (key.startsWith('imp-pmp-private-auction-deal-')) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
@@ -752,7 +752,7 @@ function createImpObject() {
     switch (selectedType) {
         case 'banner':
             imp.banner = new Banner();
-            Object.keys(inputData).forEach(key => {
+            Object.keys(defaultData).forEach(key => {
                 if (key.startsWith('imp-banner') && key.split('-').length === 3) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
@@ -775,7 +775,7 @@ function createImpObject() {
             break;
         case 'video':
             imp.video = new Video();
-            Object.keys(inputData).forEach(key => {
+            Object.keys(defaultData).forEach(key => {
                 if (key.startsWith('imp-video') && key.split('-').length === 3) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
@@ -787,7 +787,7 @@ function createImpObject() {
             break;
         case 'audio':
             imp.audio = new Audio();
-            Object.keys(inputData).forEach(key => {
+            Object.keys(defaultData).forEach(key => {
                 if (key.startsWith('imp-audio') && key.split('-').length === 3) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
@@ -806,7 +806,7 @@ function createImpObject() {
 
 function createSiteObject() {
     const site = new Site();
-    Object.keys(inputData).forEach(key => {
+    Object.keys(defaultData).forEach(key => {
         if (key.startsWith('site') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
@@ -819,7 +819,7 @@ function createSiteObject() {
     // site.publisher
     if (document.getElementById('site-publisher').checked) {
         site.publisher = new Publisher();
-        Object.keys(inputData).forEach(key => {
+        Object.keys(defaultData).forEach(key => {
             if (key.startsWith('site-publisher-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
@@ -833,7 +833,7 @@ function createSiteObject() {
     // site.content
     if (document.getElementById('site-content').checked) {
         site.content = new Content();
-        Object.keys(inputData).forEach(key => {
+        Object.keys(defaultData).forEach(key => {
             if (key.startsWith('site-content-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
@@ -848,7 +848,7 @@ function createSiteObject() {
 
 function createAppObject() {
     const app = new App();
-    Object.keys(inputData).forEach(key => {
+    Object.keys(defaultData).forEach(key => {
         if (key.startsWith('app') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
@@ -861,7 +861,7 @@ function createAppObject() {
     // app.publisher
     if (document.getElementById('app-publisher').checked) {
         app.publisher = new Publisher();
-        Object.keys(inputData).forEach(key => {
+        Object.keys(defaultData).forEach(key => {
             if (key.startsWith('app-publisher-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
@@ -875,7 +875,7 @@ function createAppObject() {
     // app.content
     if (document.getElementById('app-content').checked) {
         app.content = new Content();
-        Object.keys(inputData).forEach(key => {
+        Object.keys(defaultData).forEach(key => {
             if (key.startsWith('app-content-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
@@ -890,7 +890,7 @@ function createAppObject() {
 
 function createDeviceObject() {
     const device = new Device();
-    Object.keys(inputData).forEach(key => {
+    Object.keys(defaultData).forEach(key => {
         if (key.startsWith('device') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
@@ -900,7 +900,7 @@ function createDeviceObject() {
         }
 
         // geo
-        if (key.startsWith('device-geo')) {
+        if (key.startsWith('device-geo') && document.getElementById('device-geo').checked) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 if (!device.geo) {
@@ -916,7 +916,7 @@ function createDeviceObject() {
 
 function createUserObject() {
     const user = new User();
-    Object.keys(inputData).forEach(key => {
+    Object.keys(defaultData).forEach(key => {
         if (key.startsWith('user') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
@@ -925,7 +925,7 @@ function createUserObject() {
             }
         }
         // geo
-        if (key.startsWith('user-geo')) {
+        if (key.startsWith('user-geo') && document.getElementById('user-geo').checked) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 if (!user.geo) {
@@ -941,7 +941,7 @@ function createUserObject() {
 
 function createSourceObject() {
     const source = new Source();
-    Object.keys(inputData).forEach(key => {
+    Object.keys(defaultData).forEach(key => {
         if (key.startsWith('source') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
@@ -955,7 +955,7 @@ function createSourceObject() {
 
 function createRegsObject() {
     const regs = new Regs();
-    Object.keys(inputData).forEach(key => {
+    Object.keys(defaultData).forEach(key => {
         if (key.startsWith('regs') && key.split('-').length === 2) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
@@ -965,6 +965,79 @@ function createRegsObject() {
         }
     })
     return regs;
+}
+
+function dataTypeConvert(id) {
+    // check if the default value is an array
+    // if so, try to convert the input value to an array
+    const isIntegerArray = Array.isArray(defaultData[id]) && defaultData[id].every(item => Number.isInteger(item));
+    if (isIntegerArray) {
+        inputDataToArray = null;
+        try {
+            inputDataToArray = inputData[id].split(',').map(item => item.trim()).map(item => parseInt(item));
+        } catch (error) {
+            console.error(`Failed to convert ${id} to an integer array: ${error}`);
+        }
+        if (!inputDataToArray) {
+            inputData[id] = defaultData[id];
+        } else {
+            inputData[id] = inputDataToArray;
+        }
+        return;
+    }
+
+    const isStringArray = Array.isArray(defaultData[id]) && defaultData[id].every(item => typeof item === 'string');
+    if (isStringArray) {
+        inputDataToArray = null;
+        try {
+            inputDataToArray = inputData[id].split(',').map(item => item.trim());
+        } catch (error) {
+            console.error(`Failed to convert ${id} to an string array: ${error}`);
+        }
+        if (!inputDataToArray) {
+            inputData[id] = defaultData[id];
+        } else {
+            inputData[id] = inputDataToArray;
+        }
+        return;
+    }
+
+    // check if the default value is an integer
+    // if so, try to convert the input value to an integer
+    const isIntegerType = Number.isInteger(defaultData[id]);
+    if (isIntegerType) {
+        inputDataToInteger = null;
+        try {
+            inputDataToInteger = parseInt(inputData[id]);
+        } catch (error) {
+            console.error(`Failed to convert ${id} to an integer: ${error}`);
+        }
+
+        if (!inputDataToInteger) {
+            inputData[id] = defaultData[id];
+        } else {
+            inputData[id] = inputDataToInteger;
+        }
+    }
+
+    // check if the default value is a float
+    // if so, try to convert the input value to a float
+    const isFloatType = Number.isFinite(defaultData[id]);
+    if (isFloatType) {
+        inputDataToFloat = null;
+        try {
+            inputDataToFloat = parseFloat(inputData[id]);
+        } catch (error) {
+            console.error(`Failed to convert ${id} to a float: ${error}`);
+        }
+        if (!inputDataToFloat) {
+            inputData[id] = defaultData[id];
+        } else {
+            inputData[id] = inputDataToFloat;
+        }
+    }
+
+    // No need for string as input by default is a string
 }
 
 function createBidRequest() {
@@ -1019,7 +1092,7 @@ function createBidRequest() {
     bidRequest.source = source;
 
     // Apply top level attributes
-    Object.keys(inputData).forEach(key => {
+    Object.keys(defaultData).forEach(key => {
         if (!key.includes('-')) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {

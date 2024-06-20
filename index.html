@@ -370,9 +370,9 @@
             <fieldset id="device-fieldset" style="display:block">
                 <legend>Device Attributes</legend>
                 <label><input type="checkbox" id="device-ua" name="ua" checked> ua</label><br>
-                <label><input type="checkbox" id="device-geo" name="geo" checked> geo</label><br>
+                <label><input type="checkbox" id="device-geo" name="geo" checked> Geo</label><br>
                 <!-- Device.Geo Object-->
-                <fieldset id="device-geo-fieldset" style="display:none">
+                <fieldset id="device-geo-fieldset">
                     <legend>Geo Attributes</legend>
                     <label><input type="checkbox" id="device-geo-lat" name="lat"> lat</label><br>
                     <label><input type="checkbox" id="device-geo-lon" name="lon"> lon</label><br>
@@ -437,7 +437,7 @@
             <!-- End of Device Object-->
             <!-- User Object-->
             <label><input type="checkbox" id="user" checked> User</label><br>
-            <fieldset id="user-fieldset" style="display:none">
+            <fieldset id="user-fieldset">
                 <legend>User Attributes</legend>
                 <label><input type="checkbox" id="user-id" name="id" checked> id</label><br>
                 <label><input type="checkbox" id="user-buyeruid" name="buyeruid"> buyeruid</label><br>
@@ -547,7 +547,6 @@
                 }
                 inputDataValue = defaultData[checkbox.id.toString()];
             }
-
             const parent = checkbox.parentNode;
             
             if (!checkbox.checked) {
@@ -555,11 +554,14 @@
                 inputbox.forEach(box => box.remove());
                 inputData[checkbox.id] = null;
             } else {
+                inputData[checkbox.id] = inputDataValue;
                 const inputbox = document.createElement('input');
                 inputbox.className = 'input-default-value';
                 inputbox.value = inputDataValue;
                 inputbox.addEventListener('input', function() {
                     inputData[checkbox.id] = inputbox.value;
+                    // convert the input value to the correct data type
+                    dataTypeConvert(checkbox.id);
                 });
                 parent.appendChild(inputbox);
             }
@@ -576,6 +578,7 @@
     <textarea id="output" style="display:none;"></textarea>
     <button id="output-json-prettify-button" type="button" style="display:none;" onclick="document.getElementById('output').value = JSON.stringify(JSON.parse(document.getElementById('output').value), null, 2)">Prettify JSON</button>
     
+    <div id="footer-bar" style="height: 5vh; width: 100%;"></div>
     <footer id="footer">
         <p>Made in <span style="color: #1DA1F2;">🗽</span> New York <span>❤️</span>  |  Suggestions? <a href="https://github.com/bid-request/bid-request.github.io/issues">Create an issue here!</a></p>
     </footer>
