@@ -27,3 +27,23 @@
         margin-right: auto;
     }
 }
+
+#footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    line-height: 0.5vh;
+    height: 4vh;
+}
+
+#footer a {
+    color: white;
+}
+
+#bidRequestForm {
+    margin-bottom: 5vh;
+}
