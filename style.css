@@ -14,17 +14,29 @@
     color: darkblue;
 }
 
+.input-refresh-btn {
+    height: 0.8em;
+    cursor: pointer;
+    position: absolute;
+    right: 5%;
+}
+
 .feature-unsupported {
     color: lightgray;
     font-style: italic;
     text-decoration: line-through;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 960px) {
     body {
         max-width: 60%;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .input-refresh-btn {
+        position: absolute;
+        right: 25%;
     }
 }
 
