@@ -23,6 +23,8 @@
     <form id="bidRequestForm">
         <fieldset>
             <legend>Bid Request</legend>
+            <label><input type="checkbox" name="id" value="id" id="req-id" checked> id</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('req-id', 40)"/><br>
+            
             <!-- Imp Object-->
             <label><input type="checkbox" id="imp" checked disabled class="rtb-object"> Imp</label><br>
             <fieldset id="imp-type-fieldset">
@@ -439,8 +441,8 @@
             <label><input type="checkbox" id="user" checked> User</label><br>
             <fieldset id="user-fieldset">
                 <legend>User Attributes</legend>
-                <label><input type="checkbox" id="user-id" name="id" checked> id</label><br>
-                <label><input type="checkbox" id="user-buyeruid" name="buyeruid"> buyeruid</label><br>
+                <label><input type="checkbox" id="user-id" name="id" checked> id</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('user-id', 40)"/><br>
+                <label><input type="checkbox" id="user-buyeruid" name="buyeruid"> buyeruid</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('user-buyeruid', 40)"/><br>
                 <label><input type="checkbox" id="user-yob" name="yob"> yob</label><br>
                 <label><input type="checkbox" id="user-gender" name="gender"> gender</label><br>
                 <label><input type="checkbox" id="user-keywords" name="keywords"> keywords</label><br>
@@ -548,12 +550,11 @@
                 inputDataValue = defaultData[checkbox.id.toString()];
             }
             const parent = checkbox.parentNode;
-            
-            if (!checkbox.checked) {
-                inputbox = parent.querySelectorAll('.input-default-value');
-                inputbox.forEach(box => box.remove());
-                inputData[checkbox.id] = null;
-            } else {
+            inputbox = parent.querySelectorAll('.input-default-value');
+            inputbox.forEach(box => box.remove());
+            inputData[checkbox.id] = null;
+
+            if (checkbox.checked) {
                 inputData[checkbox.id] = inputDataValue;
                 const inputbox = document.createElement('input');
                 inputbox.className = 'input-default-value';

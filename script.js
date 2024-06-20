@@ -239,7 +239,7 @@ const defaultData = {
 
     // User Object
     "user-id": "55816b39711f9b5acf3b90e313ed29e51665623f",    // User ID
-    "user-buyeruid": "545678765467876567898765678987654", // Buyer ID
+    "user-buyeruid": "o04gl0441i0wmu1c6333q4vpsb668jzl59gk6b42", // Buyer ID
     "user-yob": 1980,           // Year of birth
     "user-gender": "M",         // User gender
     "user-keywords": "sports",    // User keywords
@@ -266,7 +266,7 @@ const defaultData = {
     // Add more user attributes as needed
 
     // Bid Request Object
-    "id": "80ce30c53c16e6ede735f123ef6e32361bfc7b22",     // Bid request ID
+    "req-id": "80ce30c53c16e6ede735f123ef6e32361bfc7b22",     // Bid request ID
     "cur": ["USD"],             // Currency
     "bcat": ["IAB1-1"],         // Blocked categories
     "badv": ["apple.com", "go-text.me", "heywire.com"], // Blocked advertisers
@@ -699,6 +699,32 @@ class Regs {
         this.coppa = null;
         this.ext = null;
     }   
+}
+
+// Helper Functions, random string generator
+function stringRandom(id, length) {
+    let result = '';
+    const weightedCharacters = '01234567890123456789012345678901234567890123456789012345678901234567890123456789abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
+    const weightedCharactersLength = weightedCharacters.length;
+    for (let i = 0; i < length; i++) {
+        result += weightedCharacters.charAt(Math.floor(Math.random() * weightedCharactersLength));
+    }
+    document.getElementById(id).value = result;
+    inputData[id] = result;
+    checkboxOnChange(id);
+}
+
+function integerRandom(id, length) {
+    let result = '';
+    const weightedCharacters = '0123456789';
+    const weightedCharactersLength = weightedCharacters.length;
+    for (let i = 0; i < length; i++) {
+        result += weightedCharacters.charAt(Math.floor(Math.random() * weightedCharactersLength));
+    }
+    result = parseInt(result);
+    document.getElementById(id).value = result;
+    inputData[id] = result;
+    checkboxOnChange(id);
 }
 
 function createImpObject() {
