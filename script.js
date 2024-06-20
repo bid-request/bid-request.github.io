@@ -1083,6 +1083,7 @@ function createBidRequest() {
     const source = includeSource ? createSourceObject() : null;
 
     const bidRequest = new BidRequest();
+    bidRequest.id = defaultData['id'];
     bidRequest.imp = imp;
     bidRequest.site = site;
     bidRequest.app = app;
