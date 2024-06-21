@@ -1,7 +1,7 @@
 // Default values
 /*
     key: name for the key, a key can be matched to a input's id in the html file.
-    value: an array of 4 elements: [type, required (bool), default value, OpenRTB description]
+    value: an array of 4 elements: [type, required (bool), default value, OpenRTB description, predefined values]
 */
 const defaultData = {
     // Bid Request Object
@@ -145,12 +145,14 @@ const defaultData = {
     "req-site-content-context": [ "integer", false, 1, "integer | Content context. See enum ContentContext." ],
     "req-site-content-contentrating": [ "string", false, "MPAA", "string | Content rating." ],
     "req-site-content-userrating": [ "string", false, "Great", "string | User rating of the content." ],
+    "req-site-content-qagmediarating": [ "integer", false, 1, "integer | Media rating per QAG guidelines. See enum QAGMediaRating." ],
     "req-site-content-keywords": [ "string array", false, ["Mordern Family"], "string array | Array of keywords describing the content." ],
     "req-site-content-livestream": [ "integer", false, 0, "integer | 0 = not live, 1 = content is live." ],
     "req-site-content-sourcerelationship": [ "integer", false, 0, "integer | Indicates the source relationship. 0 = indirect, 1 = direct." ],
     "req-site-content-len": [ "integer", false, 1800, "integer | Length of content in seconds." ],
     "req-site-content-language": [ "string", false, "en", "string | Content language using ISO-639-1-alpha-2." ],
     "req-site-content-embeddable": [ "integer", false, 0, "integer | Indicates if content is embeddable." ],
+    "req-site-content-data": [ "object", false, {}, "object | Content data. See enum ContentType." ],
     "req-site-context-ext": [ , , {}, ],
     // Content Object under App
     "req-app-content-id": [ "string", false, "1234567", "string | Content ID." ],
@@ -169,6 +171,7 @@ const defaultData = {
     "req-app-content-context": [ "integer", false, 1, "integer | Content context. See enum ContentContext." ],
     "req-app-content-contentrating": [ "string", false, "MPAA", "string | Content rating." ],
     "req-app-content-userrating": [ "string", false, "Great", "string | User rating of the content." ],
+    "req-app-content-qagmediarating": [ "integer", false, 1, "integer | Media rating per QAG guidelines. See enum QAGMediaRating." ],
     "req-app-content-keywords": [ "string array", false, ["Mordern Family"], "string array | Array of keywords describing the content." ],
     "req-app-content-livestream": [ "integer", false, 0, "integer | 0 = not live, 1 = content is live." ],
     "req-app-content-sourcerelationship": [ "integer", false, 0, "integer | Indicates the source relationship. 0 = indirect, 1 = direct." ],
@@ -176,6 +179,19 @@ const defaultData = {
     "req-app-content-language": [ "string", false, "en", "string | Content language using ISO-639-1-alpha-2." ],
     "req-app-content-embeddable": [ "integer", false, 0, "integer | Indicator of whether or not the content is embeddable." ],
     "req-app-context-ext": [ , , {}, ],
+
+    // Producer Object
+    "req-site-content-producer-id": ["string", false, "12345", "string | Exchange-specific producer ID."],
+    "req-site-content-producer-name": ["string", false, "Warner Bros", "string | Producer name."],
+    "req-site-content-producer-domain": ["string", false, "hbo.com", "string | Producer domain."],
+    "req-site-content-producer-cat": ["string array", false, ["IAB1-7"], "string array | Array of IAB content categories."],
+    "req-site-content-producer-ext": [ , , {}, ],
+
+    "req-app-content-producer-id": ["string", false, "12345", "string | Exchange-specific producer ID."],
+    "req-app-content-producer-name": ["string", false, "Warner Bros", "string | Producer name."],
+    "req-app-content-producer-domain": ["string", false, "hbo.com", "string | Producer domain."],
+    "req-app-content-producer-cat": ["string array", false, ["IAB1-7"], "string array | Array of IAB content categories."],
+    "req-app-content-producer-ext": [ , , {}, ],
 
     // Publisher Object
     "req-site-publisher-id": ["string", false, "12345", "string | Exchange-specific publisher ID."],
@@ -206,20 +222,20 @@ const defaultData = {
     "req-app-ext": [ , , {}, ],
 
     // Device Object
-    "req-device-ua": ["string", false, "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/124.0.2478.89 Version/15.0 Mobile/15E148 Safari/604.1", "string; recommended | Browser user agent string."],
+    "req-device-ua": ["string", false, "Mozilla/5.0 (iPhone14,3; U; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/19A346 Safari/602.1", "string; recommended | Browser user agent string."],
     "req-device-dnt": ["integer", false, 0, "integer; recommended | Indicator of whether tracking is restricted."],
     "req-device-lmt": ["integer", false, 0, "integer; recommended | Indicator of whether ad tracking is limited."],
-    "req-device-ip": ["string", false, "1.2.3.4", "string; recommended | IPv4 address closest to the device."],
+    "req-device-ip": ["string", false, "107.0.21.0", "string; recommended | IPv4 address closest to the device."],
     "req-device-ipv6": ["string", false, "5be8:dde9:7f0b:d5a7:bd11:b3be:9c67:573a", "string | IPv6 address closest to the device as IPv6."],
     "req-device-devicetype": ["integer", false, 1, "integer | Device type."],
     "req-device-make": ["string", false, "Apple", "string | Device make."],
     "req-device-os": ["string", false, "iOS", "string | Operating system."],
     "req-device-model": ["string", false, "iPhone", "string | Device model."],
     "req-device-osv": ["string", false, "15.8", "string | Operating system version."],
-    "req-device-hwv": ["string", false, "5S", "string | Hardware version."],
-    "req-device-h": ["integer", false, 320, "integer | Physical height of the screen in pixels."],
-    "req-device-w": ["integer", false, 480, "integer | Physical width of the screen in pixels."],
-    "req-device-ppi": ["integer", false, 0, "integer | Sreen size as pixels per linear inch."],
+    "req-device-hwv": ["string", false, "iPhone14,2", "string | Hardware version."],
+    "req-device-h": ["integer", false, 2532, "integer | Physical height of the screen in pixels."],
+    "req-device-w": ["integer", false, 1170, "integer | Physical width of the screen in pixels."],
+    "req-device-ppi": ["integer", false, 458, "integer | Sreen size as pixels per linear inch."],
     "req-device-pxratio": ["integer", false, 0, "integer | The ratio of physical pixels to device independent pixels."],
     "req-device-js": ["integer", false, 1, "integer | Support for JavaScript, where 0 = no, 1 = yes."],
     "req-device-geofetch": ["integer", false, 0, "integer | Indicates if the geolocation API will be available to JavaScript code running in the banner, where 0 = no, 1 = yes."],
@@ -238,18 +254,18 @@ const defaultData = {
     "req-device-ext": [ , , {}, ],
 
     // Device.Geo Object
-    "req-device-geo-lat": ["float", false, 35.012345, "float | Latitude."],
-    "req-device-geo-lon": ["float", false, -115.012345, "float | Longitude."],
+    "req-device-geo-lat": ["float", false, 37.2295, "float | Latitude."],
+    "req-device-geo-lon": ["float", false, -121.9865, "float | Longitude."],
     "req-device-geo-type": ["integer", false, 1, "integer | Location type."],
     "req-device-geo-accuracy": ["integer", false, 0, "integer | Location accuracy."],
     "req-device-geo-lastfix": ["integer", false, 0, "integer | Location timestamp."],
-    "req-device-geo-ipservice": ["integer", false, 0, "integer | IP service."],
+    "req-device-geo-ipservice": ["integer", false, 3, "integer | IP service."],
     "req-device-geo-country": ["string", false, "USA", "string | Country."],
     "req-device-geo-region": ["string", false, "CA", "string | Region."],
     "req-device-geo-regionfips104": ["string", false, "AT-1", "string | Region FIPS 104."],
-    "req-device-geo-metro": ["string", false, "803", "string | Metro."],
-    "req-device-geo-city": ["string", false, "Los Ageles", "string | City."],
-    "req-device-geo-zip": ["string", false, "90049", "string | Zip."],
+    "req-device-geo-metro": ["string", false, "408", "string | Metro."],
+    "req-device-geo-city": ["string", false, "Los Gatos", "string | City."],
+    "req-device-geo-zip": ["string", false, "95030", "string | Zip."],
     "req-device-geo-utcoffset": ["integer", false, -7, "integer | UTC offset."],
     "req-device-geo-ext": [ , , {}, ],
 
@@ -268,7 +284,7 @@ const defaultData = {
     "req-user-geo-type": ["integer", false, 1, "integer | Location type."],
     "req-user-geo-accuracy": ["integer", false, 0, "integer | Location accuracy."],
     "req-user-geo-lastfix": ["integer", false, 0, "integer | Location timestamp."],
-    "req-user-geo-ipservice": ["integer", false, 0, "integer | IP service."],
+    "req-user-geo-ipservice": ["integer", false, 3, "integer | IP service providers."],
     "req-user-geo-country": ["string", false, "USA", "string | Country."],
     "req-user-geo-region": ["string", false, "CA", "string | Region."],
     "req-user-geo-regionfips104": ["string", false, "AT-1", "string | Region FIPS 104."],
@@ -363,7 +379,9 @@ function createImpsObject() {
         if (document.getElementById('req-imp-pmp').checked) {
             imp["pmp"] = {}
             let pmp = imp["pmp"]
-            pmp["private_auction"] = document.getElementById('req-imp-pmp-private_auction').checked ? 1 : 0;
+            if (document.getElementById('req-imp-pmp-private_auction').checked) {
+                pmp['private_auction'] = inputData['req-imp-pmp-private_auction'];
+            }
             pmp["deals"] = [{}]; // currently only support 1 deal
             deal = pmp["deals"][0];
             Object.keys(defaultData).forEach(key => {
@@ -648,7 +666,7 @@ function createBidRequest() {
         setTimeout(() => {
             impTypeSelect.style.backgroundColor = 'white';
         }, 2000);
-        alert('Please select the Imp type');
+        alert('Hey! You need at least one imp object!');
         return
     }
 
