@@ -1,705 +1,310 @@
 // Default values
+/*
+    key: name for the key, a key can be matched to a input's id in the html file.
+    value: an array of 4 elements: [type, required (bool), default value, OpenRTB description]
+*/
 const defaultData = {
+    // Bid Request Object
+    "req-id": ["string", true, "96652i7d1g8w79545y0469e2qe81ib4zf3jevqxm", "string; required | Unique ID of the bid request, provided by the exchange"],
+    "req-cur": ["string array", false, ["USD"], "string array | Array of allowed currencies for bids on this bid request using ISO-4217 alpha codes. Recommended only if the exchange accepts multiple currencies."],
+    "req-bcat": ["string array", false, ["IAB7-1", "IAB7-2"], "string array | Blocked advertiser categories using the IAB content categories."],
+    "req-badv": ["string array", false, ["ford.com", "apple.com"], "string array | Block list of advertisers by their domains."],
+    "req-bseat": ["string array", false, ["seat1", "seat2"], "string array | Block list of buyer seats (e.g., advertisers, agencies) restricted from bidding on this impression. IDs of seats and knowledge of the buyer’s customers to which they refer must be coordinated between bidders and the exchange a priori. At most, only one of wseat and bseat should be used in the same request. Omission of both implies no seat restrictions."],
+    "req-bapp": ["string array", false, ["app1", "app2"], "string array | Block list of applications by their platform-specific exchange-independent application identifiers. On Android, these should be bundle or package names (e.g., com.foo.mygame). On iOS, these are numeric IDs."],
+    "req-at": ["integer", false, 2, "integer | Auction type. 1 = First Price, 2 = Second Price Plus, Exchange-specific auction types can be defined using values greater than 500. "],
+    "req-tmax": ["integer", false, 1000, "integer | Maximum time in milliseconds the exchange allows for bids to be received including Internet latency to avoid timeout. This value supersedes any a priori guidance from the exchange."],
+    "req-wseat": ["string array", false, ["seat1", "seat2"], "string array | White list of buyer seats (e.g., advertisers, agencies) allowed to bid on this impression. IDs of seats and knowledge of the buyer’s customers to which they refer must be coordinated between bidders and the exchange a priori. At most, only one of wseat and bseat should be used in the same request. Omission of both implies no seat restrictions."],
+    "req-allimps": ["integer", false, 0, "integer; default 0 | Flag to indicate if Exchange can verify that the impressions offered represent all of the impressions available in context to support road-blocking."],
+    "req-test": ["integer", false, 0, "integer; default 0 | Indicator of test mode in which auctions are not billable, where 0 = live mode, 1 = test mode"],
+    "req-ext": [ , , {}, ],
+    
     // Impression Object
-    "imp-id": "1",              // Impression ID
-    "imp-bidfloor": 0.1,        // Default bid floor price
-    "imp-bidfloorcur": "USD",   // Default bid floor currency
-    "imp-displaymanager": "supercool sdk", // Default display manager
-    "imp-displaymanagerver": "1.1", // Default display manager version
-    "imp-instl": 1,             // Default instl
-    "imp-tagid": "12345",       // Default tag ID
-    "imp-clickbrowser": 1,      // Default click browser
-    "imp-secure": 1,            // Default secure
-    "imp-exp": 3600,            // Default expiration
-    "imp-iframebuster": ["vendor1.com", "vendor2.com"],      // Default iframebuster
-    "imp-ext": {},              // Default ext
+    "req-imp-id": ["string", true, "1", "string; required | Unique ID of the impression, provided by the exchange"],
+    "req-imp-bidfloor": ["float", false, 0.01, "float | Minimum bid for this impression expressed in CPM"],
+    "req-imp-bidfloorcur": ["string", false, "USD", "string | Currency specified using ISO-4217 alpha codes. This may be different from bid currency returned by bidder if this is allowed by the exchange."],
+    "req-imp-displaymanager": ["string", false, "Supercool SDK", "string | Name of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps."],
+    "req-imp-displaymanagerver": ["string", false, "1.0", "string | Version of ad mediation partner or SDK. Recommended for video and/or apps."],
+    "req-imp-instl": ["integer", false, 1, "integer | 1 = the ad is interstitial or full screen, 0 = not interstitial."],
+    "req-imp-tagid": ["string", false, "t39588", "string | Identifier for specific ad placement or ad tag that was used to initiate the auction."],
+    "req-imp-clickbrowser": ["integer", false, 0, "integer; default 0 | Indicates the type of browser opened upon clicking the creative in an app, where false = embedded, true = native. Note that the Safari View Controller in iOS 9.x devices is considered a native browser for purposes of this attribute."],
+    "req-imp-secure": ["integer", false, 0, "integer; default 0 | 0 = non-secure (HTTP), 1 = secure (HTTPS)."],
+    "req-imp-exp": ["integer", false, 300, "integer | Advisory as to the number of seconds that may elapse between the auction and the actual impression."],
+    "req-imp-iframebuster": ["string array", false, ["b1", "b2"], "string array | Array of exchange-specific names of supported iframe busters."],
+    "req-imp-ext": [ , , {}, ],
 
     // Impression Banner Object
-    "imp-banner-w": 300,        // Default banner width
-    "imp-banner-h": 250,        // Default banner height
-    "imp-banner-wmax": 600,     // Default banner max width
-    "imp-banner-hmax": 600,     // Default banner max height
-    "imp-banner-wmin": 320,     // Default banner min width
-    "imp-banner-hmin": 50,      // Default banner min height
-    "imp-banner-pos": 1,        // Default banner position
-    "imp-banner-api": [1, 2, 3, 4, 5, 6],    // Default banner API
-    "imp-banner-mimes": ["image/gif", "image/jpeg", "image/png"],  // Default banner MIME types
-    "imp-banner-topframe": 0,   // Default banner top frame
-    "imp-banner-expdir": [1, 2, 3],   // Default banner expdir
-    "imp-banner-battr": [10, 11],   // Default banner battr
-    "imp-banner-btype": [3],   // Default banner btype
-    "imp-banner-id": "12345",   // Default banner ID
-    "imp-banner-vcm": 0,   // Default banner vcm
-    "imp-banner-ext": {},   // Default banner ext
+    "req-imp-banner-w": ["integer", false, 300, "integer | Width of banner in device independent pixels (DIPS)."],
+    "req-imp-banner-h": ["integer", false, 250, "integer | Height of banner in device independent pixels (DIPS)."],
+    "req-imp-banner-wmax": ["integer", false, 300, "integer; DEPRECATED | Maximum width of banner in device independent pixels (DIPS). Deprecated in favor of the `format` array"],
+    "req-imp-banner-hmax": ["integer", false, 250, "integer; DEPRECATED | Maximum height of banner in device independent pixels (DIPS). Deprecated in favor of the `format` array"],
+    "req-imp-banner-wmin": ["integer", false, 320, "integer; DEPRECATED | Minimum width of banner in device independent pixels (DIPS). Deprecated in favor of the `format` array"],
+    "req-imp-banner-hmin": ["integer", false, 50, "integer; DEPRECATED | Minimum height of banner in device independent pixels (DIPS). Deprecated in favor of the `format` array"],
+    "req-imp-banner-pos": ["integer", false, 1, "integer | Ad position on screen. Default is 1 (above the fold). Can be 0 (unknown) or 3 (below the fold)."],
+    "req-imp-banner-api": ["integer array", false, [1, 2, 3, 4, 5, 6], "integer array; default [1, 2, 3, 4, 5, 6] | List of supported API frameworks for this impression. If an API is not explicitly listed, it is assumed not to be supported."],
+    "req-imp-banner-mimes": ["string array", false, ["image/gif", "image/jpeg", "image/png"], "string array | Allowlist of content MIME types supported. Popular MIME types include, but are not limited to \"image/jpg\", \"image/gif\" and \"application/x-shockwave-flash\"."],
+    "req-imp-banner-topframe": ["integer", false, 0, "integer | Specify if the banner is delivered in the top frame (true) or in an iframe (false). Default is 0 (false)."],
+    "req-imp-banner-expdir": ["integer array", false, [1, 2, 3], "integer array; default [1, 2, 3] | Directions in which the banner may expand. Allowed values are: 1 - Right, 2 - Down, 3 - Left."],
+    "req-imp-banner-battr": ["integer array", false, [10, 11], "integer array; default [10, 11] | Blocked creative attributes. Allowed values are: 10 - Expandable, 11 - In-banner video ads."],
+    "req-imp-banner-btype": ["integer array", false, [3], "integer array; default [3] | Blocked banner ad types. Allowed values are: 3 - Expandable ads."],
+    "req-imp-banner-id": ["string", false, "12345", "string | Unique identifier for this banner object. Recommended when Banner objects are used with a Video object (Section 3.2.4) to represent an array of companion ads. Values usually start at 1 and increase with each object; should be unique within an impression."],
+    "req-imp-banner-vcm": ["integer", false, 0, "integer | Specifies the video minimum duration that the player must have played before the ad tag can be served. Default is 0 (no minimum)."],
+    "req-imp-banner-ext": [ , , {}, ],
 
     // Impression Banner Format Object
-    "imp-banner-format-w": 300,        // Default banner format width
-    "imp-banner-format-h": 250,        // Default banner format height
-    "imp-banner-format-wratio": 3,     // Default banner format width ratio
-    "imp-banner-format-hratio": 2,     // Default banner format height ratio
-    "imp-banner-format-wmin": 100,     // Default banner format min width
-    "imp-banner-format-ext": {},       // Default banner format ext
+    "req-imp-banner-format-w": ["integer", false, 300, "integer | Width of banner format in device independent pixels (DIPS)."],
+    "req-imp-banner-format-h": ["integer", false, 250, "integer | Height of banner format in device independent pixels (DIPS)."],
+    "req-imp-banner-format-wratio": ["integer", false, 3, "integer | Relative width when expressing banner format size as a ratio."],
+    "req-imp-banner-format-hratio": ["integer", false, 2, "integer | Relative height when expressing banner format size as a ratio."],
+    "req-imp-banner-format-wmin": ["integer", false, 100, "integer | Minimum width of banner format in device independent pixels (DIPS)."],
+    "req-imp-banner-format-ext": [ , , {}, ],
 
     // Impression Metrics Object
-    "imp-metric-type": "cpm",      // Default metrics type
-    "imp-metric-value": 1.5,      // Default metrics value
-    "imp-metric-vendor": "openrtb.com",  // Default metrics vendor
+    "req-imp-metric-type": ["string", true, "cpm", "string; required | Type of metric being presented using exchange curated string names which should be published to bidders a priori."],
+    "req-imp-metric-value": ["float", true, 1.5, "float; required | Number representing the value of the metric. Probabilities must be in the range 0.0 - 1.0."],
+    "req-imp-metric-vendor": ["string", false, "openrtb.com", "string; recommended | Source of the value using exchange curated string names which should be published to bidders a priori. If the exchange itself is the source versus a third party, 'EXCHANGE' is recommended."],
+    "req-imp-metric-ext": [ , , {}, ],
 
     // Impression Video Object
-    "imp-video-mimes": ["video/mp4", "video/x-flv", "video/x-ms-wmv"],    // Default video MIME types
-    "imp-video-minduration": 5,             // Default video min duration
-    "imp-video-maxduration": 60,            // Default video max duration
-    "imp-video-protocols": [1, 2, 3],     // Default video protocols
-    "imp-video-protocol": 1,                // Default video protocol
-    "imp-video-w": 640,                     // Default video width
-    "imp-video-h": 480,                     // Default video height
-    "imp-video-startdelay": 0,              // Default video start delay
-    "imp-video-placement": 1,                // Default video placement
-    "imp-video-linearity": 1,               // Default video linearity
-    "imp-video-skip": 0,                    // Default video skip
-    "imp-video-skipmin": 0,                // Default video skip min
-    "imp-video-skipafter": 0,               // Default video skip after
-    "imp-video-sequence": 1,                // Default video sequence
-    "imp-video-battr": [1, 2],            // Default video battr
-    "imp-video-maxextensions": 0,           // Default video max extensions
-    "imp-video-minbitrate": 300,              // Default video min bitrate
-    "imp-video-maxbitrate": 1500,              // Default video max bitrate
-    "imp-video-boxingallowed": 1,           // Default video boxing allowed
-    "imp-video-playbackmethod": [1],          // Default video playback method
-    "imp-video-playbackend": 1,          // Default video play backend
-    "imp-video-delivery": [1],            // Default video delivery
-    "imp-video-api": [1, 2],              // Default video API
-    "imp-video-btype": [1],               // Default video btype
-    "imp-video-pos": 1,                     // Default video position
-    "imp-video-ext": {},                   // Default video ext
+    "req-imp-video-mimes": [ "string array", true, ["video/mp4", "video/x-flv", "video/x-ms-wmv"], "string array; required | List of supported video MIME types." ],
+    "req-imp-video-minduration": [ "integer", false, 5, "integer | Minimum video ad duration in seconds." ],
+    "req-imp-video-maxduration": [ "integer", false, 60, "integer | Maximum video ad duration in seconds." ],
+    "req-imp-video-protocols": [ "integer array", false, [1, 2, 3], "integer array | Array of supported video bid response protocols." ],
+    "req-imp-video-protocol": [ "integer", false, 1, "integer | Specifies the protocol of the delivered video (e.g., VAST 2.0, VAST 3.0, VAST 4.0, VAST 4.1, DAAST 1.0, MRAID 1.0, MRAID 2.0, MRAID 3.0)." ],
+    "req-imp-video-w": [ "integer", false, 640, "integer | Width of the video player in device independent pixels (DIPS)." ],
+    "req-imp-video-h": [ "integer", false, 480, "integer | Height of the video player in device independent pixels (DIPS)." ],
+    "req-imp-video-startdelay": [ "integer", false, 0, "integer | Indicates the start delay in seconds for pre-roll, mid-roll, or post-roll ad placements." ],
+    "req-imp-video-placement": [ "integer", false, 1, "integer | Placement type for the impression." ],
+    "req-imp-video-linearity": [ "integer", false, 1, "integer | Indicates if the impression must be linear, nonlinear, etc." ],
+    "req-imp-video-skip": [ "integer", false, 0, "integer | Indicates if the player will allow the video to be skipped." ],
+    "req-imp-video-skipmin": [ "integer", false, 0, "integer | Videos of total duration greater than this number of seconds can be skippable; only applicable if the ad is skippable." ],
+    "req-imp-video-skipafter": [ "integer", false, 0, "integer | Number of seconds a video must play before skipping is enabled; only applicable if the ad is skippable." ],
+    "req-imp-video-sequence": [ "integer", false, 1, "integer | If multiple ad impressions are offered in the same bid request, the sequence number will allow for the coordinated delivery of multiple creatives." ],
+    "req-imp-video-battr": [ "integer array", false, [1, 2], "integer array | Blocked creative attributes." ],
+    "req-imp-video-maxextensions": [ "integer", false, 0, "integer | Maximum extended video ad duration, if extension is allowed." ],
+    "req-imp-video-minbitrate": [ "integer", false, 300, "integer | Minimum bit rate in Kbps." ],
+    "req-imp-video-maxbitrate": [ "integer", false, 1500, "integer | Maximum bit rate in Kbps." ],
+    "req-imp-video-boxingallowed": [ "integer", false, 1, "integer | Indicates if the player allows the video to be boxed." ],
+    "req-imp-video-playbackmethod": [ "integer array", false, [1], "integer array | Array of supported playback methods." ],
+    "req-imp-video-playbackend": [ "integer", false, 1, "integer | Specifies the playback backend of the delivered video." ],
+    "req-imp-video-delivery": [ "integer array", false, [1], "integer array | Array of supported delivery methods." ],
+    "req-imp-video-api": [ "integer array", false, [1, 2], "integer array | Array of supported API frameworks for this impression." ],
+    "req-imp-video-btype": [ "integer array", false, [1], "integer array | Blocked banner ad types." ],
+    "req-imp-video-pos": [ "integer", false, 1, "integer | Position of the impression, which can be used by buyers to indicate the desired position of the ad." ],
+    "req-imp-video-ext": [ , , {}, ],
 
     // Impression Audio Object
-    "imp-audio-mimes": ["audio/mp3", "audio/mp4"],  // Default audio MIME types
-    "imp-audio-minduration": 5,             // Default audio min duration
-    "imp-audio-maxduration": 60,            // Default audio max duration
-    "imp-audio-protocols": [1, 2, 3],     // Default audio protocols
-    "imp-audio-startdelay": 0,              // Default audio start delay
-    "imp-audio-sequence": 1,                // Default audio sequence
-    "imp-audio-maxextended": 0,             // Default audio max extended
-    "imp-audio-minbitrate": 128,              // Default audio min bitrate
-    "imp-audio-maxbitrate": 3200,              // Default audio max bitrate
-    "imp-audio-delivery": [1],            // Default audio delivery
-    "imp-audio-battr": [1, 2],            // Default audio battr
-    "imp-audio-api": [1, 2],              // Default audio API
-    "imp-audio-maxseq": 1,                 // Default audio max sequence
-    "imp-audio-feed": 1,                   // Default audio feed
-    "imp-audio-stitched": 0,               // Default audio stitched
-    "imp-audio-nvol": 0,                   // Default audio nvol
-    "imp-audio-ext": {},                   // Default audio ext
+    "req-imp-audio-mimes": [ "array", false, ["audio/mp3", "audio/mp4"], "array | Content MIME types supported (e.g., \"audio/mp4\")." ],
+    "req-imp-audio-minduration": [ "integer", false, 5, "integer | Minimum audio ad duration in seconds." ],
+    "req-imp-audio-maxduration": [ "integer", false, 60, "integer | Maximum audio ad duration in seconds." ],
+    "req-imp-audio-protocols": [ "integer array", false, [1, 2, 3], "integer array | Array of supported audio protocols." ],
+    "req-imp-audio-startdelay": [ "integer", false, 0, "integer | Indicates the start delay in seconds for pre-roll, mid-roll, or post-roll ad placements." ],
+    "req-imp-audio-sequence": [ "integer", false, 1, "integer | If multiple ad impressions are offered in the same bid request, the sequence number will allow for the coordinated delivery of multiple creatives." ],
+    "req-imp-audio-maxextended": [ "integer", false, 0, "integer | Maximum extended video ad duration, if extension is allowed." ],
+    "req-imp-audio-minbitrate": [ "integer", false, 128, "integer | Minimum bit rate in Kbps." ],
+    "req-imp-audio-maxbitrate": [ "integer", false, 3200, "integer | Maximum bit rate in Kbps." ],
+    "req-imp-audio-delivery": [ "integer array", false, [1], "integer array | Array of supported delivery methods." ],
+    "req-imp-audio-battr": [ "integer array", false, [1, 2], "integer array | Blocked creative attributes." ],
+    "req-imp-audio-api": [ "integer array", false, [1, 2], "integer array | Array of supported API frameworks for this impression." ],
+    "req-imp-audio-maxseq": [ "integer", false, 1, "integer | The maximum number of ads that can be played in an ad pod." ],
+    "req-imp-audio-feed": [ "integer", false, 1, "integer | Type of audio feed." ],
+    "req-imp-audio-stitched": [ "integer", false, 0, "integer | Indicates if the ad is stitched with audio content or delivered independently." ],
+    "req-imp-audio-nvol": [ "integer", false, 0, "integer | Volume normalization mode." ],
+    "req-imp-audio-ext": [ , , {}, ],
     // Add more impression attributes as needed
 
     // Site Object
-    "site-id": "12345",         // Site ID
-    "site-name": "OpenRTB",   // Site name
-    "site-domain": "openrtb.com", // Site domain
-    "site-cat": ["IAB3-1"], // Site category
-    "site-sectioncat": ["IAB3-1"], // Site section category
-    "site-pagecat": ["IAB3-1"], // Site page category
-    "site-page": "openrtb.com/home",       // Site page
-    "site-ref": "https://openrtb.com", // Site ref
-    "site-search": "openrtb",          // Site search
-    "site-mobile": 0,          // Site mobile
-    "site-privacypolicy": 1,   // Site privacy policy
-    "site-keywords": ["openrtb", "advertising"], // Site keywords
-    "site-ext": {},            // Site ext
+    "req-site-id": [ "string", false, "12345", "string | Site ID on the exchange." ],
+    "req-site-name": [ "string", false, "OpenRTB", "string | Site name (may be masked at publisher's request)." ],
+    "req-site-domain": [ "string", false, "openrtb.com", "string | Domain of the site, used for advertiser side blocking. For example, \"foo.com\"." ],
+    "req-site-cat": [ "string array", false, ["IAB3-1"], "string array | Array of IAB content categories of the site. See enum ContentCategory." ],
+    "req-site-sectioncat": [ "string array", false, ["IAB3-1"], "string array | Array of IAB content categories that describe the current section of the site. See enum ContentCategory." ],
+    "req-site-pagecat": [ "string array", false, ["IAB3-1"], "string array | Array of IAB content categories that describe the current page or view of the site. See enum ContentCategory." ],
+    "req-site-page": [ "string", false, "openrtb.com/home", "string | URL of the page where the impression will be shown." ],
+    "req-site-ref": [ "string", false, "https://openrtb.com", "string | Referrer URL that caused navigation to the current page." ],
+    "req-site-search": [ "string", false, "openrtb", "string | Search string that caused navigation to the current page." ],
+    "req-site-mobile": [ "integer", false, 0, "integer | Indicates if the site has been programmed to optimize layout when viewed on mobile devices, where 0 = no, 1 = yes" ],
+    "req-site-privacypolicy": [ "integer", false, 0, "integer | Indicates if the site has a privacy policy." ],
+    "req-site-keywords": [ "string array", false, ["openrtb", "advertising"], "string array | Comma separated list of keywords about this site." ],
+    "req-site-ext": [ , , {}, ],
     // Add more site attributes as needed
 
-    // Content Object
-    "site-content-id": "1234567",
-    "site-content-episode": 1,
-    "site-content-title": "Mordern Family - Season 1 Episode 1",
-    "site-content-series": "Mondern Family",
-    "site-content-season": "Season 1",
-    "site-content-artist": "Ty burrell",
-    "site-content-genre": "comedy",
-    "site-content-album": "Original Soundtrack",
-    "site-content-isrc": "1234567890",
-    "site-content-url": "https://abc.com/",
-    "site-content-cat": ["IAB1-7"],
-    "site-content-prodq": 1,
-    "site-content-videoquality": 1,
-    "site-content-context": 1,
-    "site-content-contentrating": "MPAA",
-    "site-content-userrating": "Great",
-    "site-content-keywords": "Mordern Family",
-    "site-content-livestream": 0,
-    "site-content-sourcerelationship": 0,
-    "site-content-len": 1800,
-    "site-content-language": "en",
-    "site-content-embeddable": 0,
-    "site-context-ext": {},
-    
-    "app-content-id": "1234567",
-    "app-content-episode": 1,
-    "app-content-title": "Mordern Family - Season 1 Episode 1",
-    "app-content-series": "Mondern Family",
-    "app-content-season": "Season 1",
-    "app-content-artist": "Ty burrell",
-    "app-content-genre": "comedy",
-    "app-content-album": "Original Soundtrack",
-    "app-content-isrc": "1234567890",
-    "app-content-url": "https://abc.com/",
-    "app-content-cat": ["IAB1-7"],
-    "app-content-prodq": 1,
-    "app-content-videoquality": 1,
-    "app-content-context": 1,
-    "app-content-contentrating": "MPAA",
-    "app-content-userrating": "Great",
-    "app-content-keywords": "Mordern Family",
-    "app-content-livestream": 0,
-    "app-content-sourcerelationship": 0,
-    "app-content-len": 1800,
-    "app-content-language": "en",
-    "app-content-embeddable": 0,
-    "app-context-ext": {},
+    // Content Object under Site
+    "req-site-content-id": [ "string", false, "1234567", "string | Content ID." ],
+    "req-site-content-episode": [ "integer", false, 1, "integer | Episode number." ],
+    "req-site-content-title": [ "string", false, "Mordern Family - Season 1 Episode 1", "string | Content title." ],
+    "req-site-content-series": [ "string", false, "Mondern Family", "string | Series name." ],
+    "req-site-content-season": [ "string", false, "Season 1", "string | Season name." ],
+    "req-site-content-artist": [ "string", false, "Ty burrell", "string | Artist name." ],
+    "req-site-content-genre": [ "string", false, "comedy", "string | Genre name." ],
+    "req-site-content-album": [ "string", false, "Original Soundtrack", "string | Album name." ],
+    "req-site-content-isrc": [ "string", false, "1234567890", "string | ISRC code." ],
+    "req-site-content-url": [ "string", false, "https://abc.com/", "string | Content URL." ],
+    "req-site-content-cat": [ "string array", false, ["IAB1-7"], "string array | Array of IAB content categories. See enum ContentCategory." ],
+    "req-site-content-prodq": [ "integer", false, 1, "integer | Production quality. See enum ProductionQuality." ],
+    "req-site-content-videoquality": [ "integer", false, 1, "integer | Video quality. See enum VideoQuality." ],
+    "req-site-content-context": [ "integer", false, 1, "integer | Content context. See enum ContentContext." ],
+    "req-site-content-contentrating": [ "string", false, "MPAA", "string | Content rating." ],
+    "req-site-content-userrating": [ "string", false, "Great", "string | User rating of the content." ],
+    "req-site-content-keywords": [ "string array", false, ["Mordern Family"], "string array | Array of keywords describing the content." ],
+    "req-site-content-livestream": [ "integer", false, 0, "integer | 0 = not live, 1 = content is live." ],
+    "req-site-content-sourcerelationship": [ "integer", false, 0, "integer | Indicates the source relationship. 0 = indirect, 1 = direct." ],
+    "req-site-content-len": [ "integer", false, 1800, "integer | Length of content in seconds." ],
+    "req-site-content-language": [ "string", false, "en", "string | Content language using ISO-639-1-alpha-2." ],
+    "req-site-content-embeddable": [ "integer", false, 0, "integer | Indicates if content is embeddable." ],
+    "req-site-context-ext": [ , , {}, ],
+    // Content Object under App
+    "req-app-content-id": [ "string", false, "1234567", "string | Content ID." ],
+    "req-app-content-episode": [ "integer", false, 1, "integer | Episode number." ],
+    "req-app-content-title": [ "string", false, "Mordern Family - Season 1 Episode 1", "string | Content title." ],
+    "req-app-content-series": [ "string", false, "Mondern Family", "string | Series name." ],
+    "req-app-content-season": [ "string", false, "Season 1", "string | Season name." ],
+    "req-app-content-artist": [ "string", false, "Ty burrell", "string | Artist name." ],
+    "req-app-content-genre": [ "string", false, "comedy", "string | Genre name." ],
+    "req-app-content-album": [ "string", false, "Original Soundtrack", "string | Album name." ],
+    "req-app-content-isrc": [ "string", false, "1234567890", "string | ISRC code." ],
+    "req-app-content-url": [ "string", false, "https://abc.com/", "string | Content URL." ],
+    "req-app-content-cat": [ "string array", false, ["IAB1-7"], "string array | Array of IAB content categories. See enum ContentCategory." ],
+    "req-app-content-prodq": [ "integer", false, 1, "integer | Production quality. See enum ProductionQuality." ],
+    "req-app-content-videoquality": [ "integer", false, 1, "integer | Video quality. See enum VideoQuality." ],
+    "req-app-content-context": [ "integer", false, 1, "integer | Content context. See enum ContentContext." ],
+    "req-app-content-contentrating": [ "string", false, "MPAA", "string | Content rating." ],
+    "req-app-content-userrating": [ "string", false, "Great", "string | User rating of the content." ],
+    "req-app-content-keywords": [ "string array", false, ["Mordern Family"], "string array | Array of keywords describing the content." ],
+    "req-app-content-livestream": [ "integer", false, 0, "integer | 0 = not live, 1 = content is live." ],
+    "req-app-content-sourcerelationship": [ "integer", false, 0, "integer | Indicates the source relationship. 0 = indirect, 1 = direct." ],
+    "req-app-content-len": [ "integer", false, 1800, "integer | Length of content in seconds." ],
+    "req-app-content-language": [ "string", false, "en", "string | Content language using ISO-639-1-alpha-2." ],
+    "req-app-content-embeddable": [ "integer", false, 0, "integer | Indicator of whether or not the content is embeddable." ],
+    "req-app-context-ext": [ , , {}, ],
 
     // Publisher Object
-    "site-publisher-id": "12345",         // Publisher ID
-    "site-publisher-name": "ABC.com",   // Publisher name
-    "site-publisher-domain": "abc.com", // Publisher domain
-    "site-publisher-cat": ["IAB1-7"], // Publisher category
-    "site-publisher-ext": {}, // Publisher ext
+    "req-site-publisher-id": ["string", false, "12345", "string | Exchange-specific publisher ID."],
+    "req-site-publisher-name": ["string", false, "ABC", "string | Publisher name."],
+    "req-site-publisher-domain": ["string", false, "abc.com", "string | Publisher domain."],
+    "req-site-publisher-cat": ["string array", false, ["IAB1-7"], "string array | Array of IAB content categories."],
+    "req-site-publisher-ext": [ , , {}, ],
 
-    "app-publisher-id": "12345",         // Publisher ID
-    "app-publisher-name": "ABC.com",   // Publisher name
-    "app-publisher-domain": "abc.com", // Publisher domain
-    "app-publisher-cat": ["IAB1-7"], // Publisher category
-    "app-publisher-ext": {}, // Publisher ext
-    // Add more publisher attributes as needed
+    "req-app-publisher-id": ["string", false, "12345", "string | Exchange-specific publisher ID."],
+    "req-app-publisher-name": ["string", false, "ABC.com", "string | Publisher name."],
+    "req-app-publisher-domain": ["string", false, "abc.com", "string | Publisher domain."],
+    "req-app-publisher-cat": ["string array", false, ["IAB1-7"], "string array | Array of IAB content categories."],
+    "req-app-publisher-ext": [ , , {}, ],
 
     // App Object
-    "app-id": "54321",          // App ID
-    "app-name": "OpenRTB App", // App name
-    "app-bundle": "com.openrtb.app", // App bundle (for mobile apps)
-    "app-domain": "openrtb.com", // App domain
-    "app-storeurl": "https://openrtb.com", // App store URL
-    "app-cat": ["IAB3-1"], // App category
-    "app-sectioncat": ["IAB3-1"], // App section category
-    "app-pagecat": ["IAB3-1"], // App page category
-    "app-ver": "1.2",          // App version
-    "app-privacypolicy": 1,    // App privacy policy
-    "app-paid": 0,
-    "app-keywords": ["openrtb", "advertising"], // App keywords
-    "app-ext": {}, // App ext
-    // Add more app attributes as needed
+    "req-app-id": ["string", false, "54321", "string; recommended | Exchange-specific app ID."],
+    "req-app-name": ["string", false, "OpenRTB App", "string | Application name."],
+    "req-app-bundle": ["string", false, "com.openrtb.app", "string | Application bundle."],
+    "req-app-domain": ["string", false, "openrtb.com", "string | Application domain."],
+    "req-app-storeurl": ["string", false, "https://openrtb.com", "string | Application store URL."],
+    "req-app-cat": ["string array", false, ["IAB3-1", "IAB3-2"], "string array | Array of IAB content categories."],
+    "req-app-sectioncat": ["string array", false, ["IAB7-1"], "string array | Array of section IAB content categories."],
+    "req-app-pagecat": ["string array", false, ["IAB3-1"], "string array | Array of page IAB content categories."],
+    "req-app-ver": ["string", false, "1.2", "string | Application version."],
+    "req-app-privacypolicy": ["integer", false, 1, "integer | Indicator of application privacy policy."],
+    "req-app-paid": ["integer", false, 0, "integer | Indicator of whether the application is paid."],
+    "req-app-keywords": ["string array", false, ["openrtb", "advertising"], "string array | Array of application keywords."],
+    "req-app-ext": [ , , {}, ],
 
     // Device Object
-    "device-ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/124.0.2478.89 Version/15.0 Mobile/15E148 Safari/604.1",  // User agent
-    "ddevice-dnt": 0,           // Do not track
-    "device-lmt": 0,            // Limited ads
-    "device-ip": "1.2.3.4",     // IP address
-    "device-ipv6": "5be8:dde9:7f0b:d5a7:bd11:b3be:9c67:573a", // IPv6 address
-    "device-devicetype": 1,           // Device type (1 = mobile, 2 = tablet, 3 = desktop)
-    "device-make": "Apple",    // Device make
-    "device-os": "iOS",         // Operating system
-    "device-model": "iPhone",   // Device model
-    "device-osv": "15.8",       // Operating system version
-    "device-hwv": "5S",       // Hardware version
-    "device-h": 320,            // Screen height
-    "device-w": 480,            // Screen width
-    "device-ppi": 0,            // Pixel ratio
-    "device-pxratio": 0,        // Pixel ratio
-    "device-js": 1,             // Javascript enabled
-    "device-geofetch": 0,          // Flash enabled
-    "device-flashver": "237.84.2.178", // Flash version
-    "device-language": "en",    // Language
-    "device-carrier": "AT&T",   // Carrier
-    "device-mccmnc": "310-005",  // Mobile country code and mobile network code
-    "device-connectiontype": 1, // Connection type
-    "device-ifa": "12345678901234567890", // IFA
-    "device-didsha1": "12345678901234567890", // Device ID
-    "device-didmd5": "12345678901234567890", // Device ID
-    "device-dpidsha1": "12345678901234567890", // Device ID
-    "device-dpidmd5": "12345678901234567890", // Device ID
-    "device-macsha1": "12345678901234567890", // Device ID
-    "device-macmd5": "12345678901234567890", // Device ID
-    "device-ext": {}, // Device ext
-    // Add more device attributes as needed
+    "req-device-ua": ["string", false, "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/124.0.2478.89 Version/15.0 Mobile/15E148 Safari/604.1", "string; recommended | Browser user agent string."],
+    "req-device-dnt": ["integer", false, 0, "integer; recommended | Indicator of whether tracking is restricted."],
+    "req-device-lmt": ["integer", false, 0, "integer; recommended | Indicator of whether ad tracking is limited."],
+    "req-device-ip": ["string", false, "1.2.3.4", "string; recommended | IPv4 address closest to the device."],
+    "req-device-ipv6": ["string", false, "5be8:dde9:7f0b:d5a7:bd11:b3be:9c67:573a", "string | IPv6 address closest to the device as IPv6."],
+    "req-device-devicetype": ["integer", false, 1, "integer | Device type."],
+    "req-device-make": ["string", false, "Apple", "string | Device make."],
+    "req-device-os": ["string", false, "iOS", "string | Operating system."],
+    "req-device-model": ["string", false, "iPhone", "string | Device model."],
+    "req-device-osv": ["string", false, "15.8", "string | Operating system version."],
+    "req-device-hwv": ["string", false, "5S", "string | Hardware version."],
+    "req-device-h": ["integer", false, 320, "integer | Physical height of the screen in pixels."],
+    "req-device-w": ["integer", false, 480, "integer | Physical width of the screen in pixels."],
+    "req-device-ppi": ["integer", false, 0, "integer | Sreen size as pixels per linear inch."],
+    "req-device-pxratio": ["integer", false, 0, "integer | The ratio of physical pixels to device independent pixels."],
+    "req-device-js": ["integer", false, 1, "integer | Support for JavaScript, where 0 = no, 1 = yes."],
+    "req-device-geofetch": ["integer", false, 0, "integer | Indicates if the geolocation API will be available to JavaScript code running in the banner, where 0 = no, 1 = yes."],
+    "req-device-flashver": ["string", false, "237.84.2.178", "string | Flash version."],
+    "req-device-language": ["string", false, "en", "string | Language."],
+    "req-device-carrier": ["string", false, "AT&T", "string | Carrier name."],
+    "req-device-mccmnc": ["string", false, "310-005", "string | Mobile country code and mobile network code."],
+    "req-device-connectiontype": ["integer", false, 1, "integer | Connection type."],
+    "req-device-ifa": ["string", false, "12345678901234567890", "string | IMEI."],
+    "req-device-didsha1": ["string", false, "12345678901234567890", "string | IMEI hashed via SHA1."],
+    "req-device-didmd5": ["string", false, "12345678901234567890", "string | IMEI hashed via MD5."],
+    "req-device-dpidsha1": ["string", false, "12345678901234567890", "string | Platform device ID hashed via SHA1."],
+    "req-device-dpidmd5": ["string", false, "12345678901234567890", "string | Platform device ID hashed via MD5."],
+    "req-device-macsha1": ["string", false, "12345678901234567890", "string | MAC address hashed via SHA1."],
+    "req-device-macmd5": ["string", false, "12345678901234567890", "string | MAC address hashed via MD5."],
+    "req-device-ext": [ , , {}, ],
 
     // Device.Geo Object
-    "device-geo-lat": 35.012345, // Latitude
-    "device-geo-lon": -115.12345, // Longitude
-    "device-geo-type": 1,      // Type
-    "device-geo-accuracy": 0,  // Accuracy
-    "device-geo-lastfix": 0,   // Last fix
-    "device-geo-ipservice": 0, // IP service
-    "device-geo-country": "USA", // Country
-    "device-geo-region": "CA", // Region
-    "device-geo-regionfips104": "AT-1", // Region FIPS 104
-    "device-geo-metro": "803", // Metro
-    "device-geo-city": "Los Ageles", // City
-    "device-geo-zip": "90049", // Zip
-    "device-geo-utcoffset": -7, // UTC offset
-    "device-geo-ext": {}, // Geo ext
+    "req-device-geo-lat": ["float", false, 35.012345, "float | Latitude."],
+    "req-device-geo-lon": ["float", false, -115.012345, "float | Longitude."],
+    "req-device-geo-type": ["integer", false, 1, "integer | Location type."],
+    "req-device-geo-accuracy": ["integer", false, 0, "integer | Location accuracy."],
+    "req-device-geo-lastfix": ["integer", false, 0, "integer | Location timestamp."],
+    "req-device-geo-ipservice": ["integer", false, 0, "integer | IP service."],
+    "req-device-geo-country": ["string", false, "USA", "string | Country."],
+    "req-device-geo-region": ["string", false, "CA", "string | Region."],
+    "req-device-geo-regionfips104": ["string", false, "AT-1", "string | Region FIPS 104."],
+    "req-device-geo-metro": ["string", false, "803", "string | Metro."],
+    "req-device-geo-city": ["string", false, "Los Ageles", "string | City."],
+    "req-device-geo-zip": ["string", false, "90049", "string | Zip."],
+    "req-device-geo-utcoffset": ["integer", false, -7, "integer | UTC offset."],
+    "req-device-geo-ext": [ , , {}, ],
 
     // User Object
-    "user-id": "55816b39711f9b5acf3b90e313ed29e51665623f",    // User ID
-    "user-buyeruid": "o04gl0441i0wmu1c6333q4vpsb668jzl59gk6b42", // Buyer ID
-    "user-yob": 1980,           // Year of birth
-    "user-gender": "M",         // User gender
-    "user-keywords": "sports",    // User keywords
-    "user-customdata": "randomdata",   // User custom data
-    "user-ext": {}, // User geo
+    "req-user-id": ["string", false, "55816b39711f9b5acf3b90e313ed29e51665623f", "string; recommended | Exchange-specific ID for the user. At least one of id or buyeruid is recommended"],
+    "req-user-buyeruid": ["string", false, "o04gl0441i0wmu1c6333q4vpsb668jzl59gk6b42", "string; recommmended | Buyer-specific ID for the user as mapped by the exchange. At least one of id or buyeruid is recommended"],
+    "req-user-yob": ["integer", false, 1980, "integer | Year of birth."],
+    "req-user-gender": ["string", false, "M", "string | User gender. 'M' or 'F'."],
+    "req-user-keywords": ["string", false, "sports", "string | User keywords."],
+    "req-user-customdata": ["string", false, "randomdata", "string | Custom data."],
+    "req-user-ext": [ , , {}, ],
 
     // User.Geo Object
-    "user-geo-lat": 35.012345, // Latitude
-    "user-geo-lon": -115.12345, // Longitude
-    "user-geo-lat": 35.012345, // Latitude
-    "user-geo-lon": -115.12345, // Longitude
-    "user-geo-type": 1,      // Type
-    "user-geo-accuracy": 0,  // Accuracy
-    "user-geo-lastfix": 0,   // Last fix
-    "user-geo-ipservice": 0, // IP service
-    "user-geo-country": "USA", // Country
-    "user-geo-region": "CA", // Region
-    "user-geo-regionfips104": "AT-1", // Region FIPS 104
-    "user-geo-metro": "803", // Metro
-    "user-geo-city": "Los Ageles", // City
-    "user-geo-zip": "90049", // Zip
-    "user-geo-utcoffset": -7, // UTC offset
-    "user-geo-ext": {}, // Geo ext
-    // Add more user attributes as needed
-
-    // Bid Request Object
-    "req-id": "80ce30c53c16e6ede735f123ef6e32361bfc7b22",     // Bid request ID
-    "cur": ["USD"],             // Currency
-    "bcat": ["IAB1-1"],         // Blocked categories
-    "badv": ["apple.com", "go-text.me", "heywire.com"], // Blocked advertisers
-    "bseat": ["seat3", "seat4"], // Blocked seats
-    "bapp": ["app1", "app2"],   // Blocked apps
-    "at": 1,                    // Auction type
-    "tmax": 5000,               // Max timeout
-    "wseat": ["seat1", "seat2"], // Whitelisted seats
-    "allimps": 0,            // Enable all impressions
-    "test": 0,                  // Test mode
-    "ext": {},                  // Bid request ext
-    // Add more bid request attributes as needed
+    "req-user-geo-lat": ["float", false, 35.012345, "float | Latitude."],
+    "req-user-geo-lon": ["float", false, -115.012345, "float | Longitude."],
+    "req-user-geo-type": ["integer", false, 1, "integer | Location type."],
+    "req-user-geo-accuracy": ["integer", false, 0, "integer | Location accuracy."],
+    "req-user-geo-lastfix": ["integer", false, 0, "integer | Location timestamp."],
+    "req-user-geo-ipservice": ["integer", false, 0, "integer | IP service."],
+    "req-user-geo-country": ["string", false, "USA", "string | Country."],
+    "req-user-geo-region": ["string", false, "CA", "string | Region."],
+    "req-user-geo-regionfips104": ["string", false, "AT-1", "string | Region FIPS 104."],
+    "req-user-geo-metro": ["string", false, "803", "string | Metro."],
+    "req-user-geo-city": ["string", false, "Los Angeles", "string | City."],
+    "req-user-geo-zip": ["string", false, "90049", "string | Zip."],
+    "req-user-geo-utcoffset": ["integer", false, -7, "integer | UTC offset."],
+    "req-user-geo-ext": [ , , {}, ],
 
     // PMP Object
-    "imp-pmp-private-auction": 1, // Private auction
-    "imp-pmp-private-auction-deal-id": "openrtb-test-deal", // Deal ID
-    "imp-pmp-private-auction-deal-bidfloor": 0.01, // Deal bid floor
-    "imp-pmp-private-auction-deal-bidfloorcur": "USD", // Deal bid floor currency
-    "imp-pmp-private-auction-deal-at": 1, // Deal at
-    "imp-pmp-private-auction-deal-wseat": ['seat1', 'seat2'], // Deal whitelisted seats
-    "imp-pmp-private-auction-deal-wadomain": ['www.happybidder.com', 'www.happybuyer.com'], // Deal whitelisted ad servers
-    "imp-pmp-private-auction-deal-ext": {}, // Deal ext
+    "req-imp-pmp-private_auction": ["integer", false, 1, "integer | Indicator of auction eligibility to seats named in the Direct Deals object, where 0 = all bids are accepted, 1 = bids are restricted to the deals specified and the terms thereof."], 
+    "req-imp-pmp-ext": [ , , {}, ],
+    // Direct Deal Object
+    "req-imp-pmp-deal-id": ["string", true, "openrtb-test-deal", "string; required | A unique identifier for the direct deal."],
+    "req-imp-pmp-deal-bidfloor": ["float", false, 0.01, "float | Minimum bid for this impression expressed in CPM."],
+    "req-imp-pmp-deal-bidfloorcur": ["string", false, "USD", "string | Currency specified using ISO-4217 alpha codes."],
+    "req-imp-pmp-deal-at": ["integer", false, 1, "integer | Optional override of the overall auction type of the bid request."],
+    "req-imp-pmp-deal-wseat": ["string array", false, ['seat1', 'seat2'], "string array | Allowlist of buyer seats allowed to bid on this deal."],
+    "req-imp-pmp-deal-wadomain": ["string array", false, ['www.happybidder.com', 'www.happybuyer.com'], "string array | Array of advertiser domains allowed to bid on this deal."],
+    "req-imp-pmp-deal-ext": [ , , {}, ],
 
     // Source Object
-    "source-fd": 0,             // Exchange
-    "source-tid": "sic-3kdpacmpdsads1o9fjd8espe",
-    "source-pchain": "pchain-3kdpacmpdsads1o9fjd8espe",
-    "source-ext": {},
+    "req-source-fd": ["integer", false, 0, "integer; recommended | Entity responsible for the final impression sale decision, where false = exchange, true = upstream source."],
+    "req-source-tid": ["string", false, "sic-3kdpacmpdsads1o9fjd8espe", "string; recommended | Transaction ID that must be common across all participants in this bid request."],
+    "req-source-pchain": ["string", false, "pchain-3kdpacmpdsads1o9fjd8espe", "string; recommended | Payment ID chain string containing embedded syntax described in the TAG Payment ID Protocol v1.0."],
+    "req-source-ext": [ , , {}, ],
 
     // Regs Object
-    "regs-coppa": 0,           // COPPA consent
-    "regs-ext": {},
+    "req-regs-coppa": ["integer", false, 0, "integer; recommended | COPPA compliance status (0 = no, 1 = yes)."],
+    "req-regs-ext": [ , , {}, ],
 
     // GDPR-related attributes
-    "gdpr": 0,                  // GDPR consent status (0 = no consent, 1 = consent)
-    "gdpr-consent": "BOEFEAyOEFEAyAHABDENAI4AAAB9vABAASA", // GDPR consent string
-    // Add more GDPR attributes as needed
-
-    // Additional Objects and Attributes
-    // Add more attributes for video, native, PMP (private marketplace), etc.
+    // TODO
 };
 // User input
 const inputData = {}
-
-class BidRequest {
-    constructor(id, imp, site, app, device, user, test, at, tmax, wseat, allimps, cur, bcat, badv, regs) {
-        this.id = id;
-        this.imp = imp; // Array of Imp objects
-        this.site = site; // Site object
-        this.app = app; // App object
-        this.device = device; // Device object
-        this.user = user; // User object
-        this.test = test;
-        this.at = at;
-        this.tmax = tmax;
-        this.wseat = wseat;
-        this.allimps = allimps;
-        this.cur = cur;
-        this.bcat = bcat;
-        this.badv = badv;
-        this.regs = regs; // Regs object
-    }
-}
-
-class Imp {
-    constructor(id, banner, video, native, pmp, displaymanager, displaymanagerver, instl, tagid, bidfloor, bidfloorcur, clickbrowser, secure, iframebuster, exp, metric, ext) {
-        this.id = id;
-        this.banner = banner; // Banner object
-        this.video = video; // Video object
-        this.native = native; // Native object
-        this.pmp = pmp; // PMP object
-        this.displaymanager = displaymanager; // Display manager
-        this.displaymanagerver = displaymanagerver; // Display manager version
-        this.instl = instl; // Instl
-        this.tagid = tagid; // Tag ID
-        this.bidfloor = bidfloor; // Bid floor
-        this.bidfloorcur = bidfloorcur; // Bid floor currency
-        this.clickbrowser = clickbrowser; // Click browser
-        this.secure = secure; // Secure
-        this.iframebuster = iframebuster; // Iframebuster
-        this.exp = exp; // Exp
-        this.metric = metric;
-        this.ext = ext; // Ext
-    }
-}
-
-class Metric {
-    constructor(type, value, vendor, ext) {
-        this.type = type;
-        this.value = value;
-        this.vendor = vendor;
-        this.ext = ext;
-    }
-}
-
-class Deal {
-    constructor(id, bidfloor, bidfloorcur, at, wseats, wadomains, ext) {
-        this.id = id;
-        this.bidfloor = bidfloor;
-        this.bidfloorcur = bidfloorcur;
-        this.at = at;
-        this.wseats = wseats;
-        this.wadomains = wadomains;
-        this.ext = ext;
-    }
-}
-
-class Pmp {
-    constructor(private_auction, deals, ext) {
-        this.private_auction = private_auction;
-        this.deals = deals;
-        this.ext = ext;
-    }
-}
-
-class Banner {
-    constructor(
-        format,
-        w,
-        h,
-        wmax,
-        hmax,
-        wmin,
-        hmin,
-        btype,
-        battr,
-        pos,
-        mimes,
-        topframe,
-        expdir,
-        api,
-        id,
-        vcm,
-        ext
-    ) {
-        this.format = format;
-        this.w = w;
-        this.h = h;
-        this.wmax = wmax;
-        this.hmax = hmax;
-        this.wmin = wmin;
-        this.hmin = hmin;
-        this.btype = btype;
-        this.battr = battr;
-        this.pos = pos;
-        this.mimes = mimes;
-        this.topframe = topframe;
-        this.expdir = expdir;
-        this.api = api;
-        this.id = id;
-        this.vcm = vcm; 
-        this.ext = ext;
-    }
-}
-
-class Format {
-    constructor(w, h, wratio, hratio, wmin, ext) {
-        this.w = w;
-        this.h = h;
-        this.wratio = wratio;
-        this.hratio = hratio;
-        this.wmin = wmin;
-        this.ext = ext;
-    }
-}
-
-class Video {
-    constructor(
-        mimes,
-        minduration,
-        maxduration,
-        protocols,
-        protocol,
-        w,
-        h,
-        wmin,
-        hmin,
-        wmax,
-        hmax,
-        battr,
-        maxbitrate,
-        minbitrate,
-        boxingallowed,
-        playbackmethod,
-        delivery,
-        pos,
-        companionad,
-        api,
-        companiontype,
-        ext
-    ) {
-        this.mimes = mimes;
-        this.minduration = minduration;
-        this.maxduration = maxduration;
-        this.protocols = protocols;
-        this.protocol = protocol;
-        this.w = w;
-        this.h = h;
-        this.wmin = wmin;
-        this.hmin = hmin;
-        this.wmax = wmax;
-        this.hmax = hmax;
-        this.battr = battr;
-        this.maxbitrate = maxbitrate;
-        this.minbitrate = minbitrate;
-        this.boxingallowed = boxingallowed;
-        this.playbackmethod = playbackmethod;
-        this.delivery = delivery;
-        this.pos = pos;
-        this.companionad = companionad;
-        this.companiontype = companiontype;
-        this.api = api;
-        this.ext = ext;
-    }
-}
-
-class Audio {
-    constructor(
-        mimes,
-        minduration,
-        maxduration,
-        protocols,
-        startdelay,
-        sequence,
-        battr,
-        maxextended,
-        minbitrate,
-        maxbitrate,
-        delivery,
-        companionad,
-        api,
-        companiontype,
-        maxseq,
-        feed,
-        stitched,
-        nvol,
-        ext
-    ) {
-        this.mimes = mimes;
-        this.minduration = minduration;
-        this.maxduration = maxduration;
-        this.protocols = protocols;
-        this.startdelay = startdelay;
-        this.sequence = sequence;
-        this.battr = battr;
-        this.maxextended = maxextended;
-        this.minbitrate = minbitrate;
-        this.maxbitrate = maxbitrate;
-        this.delivery = delivery;
-        this.companionad = companionad;
-        this.api = api;
-        this.companiontype = companiontype;
-        this.maxseq = maxseq;
-        this.feed = feed;
-        this.stitched = stitched;
-        this.nvol = nvol;
-        this.ext = ext;
-    }
-}
-
-class Site {
-    constructor(id, name, domain, cat, sectioncat, pagecat, page, ref, search, mobile, privacypolicy, publisher, content, keywords) {
-        this.id = id;
-        this.name = name;
-        this.domain = domain;
-        this.cat = cat;
-        this.sectioncat = sectioncat;
-        this.pagecat = pagecat;
-        this.page = page;
-        this.ref = ref;
-        this.search = search;
-        this.mobile = mobile;
-        this.privacypolicy = privacypolicy;
-        this.publisher = publisher; // Publisher object
-        this.content = content; // Content object
-        this.keywords = keywords;
-    }
-}
-
-class App {
-    constructor(
-        id,
-        name,
-        bundle,
-        domain,
-        storeurl,
-        cat,
-        sectioncat,
-        pagecat,
-        ver,
-        privacypolicy,
-        paid,
-        publisher,
-        content,
-        keywords,
-        ext
-    ) {
-        this.id = id;
-        this.name = name;
-        this.bundle = bundle;
-        this.domain = domain;
-        this.storeurl = storeurl;
-        this.cat = cat;
-        this.sectioncat = sectioncat;
-        this.pagecat = pagecat;
-        this.ver = ver;
-        this.privacypolicy = privacypolicy;
-        this.paid = paid;
-        this.publisher = publisher; // Publisher object
-        this.content = content; // Content object
-        this.keywords = keywords;
-        this.ext = ext;
-    }
-}
-
-class Publisher {
-    constructor(id, name, domain, cat, ext) {
-        this.id = id;
-        this.name = name;
-        this.domain = domain;
-        this.cat = cat;
-        this.ext = ext;
-    }
-}
-
-class Content {
-    constructor() {
-        this.id = null;
-        this.episode = null;
-        this.title = null;
-        this.series = null;
-        this.season = null;
-        this.artist = null;
-        this.genre = null;
-        this.album = null;
-        this.isrc = null;
-        this.producer = null;
-        this.url = null;
-        this.cat = null;
-        this.videoquality = null;
-        this.context = null;
-        this.contentrating = null;
-        this.userrating = null;
-        this.keywords = null;
-        this.livestream = null;
-        this.sourcerelationship = null;
-        this.len = null;
-        this.language = null;
-        this.embeddable = null;
-        this.data = null;
-        this.ext = null;
-    }
-}
-
-class Device {
-    constructor(ua, geo, dnt, lmt, ip, ipv6, devicetype, make, model, os, osv, hwv, h, w, ppi, pxratio, js, flashver, language, carrier, connectiontype, ifa, didsha1, didmd5, dpidsha1, dpidmd5, macsha1, macmd5) {
-        this.ua = ua;
-        this.geo = geo; // Geo object
-        this.dnt = dnt;
-        this.lmt = lmt;
-        this.ip = ip;
-        this.ipv6 = ipv6;
-        this.devicetype = devicetype;
-        this.make = make;
-        this.model = model;
-        this.os = os;
-        this.osv = osv;
-        this.hwv = hwv;
-        this.h = h;
-        this.w = w;
-        this.ppi = ppi;
-        this.pxratio = pxratio;
-        this.js = js;
-        this.flashver = flashver;
-        this.language = language;
-        this.carrier = carrier;
-        this.connectiontype = connectiontype;
-        this.ifa = ifa;
-        this.didsha1 = didsha1;
-        this.didmd5 = didmd5;
-        this.dpidsha1 = dpidsha1;
-        this.dpidmd5 = dpidmd5;
-        this.macsha1 = macsha1;
-        this.macmd5 = macmd5;
-    }
-}
-
-class User {
-    constructor(id, buyeruid, yob, gender, keywords, customdata, geo, data) {
-        this.id = id;
-        this.buyeruid = buyeruid;
-        this.yob = yob;
-        this.gender = gender;
-        this.keywords = keywords;
-        this.customdata = customdata;
-        this.geo = geo; // Geo object
-        this.data = data; // Array of Data objects
-    }
-}
-
-class Geo {
-    constructor(lat, lon, type, accuracy, lastfix, ipservice, country, region, regionfips104, metro, city, zip, utcoffset) {
-        this.lat = lat;
-        this.lon = lon;
-        this.type = type;
-        this.accuracy = accuracy;
-        this.lastfix = lastfix;
-        this.ipservice = ipservice;
-        this.country = country;
-        this.region = region;
-        this.regionfips104 = regionfips104;
-        this.metro = metro;
-        this.city = city;
-        this.zip = zip;
-        this.utcoffset = utcoffset;
-    }
-}
-
-class Source {
-    constructor() {
-        this.fd = null;
-        this.tid = null;
-        this.pchain = null;
-        this.ext = null;
-    }
-}
-
-class Regs {
-    constructor() {
-        this.coppa = null;
-        this.ext = null;
-    }   
-}
 
 // Helper Functions, random string generator
 function stringRandom(id, length) {
@@ -727,39 +332,42 @@ function integerRandom(id, length) {
     checkboxOnChange(id);
 }
 
-function createImpObject() {
-    // Imp is required.
-    const imps = [new Imp('1', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)]
-    const imp = imps[0]
+function createImpsObject() {
+    let imps = []; // imps is an array
+    let imp = {};
+    imps[0] = imp; // currently support 1 imp only.
     
     // Basic Attributes
     Object.keys(defaultData).forEach(key => {
-        if (key.startsWith('imp') && key.split('-').length === 2) {
+        if (key.startsWith('req-imp') && key.split('-').length === 3) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                const [, field] = key.split('-');
+                const [, field] = key.split('-imp-');
                 imp[field] = inputData[key];
             }
         }
 
         // metric
-        if (key.startsWith('imp-metric')) {
+        if (key.startsWith('req-imp-metric') && document.getElementById('req-imp-metric').checked) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                imp.metric = [new Metric()];
-                const [, , field] = key.split('-');
-                imp.metric[0][field] = inputData[key];
+                imp["metric"] = [];
+                let metric = {};
+                imp["metric"][0] = metric; // currently support 1 metric only
+                const [, field] = key.split('imp-metric-');
+                metric[field] = inputData[key];
             }
         }
 
         // pmp
-        if (document.getElementById('imp-pmp').checked) {
-            imp.pmp = new Pmp(true, null, null);
-            imp.pmp.private_auction = document.getElementById('imp-pmp-private-auction').checked ? 1 : 0;
-            imp.pmp.deals = [new Deal()];
-            deal = imp.pmp.deals[0]
+        if (document.getElementById('req-imp-pmp').checked) {
+            imp["pmp"] = {}
+            let pmp = imp["pmp"]
+            pmp["private_auction"] = document.getElementById('req-imp-pmp-private_auction').checked ? 1 : 0;
+            pmp["deals"] = [{}]; // currently only support 1 deal
+            deal = pmp["deals"][0];
             Object.keys(defaultData).forEach(key => {
-                if (key.startsWith('imp-pmp-private-auction-deal-')) {
+                if (key.startsWith('req-imp-pmp-deal-')) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
                         const [ ,field] = key.split('deal-');
@@ -771,54 +379,53 @@ function createImpObject() {
     });
 
     // Banner/Video/Audio Attributes
-    const selectedType = document.getElementById('impTypeSelect').value;
+    const selectedType = document.getElementById('req-impTypeSelect').value;
     if (!selectedType) {
         return imps;
     }
     switch (selectedType) {
         case 'banner':
-            imp.banner = new Banner();
+            imp["banner"] = {};
             Object.keys(defaultData).forEach(key => {
-                if (key.startsWith('imp-banner') && key.split('-').length === 3) {
+                if (key.startsWith('req-imp-banner') && key.split('-').length === 4) { // banner top leve lattributes
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
-                        const [, second, third] = key.split('-');
-                        imp.banner[third] = inputData[key];
+                        const [, field] = key.split('-banner-');
+                        imp["banner"][field] = inputData[key];
                     }
                 }
-                if (key.startsWith('imp-banner-format')) {
+                if (key.startsWith('req-imp-banner-format')) {
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
-                        if (!imp.banner.format) {
-                            imp.banner.format = [];
-                            imp.banner.format[0] = new Format();
+                        if (!imp["banner"]["format"]) {
+                            imp["banner"]["format"] = [{}];
                         }
-                        const [, , , field] = key.split('-');
-                        imp.banner.format[0][field] = inputData[key];
+                        const [, field] = key.split('-format-');
+                        imp["banner"]["format"][0][field] = inputData[key];
                     }
                 }
             });
             break;
         case 'video':
-            imp.video = new Video();
+            imp["video"] = {};
             Object.keys(defaultData).forEach(key => {
-                if (key.startsWith('imp-video') && key.split('-').length === 3) {
+                if (key.startsWith('req-imp-video') && key.split('-').length === 4) { // video top leve lattributes
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
-                        const [, second, third] = key.split('-');
-                        imp.video[third] = inputData[key];
+                        const [, field] = key.split('-video-');
+                        imp["video"][field] = inputData[key];
                     }
                 }
             })
             break;
         case 'audio':
-            imp.audio = new Audio();
+            imp["audio"] = {};
             Object.keys(defaultData).forEach(key => {
-                if (key.startsWith('imp-audio') && key.split('-').length === 3) {
+                if (key.startsWith('req-imp-audio') && key.split('-').length === 4) { // audio top leve lattributes
                     const element = document.getElementById(key);
                     if (element && element.type === 'checkbox' && element.checked) {
-                        const [, second, third] = key.split('-');
-                        imp.audio[third] = inputData[key];
+                        const [, field] = key.split('-audio-');
+                        imp["audio"][field] = inputData[key];
                     }
                 }
             })
@@ -831,40 +438,40 @@ function createImpObject() {
 }
 
 function createSiteObject() {
-    const site = new Site();
+    const site = {};
     Object.keys(defaultData).forEach(key => {
-        if (key.startsWith('site') && key.split('-').length === 2) {
+        if (key.startsWith('req-site') && key.split('-').length === 3) { // top level attributes of site, as the key looks like req-site-name
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                const [, field] = key.split('-');
+                const [, field] = key.split('-site-');
                 site[field] = inputData[key];
             }
         }
     })
 
     // site.publisher
-    if (document.getElementById('site-publisher').checked) {
-        site.publisher = new Publisher();
+    if (document.getElementById('req-site-publisher').checked) {
+        site["publisher"] = {};
         Object.keys(defaultData).forEach(key => {
-            if (key.startsWith('site-publisher-')) {
+            if (key.startsWith('req-site-publisher-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
-                    const [, field] = key.split('pubslisher-');
-                    site.publisher[field] = inputData[key];
+                    const [, field] = key.split('-pubslisher-');
+                    site["publisher"][field] = inputData[key];
                 }
             }
         })
     }
 
     // site.content
-    if (document.getElementById('site-content').checked) {
-        site.content = new Content();
+    if (document.getElementById('req-site-content').checked) {
+        site["content"] = {};
         Object.keys(defaultData).forEach(key => {
-            if (key.startsWith('site-content-')) {
+            if (key.startsWith('req-site-content-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
-                    const [, field] = key.split('content-');
-                    site.content[field] = inputData[key];
+                    const [, field] = key.split('-content-');
+                    site["content"][field] = inputData[key];
                 }
             }
         })
@@ -873,40 +480,40 @@ function createSiteObject() {
 }
 
 function createAppObject() {
-    const app = new App();
+    const app = {};
     Object.keys(defaultData).forEach(key => {
-        if (key.startsWith('app') && key.split('-').length === 2) {
+        if (key.startsWith('req-app') && key.split('-').length === 3) { // top level attributes of app, as the key looks like req-app-name
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                const [, field] = key.split('-');
+                const [, field] = key.split('-app-');
                 app[field] = inputData[key];
             }
         }
     })
 
     // app.publisher
-    if (document.getElementById('app-publisher').checked) {
-        app.publisher = new Publisher();
+    if (document.getElementById('req-app-publisher').checked) {
+        app["publisher"] = {};
         Object.keys(defaultData).forEach(key => {
-            if (key.startsWith('app-publisher-')) {
+            if (key.startsWith('req-app-publisher-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
-                    const [, field] = key.split('publisher-');
-                    app.publisher[field] = inputData[key];
+                    const [, field] = key.split('-pubslisher-');
+                    app["publisher"][field] = inputData[key];
                 }
             }
         })
     }
     
     // app.content
-    if (document.getElementById('app-content').checked) {
-        app.content = new Content();
+    if (document.getElementById('req-app-content').checked) {
+        app["content"] = {};
         Object.keys(defaultData).forEach(key => {
-            if (key.startsWith('app-content-')) {
+            if (key.startsWith('req-app-content-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
-                    const [, field] = key.split('content-');
-                    app.content[field] = inputData[key];
+                    const [, field] = key.split('-content-');
+                    app["content"][field] = inputData[key];
                 }
             }
         })
@@ -915,25 +522,25 @@ function createAppObject() {
 }
 
 function createDeviceObject() {
-    const device = new Device();
+    const device = {};
     Object.keys(defaultData).forEach(key => {
-        if (key.startsWith('device') && key.split('-').length === 2) {
+        if (key.startsWith('req-device') && key.split('-').length === 3) { // top level attributes for device
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                const [, field] = key.split('-');
+                const [, field] = key.split('-device-');
                 device[field] = inputData[key];
             }
         }
 
         // geo
-        if (key.startsWith('device-geo') && document.getElementById('device-geo').checked) {
+        if (key.startsWith('req-device-geo') && document.getElementById('req-device-geo').checked) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                if (!device.geo) {
-                    device.geo = new Geo();
+                if (!device["geo"]) {
+                    device["geo"] = {};
                 }
-                const [, ,field] = key.split('-');
-                device.geo[field] = inputData[key];
+                const [, field] = key.split('-geo-');
+                device["geo"][field] = inputData[key];
             }
         }
     })
@@ -941,24 +548,24 @@ function createDeviceObject() {
 }
 
 function createUserObject() {
-    const user = new User();
+    const user = {};
     Object.keys(defaultData).forEach(key => {
-        if (key.startsWith('user') && key.split('-').length === 2) {
+        if (key.startsWith('req-user') && key.split('-').length === 3) { // top level attributes for user
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                const [, field] = key.split('-');
+                const [, field] = key.split('-user-');
                 user[field] = inputData[key];
             }
         }
         // geo
-        if (key.startsWith('user-geo') && document.getElementById('user-geo').checked) {
+        if (key.startsWith('req-user-geo') && document.getElementById('req-user-geo').checked) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                if (!user.geo) {
-                    user.geo = new Geo();
+                if (!user['geo']) {
+                    user['geo'] = {};
                 }
-                const [, ,field] = key.split('-');
-                user.geo[field] = inputData[key];
+                const [, field] = key.split('-geo-');
+                user['geo'][field] = inputData[key];
             }
         }
     })
@@ -966,12 +573,12 @@ function createUserObject() {
 }
 
 function createSourceObject() {
-    const source = new Source();
+    const source = {};
     Object.keys(defaultData).forEach(key => {
-        if (key.startsWith('source') && key.split('-').length === 2) {
+        if (key.startsWith('req-source') && key.split('-').length === 3) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                const [, field] = key.split('-');
+                const [, field] = key.split('-source-');
                 source[field] = inputData[key];
             }
         }
@@ -980,12 +587,12 @@ function createSourceObject() {
 }
 
 function createRegsObject() {
-    const regs = new Regs();
+    const regs = {};
     Object.keys(defaultData).forEach(key => {
-        if (key.startsWith('regs') && key.split('-').length === 2) {
+        if (key.startsWith('req-regs') && key.split('-').length === 3) {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                const [, field] = key.split('-');
+                const [, field] = key.split('-regs-');
                 regs[field] = inputData[key];
             }
         }
@@ -993,114 +600,83 @@ function createRegsObject() {
     return regs;
 }
 
-function dataTypeConvert(id) {
-    // check if the default value is an array
-    // if so, try to convert the input value to an array
-    const isIntegerArray = Array.isArray(defaultData[id]) && defaultData[id].every(item => Number.isInteger(item));
-    if (isIntegerArray) {
-        inputDataToArray = null;
-        try {
-            inputDataToArray = inputData[id].split(',').map(item => item.trim()).map(item => parseInt(item));
-        } catch (error) {
-            console.error(`Failed to convert ${id} to an integer array: ${error}`);
+function applyToInputData(id) {
+    const fieldName = id.toString();
+    const element = document.getElementById(id);
+    // get the default data, as defined in defaultData
+    const dataMeta = defaultData[fieldName];
+    if (!element || !dataMeta) return;
+    const valueFromInputBox = element.parentNode.querySelector('.input-value-box').value;
+    const typeOfData = dataMeta[0];
+
+    try {
+        switch (typeOfData) {
+            case 'string':
+                inputData[fieldName] = String(valueFromInputBox);
+                break;
+            case 'float':
+                inputData[fieldName] = Number(valueFromInputBox);
+                break;
+            case 'integer':
+                inputData[fieldName] = parseInt(valueFromInputBox);
+                break;
+            case 'string array':
+                inputData[fieldName] = valueFromInputBox.split(',').map(item => item.trim());
+                break;
+            case 'integer array':
+                inputData[fieldName] = valueFromInputBox.split(',').map(item => Number(item.trim()));
+                break;
+            default:
+                inputData[id] = null;
+                console.error(`Failed to convert ${id} to a ${typeOfData}`);
+                break;
         }
-        if (!inputDataToArray) {
-            inputData[id] = defaultData[id];
-        } else {
-            inputData[id] = inputDataToArray;
-        }
-        return;
+    } catch (error) {
+        console.error(`Failed to convert ${id} to a ${typeOfData}: ${error}`);
+        inputData[id] = null;
     }
 
-    const isStringArray = Array.isArray(defaultData[id]) && defaultData[id].every(item => typeof item === 'string');
-    if (isStringArray) {
-        inputDataToArray = null;
-        try {
-            inputDataToArray = inputData[id].split(',').map(item => item.trim());
-        } catch (error) {
-            console.error(`Failed to convert ${id} to an string array: ${error}`);
-        }
-        if (!inputDataToArray) {
-            inputData[id] = defaultData[id];
-        } else {
-            inputData[id] = inputDataToArray;
-        }
-        return;
-    }
-
-    // check if the default value is an integer
-    // if so, try to convert the input value to an integer
-    const isIntegerType = Number.isInteger(defaultData[id]);
-    if (isIntegerType) {
-        inputDataToInteger = null;
-        try {
-            inputDataToInteger = parseInt(inputData[id]);
-        } catch (error) {
-            console.error(`Failed to convert ${id} to an integer: ${error}`);
-        }
-
-        if (!inputDataToInteger) {
-            inputData[id] = defaultData[id];
-        } else {
-            inputData[id] = inputDataToInteger;
-        }
-    }
-
-    // check if the default value is a float
-    // if so, try to convert the input value to a float
-    const isFloatType = Number.isFinite(defaultData[id]);
-    if (isFloatType) {
-        inputDataToFloat = null;
-        try {
-            inputDataToFloat = parseFloat(inputData[id]);
-        } catch (error) {
-            console.error(`Failed to convert ${id} to a float: ${error}`);
-        }
-        if (!inputDataToFloat) {
-            inputData[id] = defaultData[id];
-        } else {
-            inputData[id] = inputDataToFloat;
-        }
-    }
-
-    // No need for string as input by default is a string
+    return;
 }
 
 function createBidRequest() {
     // valid Imp
-    const impTypeSelect = document.getElementById('impTypeSelect');
+    const impTypeSelect = document.getElementById('req-impTypeSelect');
     if (!['banner', 'video', 'audio'].includes(impTypeSelect.value)) {
         impTypeSelect.focus();
-        alert('Please select a valid imp type');
+        impTypeSelect.style.backgroundColor = 'red';
+        setTimeout(() => {
+            impTypeSelect.style.backgroundColor = 'white';
+        }, 2000);
+        alert('Please select the Imp type');
         return
     }
 
     // valid App/Site
-    const selectedApp = document.getElementById('app').checked;
-    const selectedSite = document.getElementById('site').checked;
+    const selectedApp = document.getElementById('req-app').checked;
+    const selectedSite = document.getElementById('req-site').checked;
     
     if (selectedApp && selectedSite) {
-        document.getElementById('site').focus();
+        document.getElementById('req-site').focus();
         alert('Only one of `App` or `Site` element can be selected');
         return;
     }
     
     if (!selectedApp && !selectedSite) {
-        document.getElementById('site').focus();
+        document.getElementById('req-site').focus();
         alert('One of `App` or `Site` element must be selected');
         return;
     }
     
-    const includeSite = document.getElementById('site').checked;
-    const includeApp = document.getElementById('app').checked;
-    const includeDevice = document.getElementById('device').checked;
-    const includeUser = document.getElementById('user').checked;
-    const includeRegs = document.getElementById('regs').checked;
-    const includeSource = document.getElementById('source').checked;
+    const includeSite = document.getElementById('req-site').checked;
+    const includeApp = document.getElementById('req-app').checked;
+    const includeDevice = document.getElementById('req-device').checked;
+    const includeUser = document.getElementById('req-user').checked;
+    const includeRegs = document.getElementById('req-regs').checked;
+    const includeSource = document.getElementById('req-source').checked;
 
     // Imp is required.
-    const imp = createImpObject();
-
+    const imps = createImpsObject();
     const site = includeSite ? createSiteObject() : null;
     const app = includeApp ? createAppObject() : null;
     const device = includeDevice ? createDeviceObject() : null;
@@ -1108,25 +684,28 @@ function createBidRequest() {
     const regs = includeRegs ? createRegsObject() : null;
     const source = includeSource ? createSourceObject() : null;
 
-    const bidRequest = new BidRequest();
-    bidRequest.id = defaultData['id'];
-    bidRequest.imp = imp;
-    bidRequest.site = site;
-    bidRequest.app = app;
-    bidRequest.device = device;
-    bidRequest.user = user;
-    bidRequest.regs = regs;
-    bidRequest.source = source;
+    const bidRequest = {};
+    bidRequest["id"] = inputData['req-id'];
+    bidRequest["imps"] = imps;
+    bidRequest["site"] = site;
+    bidRequest["app"] = app;
+    bidRequest["device"] = device;
+    bidRequest["user"] = user;
+    bidRequest["regs"] = regs;
+    bidRequest["source"] = source;
 
     // Apply top level attributes
     Object.keys(defaultData).forEach(key => {
-        if (!key.includes('-')) {
+        if (key.startsWith('req') && key.split('-').length === 2) { // top bid request attributes
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
-                bidRequest[key] = inputData[key];
+                [, field] = key.split('-');
+                bidRequest[field] = inputData[key];
             }
         }
     })
+    // log the final bid request for convienience.
+    console.log(bidRequest);
 
     // Populate
     document.getElementById('output').style.display = 'block';
