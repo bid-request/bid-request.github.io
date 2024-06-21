@@ -686,7 +686,7 @@ function createBidRequest() {
 
     const bidRequest = {};
     bidRequest["id"] = inputData['req-id'];
-    bidRequest["imps"] = imps;
+    bidRequest["imp"] = imps;
     bidRequest["site"] = site;
     bidRequest["app"] = app;
     bidRequest["device"] = device;
