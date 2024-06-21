@@ -98,13 +98,13 @@ SOFTWARE.
                     <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-banner-hmin"> hmin (deprecated)</label><br>
                     <label><input type="checkbox" name="btype" value="btype" id="req-imp-banner-btype"> btype</label><br>
                     <label><input type="checkbox" name="battr" value="battr" id="req-imp-banner-battr" id="req-imp-banner-battr-id"> battr</label><br>
-                    <label><input type="checkbox" name="pos" value="pos" id="req-imp-banner-pos"> pos</label><br>
+                    <label><input type="checkbox" name="pos" value="pos" id="req-imp-banner-pos" pre-defined-options="0,1,2,3,4,5,6,7"> pos</label><br>
                     <label><input type="checkbox" name="mimes" value="mimes" id="req-imp-banner-mimes"> mimes</label><br>
-                    <label><input type="checkbox" name="topframe" value="topframe" id="req-imp-banner-topframe"> topframe</label><br>
+                    <label><input type="checkbox" name="topframe" value="topframe" id="req-imp-banner-topframe" pre-defined-options="0,1"> topframe</label><br>
                     <label><input type="checkbox" name="expdir" value="expdir" id="req-imp-banner-expdir"> expdir</label><br>
                     <label><input type="checkbox" name="api" value="api" id="req-imp-banner-api"> api</label><br>
                     <label><input type="checkbox" name="id" value="id" id="req-imp-banner-id"> id</label><br>
-                    <label><input type="checkbox" name="vcm" value="vcm" id="req-imp-banner-vcm"> vcm</label><br>
+                    <label><input type="checkbox" name="vcm" value="vcm" id="req-imp-banner-vcm" pre-defined-options="0,1"> vcm</label><br>
                     <label><input type="checkbox" name="ext" value="ext" id="req-imp-banner-ext"> ext</label><br>
                 </fieldset>
                 <fieldset id="req-video-fieldset" style="display:none">
@@ -117,9 +117,9 @@ SOFTWARE.
                     <label><input type="checkbox" name="w" checked id="req-imp-video-w"> w</label><br>
                     <label><input type="checkbox" name="h" checked id="req-imp-video-h"> h</label><br>
                     <label><input type="checkbox" name="startdelay" id="req-imp-video-startdelay"> startdelay</label><br>
-                    <label><input type="checkbox" name="placement" id="req-imp-video-placement"> placement</label><br>
-                    <label><input type="checkbox" name="linearity" id="req-imp-video-linearity"> linearity</label><br>
-                    <label><input type="checkbox" name="skip" id="req-imp-video-skip"> skip</label><br>
+                    <label><input type="checkbox" name="placement" id="req-imp-video-placement" pre-defined-options="1,2,3,4,5"> placement</label><br>
+                    <label><input type="checkbox" name="linearity" id="req-imp-video-linearity" pre-defined-options="1,2">> linearity</label><br>
+                    <label><input type="checkbox" name="skip" id="req-imp-video-skip" pre-defined-options="0,1">> skip</label><br>
                     <label><input type="checkbox" name="skipmin" id="req-imp-video-skipmin"> skipmin</label><br>
                     <label><input type="checkbox" name="skipafter" id="req-imp-video-skipafter"> skipafter</label><br>
                     <label><input type="checkbox" name="sequence" id="req-imp-video-sequence"> sequence</label><br>
@@ -127,11 +127,11 @@ SOFTWARE.
                     <label><input type="checkbox" name="maxextended" id="req-imp-video-maxextended"> maxextended</label><br>
                     <label><input type="checkbox" name="minbitrate" id="req-imp-video-minbitrate"> minbitrate</label><br>
                     <label><input type="checkbox" name="maxbitrate" id="req-imp-video-maxbitrate"> maxbitrate</label><br>
-                    <label><input type="checkbox" name="boxingallowed" id="req-imp-video-boxingallowed"> boxingallowed</label><br>
+                    <label><input type="checkbox" name="boxingallowed" id="req-imp-video-boxingallowed" pre-defined-options="0,1"> boxingallowed</label><br>
                     <label><input type="checkbox" name="playbackmethod" id="req-imp-video-playbackmethod"> playbackmethod</label><br>
-                    <label><input type="checkbox" name="playbackend" id="req-imp-video-playbackend"> playbackend</label><br>
+                    <label><input type="checkbox" name="playbackend" id="req-imp-video-playbackend" pre-defined-options="1,2,3"> playbackend</label><br>
                     <label><input type="checkbox" name="delivery" id="req-imp-video-delivery"> delivery</label><br>
-                    <label><input type="checkbox" name="pos" id="req-imp-video-pos"> pos</label><br>
+                    <label><input type="checkbox" name="pos" id="req-imp-video-pos" pre-defined-options="1,2,3,4,5,6,7"> pos</label><br>
                     <label><input type="checkbox" name="companionad" id="req-imp-video-companionad" class="feature-unsupported"> companionad</label><br>
                     <label><input type="checkbox" name="api" id="req-imp-video-api"> api</label><br>
                     <label><input type="checkbox" name="companiontype" id="req-imp-video-companiontype"> companiontype</label><br>
@@ -155,7 +155,7 @@ SOFTWARE.
                     <label><input type="checkbox" name="companiontype" id="req-imp-audio-companiontype"> companiontype</label><br>
                     <label><input type="checkbox" name="maxseq" id="req-imp-audio-maxseq"> maxseq</label><br>
                     <label><input type="checkbox" name="feed" id="req-imp-audio-feed"> feed</label><br>
-                    <label><input type="checkbox" name="stitched" id="req-imp-audio-stitched"> stitched</label><br>
+                    <label><input type="checkbox" name="stitched" id="req-imp-audio-stitched" pre-defined-options="0,1"> stitched</label><br>
                     <label><input type="checkbox" name="nvol" id="req-imp-audio-nvol"> nvol</label><br>
                     <label><input type="checkbox" name="ext" id="req-imp-audio-ext"> ext</label><br>
                 </fieldset>
@@ -186,13 +186,13 @@ SOFTWARE.
                 <!-- Pmp Object-->
                 <fieldset id="req-imp-pmp-fieldset" style="display: none;">
                     <legend>Pmp Attributes</legend>
-                    <label><input type="checkbox" name="private_auction" id="req-imp-pmp-private_auction"> private_auction</label><br>
+                    <label><input type="checkbox" name="private_auction" id="req-imp-pmp-private_auction" pre-defined-options="0,1"> private_auction</label><br>
                     <fieldset id="req-imp-pmp-deal-fieldset">
                         <legend>Deal</legend>
                         <label><input type="checkbox" name="id" id="req-imp-pmp-deal-id" checked disabled> id</label><br>
                         <label><input type="checkbox" name="bidfloor" id="req-imp-pmp-deal-bidfloor"> bidfloor</label><br>
                         <label><input type="checkbox" name="bidfloorcur" id="req-imp-pmp-deal-bidfloorcur"> bidfloorcur</label><br>
-                        <label><input type="checkbox" name="at" id="req-imp-pmp-deal-at"> at</label><br>
+                        <label><input type="checkbox" name="at" id="req-imp-pmp-deal-at" pre-defined-options="1,2,3"> at</label><br>
                         <label><input type="checkbox" name="wseat" id="req-imp-pmp-deal-wseat"> wseat</label><br>
                         <label><input type="checkbox" name="wadomain" id="req-imp-pmp-deal-wadomain"> wadomain</label><br>
                         <label><input type="checkbox" name="ext" id="req-imp-pmp-deal-ext"> ext</label><br>
@@ -211,12 +211,12 @@ SOFTWARE.
                 <!-- End of Pmp Object-->
                 <label><input type="checkbox" id="req-imp-displaymanager" name="displaymanager"> displaymanager</label><br>
                 <label><input type="checkbox" id="req-imp-displaymanagerver" name="displaymanagerver"> displaymanagerver</label><br>
-                <label><input type="checkbox" id="req-imp-instl" name="instl"> instl</label><br>
+                <label><input type="checkbox" id="req-imp-instl" name="instl" pre-defined-options="0,1"> instl</label><br>
                 <label><input type="checkbox" id="req-imp-tagid" name="tagid"> tagid</label><br>
                 <label><input type="checkbox" id="req-imp-bidfloor" name="bidfloor"> bidfloor</label><br>
                 <label><input type="checkbox" id="req-imp-bidfloorcur" name="bidfloorcur"> bidfloorcur</label><br>
-                <label><input type="checkbox" id="req-imp-clickbrowser" name="clickbrowser"> clickbrowser</label><br>
-                <label><input type="checkbox" id="req-imp-secure" name="secure"> secure</label><br>
+                <label><input type="checkbox" id="req-imp-clickbrowser" name="clickbrowser" pre-defined-options="0,1"> clickbrowser</label><br>
+                <label><input type="checkbox" id="req-imp-secure" name="secure" pre-defined-options="0,1"> secure</label><br>
                 <label><input type="checkbox" id="req-imp-iframebuster" name="iframebuster"> iframebuster</label><br>
                 <label><input type="checkbox" id="req-imp-exp" name="exp"> exp</label><br>
                 <label><input type="checkbox" id="req-imp-ext" name="ext"> ext</label><br>
@@ -235,9 +235,9 @@ SOFTWARE.
                 <label><input type="checkbox" id="req-site-page" name="page"> page</label><br>
                 <label><input type="checkbox" id="req-site-ref" name="ref"> ref</label><br>
                 <label><input type="checkbox" id="req-site-search" name="search"> search</label><br>
-                <label><input type="checkbox" id="req-site-mobile" name="mobile"> mobile</label><br>
-                <label><input type="checkbox" id="req-site-privacypolicy" name="privacypolicy"> privacypolicy</label><br>
-                <label><input type="checkbox" id="req-site-publisher" name="publisher"> publisher</label><br>
+                <label><input type="checkbox" id="req-site-mobile" name="mobile" pre-defined-options="0,1"> mobile</label><br>
+                <label><input type="checkbox" id="req-site-privacypolicy" name="privacypolicy" pre-defined-options="0,1"> privacypolicy</label><br>
+                <label><input type="checkbox" id="req-site-publisher" name="publisher"> Publisher</label><br>
                 <fieldset id="req-site-publisher-fieldset" style="display:none">
                     <legend>Publisher Attributes</legend>
                     <label><input type="checkbox" id="req-site-publisher-id" name="id" checked> id</label><br>
@@ -254,7 +254,7 @@ SOFTWARE.
                         reqSitePublisherFieldset.style.display = this.checked ? 'block' : 'none';
                     });
                 </script>
-                <label><input type="checkbox" id="req-site-content" name="content"> content</label><br>
+                <label><input type="checkbox" id="req-site-content" name="content"> Content</label><br>
                 <fieldset id="req-site-content-fieldset" style="display:none">
                     <legend>Content Attributes</legend>
                     <label><input type="checkbox" id="req-site-content-id" name="id" checked> id</label><br>
@@ -266,7 +266,23 @@ SOFTWARE.
                     <label><input type="checkbox" id="req-site-content-genre" name="genre"> genre</label><br>
                     <label><input type="checkbox" id="req-site-content-album" name="album"> album</label><br>
                     <label><input type="checkbox" id="req-site-content-isrc" name="isrc"> isrc</label><br>
-                    <label><input type="checkbox" id="req-site-content-producer" name="producer"> producer</label><br>
+                    <label><input type="checkbox" id="req-site-content-producer" name="producer"> Producer</label><br>
+                    <fieldset id="req-site-content-producer-fieldset" style="display:none">
+                        <legend>Producer Attributes</legend>
+                        <label><input type="checkbox" id="req-site-content-producer-id" name="id"> id</label><br>
+                        <label><input type="checkbox" id="req-site-content-producer-name" name="name"> name</label><br>
+                        <label><input type="checkbox" id="req-site-content-producer-cat" name="cat"> cat</label><br>
+                        <label><input type="checkbox" id="req-site-content-producer-domain" name="domain"> domain</label><br>
+                        <label><input type="checkbox" id="req-site-content-producer-ext" name="ext"> ext</label><br>
+                    </fieldset>
+                    <script>
+                        const reqSiteContentProducerCheckbox = document.getElementById('req-site-content-producer');
+                        const reqSiteContentProducerFieldset = document.getElementById('req-site-content-producer-fieldset');
+                        
+                        reqSiteContentProducerCheckbox.addEventListener('change', function() {
+                            reqSiteContentProducerFieldset.style.display = this.checked ? 'block' : 'none';
+                        });
+                    </script>
                     <label><input type="checkbox" id="req-site-content-url" name="url"> url</label><br>
                     <label><input type="checkbox" id="req-site-content-cat" name="cat"> cat</label><br>
                     <label><input type="checkbox" id="req-site-content-videoquality" name="videoquality"> videoquality</label><br>
@@ -307,9 +323,9 @@ SOFTWARE.
                 <label><input type="checkbox" id="req-app-sectioncat" name="sectioncat"> sectioncat</label><br>
                 <label><input type="checkbox" id="req-app-pagecat" name="pagecat"> pagecat</label><br>
                 <label><input type="checkbox" id="req-app-ver" name="ver"> ver</label><br>
-                <label><input type="checkbox" id="req-app-privacypolicy" name="privacypolicy"> privacypolicy</label><br>
-                <label><input type="checkbox" id="req-app-paid" name="paid"> paid</label><br>
-                <label><input type="checkbox" id="req-app-publisher" name="publisher"> publisher</label><br>
+                <label><input type="checkbox" id="req-app-privacypolicy" name="privacypolicy" pre-defined-options="0,1"> privacypolicy</label><br>
+                <label><input type="checkbox" id="req-app-paid" name="paid" pre-defined-options="0,1"> paid</label><br>
+                <label><input type="checkbox" id="req-app-publisher" name="publisher"> Publisher</label><br>
                 <!-- App.Publisher Object-->
                 <fieldset id="req-app-publisher-fieldset" style="display:none">
                     <legend>Publisher Attributes</legend>
@@ -328,7 +344,7 @@ SOFTWARE.
                     });
                 </script>
                 <!-- End of App.Publisher Object-->
-                <label><input type="checkbox" id="req-app-content" name="content"> content</label><br>
+                <label><input type="checkbox" id="req-app-content" name="content"> Content</label><br>
                 <fieldset id="req-app-content-fieldset" style="display:none">
                     <legend>Content Attributes</legend>
                     <label><input type="checkbox" id="req-app-content-id" name="id" checked> id</label><br>
@@ -340,19 +356,36 @@ SOFTWARE.
                     <label><input type="checkbox" id="req-app-content-genre" name="genre"> genre</label><br>
                     <label><input type="checkbox" id="req-app-content-album" name="album"> album</label><br>
                     <label><input type="checkbox" id="req-app-content-isrc" name="isrc"> isrc</label><br>
-                    <label><input type="checkbox" id="req-app-content-producer" name="producer"> producer</label><br>
+                    <label><input type="checkbox" id="req-app-content-producer" name="producer"> Producer</label><br>
+                    <fieldset id="req-app-content-producer-fieldset" style="display:none">
+                        <legend>Producer Object</legend>
+                        <label><input type="checkbox" id="req-app-content-producer-id" name="id"> id</label><br>
+                        <label><input type="checkbox" id="req-app-content-producer-name" name="name"> name</label><br>
+                        <label><input type="checkbox" id="req-app-content-producer-cat" name="cat"> cat</label><br>
+                        <label><input type="checkbox" id="req-app-content-producer-domain" name="domain"> domain</label><br>
+                        <label><input type="checkbox" id="req-app-content-producer-ext" name="ext"> ext</label><br>
+                    </fieldset>
+                    <script>
+                        const reqAppContentProducerCheckbox = document.getElementById('req-app-content-producer');
+                        const reqAppContentProducerFieldset = document.getElementById('req-app-content-producer-fieldset');
+                        
+                        reqAppContentProducerCheckbox.addEventListener('change', function() {
+                            reqAppContentProducerFieldset.style.display = this.checked ? 'block' : 'none';
+                        });
+                    </script>
                     <label><input type="checkbox" id="req-app-content-url" name="url"> url</label><br>
                     <label><input type="checkbox" id="req-app-content-cat" name="cat"> cat</label><br>
-                    <label><input type="checkbox" id="req-app-content-videoquality" name="videoquality"> videoquality</label><br>
-                    <label><input type="checkbox" id="req-app-content-context" name="context"> context</label><br>
+                    <label><input type="checkbox" id="req-app-content-videoquality" name="videoquality" pre-defined-options="0,1,2,3"> videoquality</label><br>
+                    <label><input type="checkbox" id="req-app-content-context" name="context" pre-defined-options="0,1,2,3,4,5,6,7"> context</label><br>
                     <label><input type="checkbox" id="req-app-content-contentrating" name="contentrating"> contentrating</label><br>
                     <label><input type="checkbox" id="req-app-content-userrating" name="userrating"> userrating</label><br>
+                    <label><input type="checkbox" id="req-app-content-qagmediarating" name="qagmediarating" pre-defined-options="1,2,3"> qagmediarating</label><br>
                     <label><input type="checkbox" id="req-app-content-keywords" name="keywords"> keywords</label><br>
-                    <label><input type="checkbox" id="req-app-content-livestream" name="livestream"> livestream</label><br>
-                    <label><input type="checkbox" id="req-app-content-sourcerelationship" name="sourcerelationship"> sourcerelationship</label><br>
+                    <label><input type="checkbox" id="req-app-content-livestream" name="livestream" pre-defined-options="0,1"> livestream</label><br>
+                    <label><input type="checkbox" id="req-app-content-sourcerelationship" name="sourcerelationship" pre-defined-options="0,1"> sourcerelationship</label><br>
                     <label><input type="checkbox" id="req-app-content-len" name="len"> len</label><br>
                     <label><input type="checkbox" id="req-app-content-language" name="language"> language</label><br>
-                    <label><input type="checkbox" id="req-app-content-embeddable" name="embeddable"> embeddable</label><br>
+                    <label><input type="checkbox" id="req-app-content-embeddable" name="embeddable" pre-defined-options="0,1"> embeddable</label><br>
                     <label><input type="checkbox" id="req-app-content-data" name="data"> data</label><br>
                     <label><input type="checkbox" id="req-app-content-ext" name="ext"> ext</label><br>
                 </fieldset>
@@ -404,6 +437,7 @@ SOFTWARE.
                     <label><input type="checkbox" id="req-device-geo-type" name="type"> type</label><br>
                     <label><input type="checkbox" id="req-device-geo-accuracy" name="accuracy"> accuracy</label><br>
                     <label><input type="checkbox" id="req-device-geo-lastfix" name="lastfix"> lastfix</label><br>
+                    <label><input type="checkbox" id="req-device-geo-ipservice" name="ipservice" pre-defined-options="1,2,3,4"> ipservice</label><br>
                     <label><input type="checkbox" id="req-device-geo-country" name="country" checked> country</label><br>
                     <label><input type="checkbox" id="req-device-geo-region" name="region" checked> region</label><br>
                     <label><input type="checkbox" id="req-device-geo-regionfips104" name="regionfips104"> regionfips104</label><br>
@@ -421,11 +455,11 @@ SOFTWARE.
                     });
                 </script>
                 <!-- End of Device.Geo Object-->
-                <label><input type="checkbox" id="req-device-dnt" name="dnt"> dnt</label><br>
-                <label><input type="checkbox" id="req-device-lmt" name="lmt"> lmt</label><br>
+                <label><input type="checkbox" id="req-device-dnt" name="dnt" pre-defined-options="0,1"> dnt</label><br>
+                <label><input type="checkbox" id="req-device-lmt" name="lmt" pre-defined-options="0,1"> lmt</label><br>
                 <label><input type="checkbox" id="req-device-ip" name="ip"> ip</label><br>
                 <label><input type="checkbox" id="req-device-ipv6" name="ipv6"> ipv6</label><br>
-                <label><input type="checkbox" id="req-device-devicetype" name="devicetype"> devicetype</label><br>
+                <label><input type="checkbox" id="req-device-devicetype" name="devicetype" pre-defined-options="1,2,3,4,5,6,7"> devicetype</label><br>
                 <label><input type="checkbox" id="req-device-make" name="make"> make</label><br>
                 <label><input type="checkbox" id="req-device-model" name="model"> model</label><br>
                 <label><input type="checkbox" id="req-device-os" name="os"> os</label><br>
@@ -435,13 +469,13 @@ SOFTWARE.
                 <label><input type="checkbox" id="req-device-w" name="w"> w</label><br>
                 <label><input type="checkbox" id="req-device-ppi" name="ppi"> ppi</label><br>
                 <label><input type="checkbox" id="req-device-pxratio" name="pxratio"> pxratio</label><br>
-                <label><input type="checkbox" id="req-device-js" name="js"> js</label><br>
-                <label><input type="checkbox" id="req-device-geofetch" name="geofetch"> geofetch</label><br>
+                <label><input type="checkbox" id="req-device-js" name="js" pre-defined-options="0,1"> js</label><br>
+                <label><input type="checkbox" id="req-device-geofetch" name="geofetch" pre-defined-options="0,1"> geofetch</label><br>
                 <label><input type="checkbox" id="req-device-flashver" name="flashver"> flashver</label><br>
                 <label><input type="checkbox" id="req-device-language" name="language"> language</label><br>
                 <label><input type="checkbox" id="req-device-carrier" name="carrier"> carrier</label><br>
                 <label><input type="checkbox" id="req-device-mccmnc" name="mccmnc"> mccmnc</label><br>
-                <label><input type="checkbox" id="req-device-connectiontype" name="connectiontype"> connectiontype</label><br>
+                <label><input type="checkbox" id="req-device-connectiontype" name="connectiontype" pre-defined-options="0,1,2,3,4,5,6,7"> connectiontype</label><br>
                 <label><input type="checkbox" id="req-device-ifa" name="ifa"> ifa</label><br>
                 <label><input type="checkbox" id="req-device-didsha1" name="didsha1"> didsha1</label><br>
                 <label><input type="checkbox" id="req-device-didmd5" name="didmd5"> didmd5</label><br>
@@ -479,6 +513,7 @@ SOFTWARE.
                     <label><input type="checkbox" id="req-user-geo-type" name="type"> type</label><br>
                     <label><input type="checkbox" id="req-user-geo-accuracy" name="accuracy"> accuracy</label><br>
                     <label><input type="checkbox" id="req-user-geo-lastfix" name="lastfix"> lastfix</label><br>
+                    <label><input type="checkbox" id="req-user-geo-ipservice" name="ipservice" pre-defined-options="1,2,3,4"> ipservice</label><br>
                     <label><input type="checkbox" id="req-user-geo-country" name="country" checked> country</label><br>
                     <label><input type="checkbox" id="req-user-geo-region" name="region" checked> region</label><br>
                     <label><input type="checkbox" id="req-user-geo-regionfips104" name="regionfips104"> regionfips104</label><br>
@@ -587,11 +622,36 @@ SOFTWARE.
                         return;
                     }
                     inputDataValue = defaultData[checkbox.id.toString()][2];
+
+
+
                     inputData[checkbox.id.toString()] = inputDataValue;
                 }
                 // 2. apply the value to inputbox
                 // create new inputbox containing the data from above
                 let newInputbox = document.createElement('input');
+                // logic to support dropdown for predefined attributes
+                if (checkbox.getAttribute('pre-defined-options')) {
+                    const optionsAttr = checkbox.getAttribute('pre-defined-options');
+                    const optionsArray = optionsAttr.split(',');
+                    newInputbox = document.createElement('select');
+                    maxwidth = 0;
+                    for (let i = 0; i < optionsArray.length; i++) {
+                        let newOption = document.createElement('option');
+                        newOption.value = optionsArray[i];
+                        newOption.text = optionsArray[i];
+                        newInputbox.appendChild(newOption);
+                        if (inputDataValue === optionsArray[i]) {
+                            newInputbox.selectedIndex = i;
+                        }
+                        maxwidth = Math.max(maxwidth, optionsArray[i].length);
+                    }
+                    if (newInputbox.selectedIndex === -1) {
+                        newInputbox.selectedIndex = 0;
+                    }
+                    newInputbox.style.width = maxwidth + 3 + 'ch';
+                }
+
                 newInputbox.className = 'input-value-box';
                 newInputbox.value = inputDataValue;
                 newInputbox.addEventListener('input', function() {
