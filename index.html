@@ -23,19 +23,19 @@
     <form id="bidRequestForm">
         <fieldset>
             <legend>Bid Request</legend>
-            <label><input type="checkbox" name="id" value="id" id="req-id" checked> id</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('req-id', 40)"/><br>
+            <label><input type="checkbox" name="id" value="id" id="req-id" checked disabled> id</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('req-id', 40)"/><br>
             
             <!-- Imp Object-->
-            <label><input type="checkbox" id="imp" checked disabled class="rtb-object"> Imp</label><br>
-            <fieldset id="imp-type-fieldset">
+            <label><input type="checkbox" id="req-imp" checked disabled class="rtb-object"> Imp</label><br>
+            <fieldset id="req-imp-type-fieldset">
                 <legend>Select Type</legend>
-                <select id="impTypeSelect">
+                <select id="req-impTypeSelect">
                 <script>
-                    document.getElementById('impTypeSelect').addEventListener('change', function() {
+                    document.getElementById('req-impTypeSelect').addEventListener('change', function() {
                         const selectedValue = this.value;
-                        const bannerFieldset = document.getElementById('banner-fieldset');
-                        const videoFieldset = document.getElementById('video-fieldset');
-                        const audioFieldset = document.getElementById('audio-fieldset');
+                        const bannerFieldset = document.getElementById('req-banner-fieldset');
+                        const videoFieldset = document.getElementById('req-video-fieldset');
+                        const audioFieldset = document.getElementById('req-audio-fieldset');
 
                         bannerFieldset.style.display = selectedValue === 'banner' ? 'block' : 'none';
                         videoFieldset.style.display = selectedValue === 'video' ? 'block' : 'none';
@@ -48,309 +48,309 @@
                     <option value="audio">Audio</option>
                     <option value="native" disabled>Native</option>
                 </select>
-                <fieldset id="banner-fieldset" style="display:none">
+                <fieldset id="req-banner-fieldset" style="display:none">
                     <legend>Banner Attributes</legend>
                     <!-- Banner Format Object-->
-                    <label><input type="checkbox" name="format" value="format" id="imp-banner-format"> format</label><br>
-                    <fieldset id="imp-banner-format-fieldset" style="display:none">
+                    <label><input type="checkbox" name="format" value="format" id="req-imp-banner-format"> format</label><br>
+                    <fieldset id="req-imp-banner-format-fieldset" style="display:none">
                         <legend>Format Attributes</legend>
-                        <label><input type="checkbox" name="w" value="w" id="imp-banner-format-w"> w</label><br>
-                        <label><input type="checkbox" name="h" value="h" id="imp-banner-format-h"> h</label><br>
-                        <label><input type="checkbox" name="wmax" value="wmax" id="imp-banner-format-wratio"> wratio</label><br>
-                        <label><input type="checkbox" name="hmax" value="hmax" id="imp-banner-format-hratio"> hratio</label><br>
-                        <label><input type="checkbox" name="wmin" value="wmin" id="imp-banner-format-wmin"> wmin</label><br>
-                        <label><input type="checkbox" name="hmin" value="hmin" id="imp-banner-format-ext"> ext</label><br>
+                        <label><input type="checkbox" name="w" value="w" id="req-imp-banner-format-w"> w</label><br>
+                        <label><input type="checkbox" name="h" value="h" id="req-imp-banner-format-h"> h</label><br>
+                        <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-banner-format-wratio"> wratio</label><br>
+                        <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-banner-format-hratio"> hratio</label><br>
+                        <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-banner-format-wmin"> wmin</label><br>
+                        <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-banner-format-ext"> ext</label><br>
                     </fieldset>
                     <script>
-                        document.getElementById('imp-banner-format').addEventListener('change', function() {
-                            document.getElementById('imp-banner-format-fieldset').style.display = this.checked ? 'block' : 'none';
+                        document.getElementById('req-imp-banner-format').addEventListener('change', function() {
+                            document.getElementById('req-imp-banner-format-fieldset').style.display = this.checked ? 'block' : 'none';
                         });
                     </script>
                     <!-- End of Banner Format Object-->
-                    <label><input type="checkbox" name="w" value="w" checked id="imp-banner-w"> w</label><br>
-                    <label><input type="checkbox" name="h" value="h" checked id="imp-banner-h"> h</label><br>
-                    <label><input type="checkbox" name="wmax" value="wmax" id="imp-banner-wmax"> wmax (deprecated)</label><br>
-                    <label><input type="checkbox" name="hmax" value="hmax" id="imp-banner-hmax"> hmax (deprecated)</label><br>
-                    <label><input type="checkbox" name="wmin" value="wmin" id="imp-banner-wmin"> wmin (deprecated)</label><br>
-                    <label><input type="checkbox" name="hmin" value="hmin" id="imp-banner-hmin"> hmin (deprecated)</label><br>
-                    <label><input type="checkbox" name="btype" value="btype" id="imp-banner-btype"> btype</label><br>
-                    <label><input type="checkbox" name="battr" value="battr" id="imp-banner-battr" id="imp-banner-battr-id"> battr</label><br>
-                    <label><input type="checkbox" name="pos" value="pos" id="imp-banner-pos"> pos</label><br>
-                    <label><input type="checkbox" name="mimes" value="mimes" id="imp-banner-mimes"> mimes</label><br>
-                    <label><input type="checkbox" name="topframe" value="topframe" id="imp-banner-topframe"> topframe</label><br>
-                    <label><input type="checkbox" name="expdir" value="expdir" id="imp-banner-expdir"> expdir</label><br>
-                    <label><input type="checkbox" name="api" value="api" id="imp-banner-api"> api</label><br>
-                    <label><input type="checkbox" name="id" value="id" id="imp-banner-id"> id</label><br>
-                    <label><input type="checkbox" name="vcm" value="vcm" id="imp-banner-vcm"> vcm</label><br>
-                    <label><input type="checkbox" name="ext" value="ext" id="imp-banner-ext"> ext</label><br>
+                    <label><input type="checkbox" name="w" value="w" checked id="req-imp-banner-w"> w</label><br>
+                    <label><input type="checkbox" name="h" value="h" checked id="req-imp-banner-h"> h</label><br>
+                    <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-banner-wmax"> wmax (deprecated)</label><br>
+                    <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-banner-hmax"> hmax (deprecated)</label><br>
+                    <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-banner-wmin"> wmin (deprecated)</label><br>
+                    <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-banner-hmin"> hmin (deprecated)</label><br>
+                    <label><input type="checkbox" name="btype" value="btype" id="req-imp-banner-btype"> btype</label><br>
+                    <label><input type="checkbox" name="battr" value="battr" id="req-imp-banner-battr" id="req-imp-banner-battr-id"> battr</label><br>
+                    <label><input type="checkbox" name="pos" value="pos" id="req-imp-banner-pos"> pos</label><br>
+                    <label><input type="checkbox" name="mimes" value="mimes" id="req-imp-banner-mimes"> mimes</label><br>
+                    <label><input type="checkbox" name="topframe" value="topframe" id="req-imp-banner-topframe"> topframe</label><br>
+                    <label><input type="checkbox" name="expdir" value="expdir" id="req-imp-banner-expdir"> expdir</label><br>
+                    <label><input type="checkbox" name="api" value="api" id="req-imp-banner-api"> api</label><br>
+                    <label><input type="checkbox" name="id" value="id" id="req-imp-banner-id"> id</label><br>
+                    <label><input type="checkbox" name="vcm" value="vcm" id="req-imp-banner-vcm"> vcm</label><br>
+                    <label><input type="checkbox" name="ext" value="ext" id="req-imp-banner-ext"> ext</label><br>
                 </fieldset>
-                <fieldset id="video-fieldset" style="display:none">
+                <fieldset id="req-video-fieldset" style="display:none">
                     <legend>Video Attributes</legend>
-                    <label><input type="checkbox" name="mimes" id="imp-video-mimes" checked disabled> mimes</label><br>
-                    <label><input type="checkbox" name="minduration" checked id="imp-video-minduration"> minduration</label><br>
-                    <label><input type="checkbox" name="maxduration" checked id="imp-video-maxduration"> maxduration</label><br>
-                    <label><input type="checkbox" name="protocols" id="imp-video-protocols"> protocols</label><br>
-                    <label><input type="checkbox" name="protocol" id="imp-video-protocol"> protocol (deprecated)</label><br>
-                    <label><input type="checkbox" name="w" checked id="imp-video-w"> w</label><br>
-                    <label><input type="checkbox" name="h" checked id="imp-video-h"> h</label><br>
-                    <label><input type="checkbox" name="startdelay" id="imp-video-startdelay"> startdelay</label><br>
-                    <label><input type="checkbox" name="placement" id="imp-video-placement"> placement</label><br>
-                    <label><input type="checkbox" name="linearity" id="imp-video-linearity"> linearity</label><br>
-                    <label><input type="checkbox" name="skip" id="imp-video-skip"> skip</label><br>
-                    <label><input type="checkbox" name="skipmin" id="imp-video-skipmin"> skipmin</label><br>
-                    <label><input type="checkbox" name="skipafter" id="imp-video-skipafter"> skipafter</label><br>
-                    <label><input type="checkbox" name="sequence" id="imp-video-sequence"> sequence</label><br>
-                    <label><input type="checkbox" name="battr" id="imp-video-battr"> battr</label><br>
-                    <label><input type="checkbox" name="maxextended" id="imp-video-maxextended"> maxextended</label><br>
-                    <label><input type="checkbox" name="minbitrate" id="imp-video-minbitrate"> minbitrate</label><br>
-                    <label><input type="checkbox" name="maxbitrate" id="imp-video-maxbitrate"> maxbitrate</label><br>
-                    <label><input type="checkbox" name="boxingallowed" id="imp-video-boxingallowed"> boxingallowed</label><br>
-                    <label><input type="checkbox" name="playbackmethod" id="imp-video-playbackmethod"> playbackmethod</label><br>
-                    <label><input type="checkbox" name="playbackend" id="imp-video-playbackend"> playbackend</label><br>
-                    <label><input type="checkbox" name="delivery" id="imp-video-delivery"> delivery</label><br>
-                    <label><input type="checkbox" name="pos" id="imp-video-pos"> pos</label><br>
-                    <label><input type="checkbox" name="companionad" id="imp-video-companionad" class="feature-unsupported"> companionad</label><br>
-                    <label><input type="checkbox" name="api" id="imp-video-api"> api</label><br>
-                    <label><input type="checkbox" name="companiontype" id="imp-video-companiontype"> companiontype</label><br>
-                    <label><input type="checkbox" name="ext" id="imp-video-ext"> ext</label><br>
+                    <label><input type="checkbox" name="mimes" id="req-imp-video-mimes" checked disabled> mimes</label><br>
+                    <label><input type="checkbox" name="minduration" checked id="req-imp-video-minduration"> minduration</label><br>
+                    <label><input type="checkbox" name="maxduration" checked id="req-imp-video-maxduration"> maxduration</label><br>
+                    <label><input type="checkbox" name="protocols" id="req-imp-video-protocols"> protocols</label><br>
+                    <label><input type="checkbox" name="protocol" id="req-imp-video-protocol"> protocol (deprecated)</label><br>
+                    <label><input type="checkbox" name="w" checked id="req-imp-video-w"> w</label><br>
+                    <label><input type="checkbox" name="h" checked id="req-imp-video-h"> h</label><br>
+                    <label><input type="checkbox" name="startdelay" id="req-imp-video-startdelay"> startdelay</label><br>
+                    <label><input type="checkbox" name="placement" id="req-imp-video-placement"> placement</label><br>
+                    <label><input type="checkbox" name="linearity" id="req-imp-video-linearity"> linearity</label><br>
+                    <label><input type="checkbox" name="skip" id="req-imp-video-skip"> skip</label><br>
+                    <label><input type="checkbox" name="skipmin" id="req-imp-video-skipmin"> skipmin</label><br>
+                    <label><input type="checkbox" name="skipafter" id="req-imp-video-skipafter"> skipafter</label><br>
+                    <label><input type="checkbox" name="sequence" id="req-imp-video-sequence"> sequence</label><br>
+                    <label><input type="checkbox" name="battr" id="req-imp-video-battr"> battr</label><br>
+                    <label><input type="checkbox" name="maxextended" id="req-imp-video-maxextended"> maxextended</label><br>
+                    <label><input type="checkbox" name="minbitrate" id="req-imp-video-minbitrate"> minbitrate</label><br>
+                    <label><input type="checkbox" name="maxbitrate" id="req-imp-video-maxbitrate"> maxbitrate</label><br>
+                    <label><input type="checkbox" name="boxingallowed" id="req-imp-video-boxingallowed"> boxingallowed</label><br>
+                    <label><input type="checkbox" name="playbackmethod" id="req-imp-video-playbackmethod"> playbackmethod</label><br>
+                    <label><input type="checkbox" name="playbackend" id="req-imp-video-playbackend"> playbackend</label><br>
+                    <label><input type="checkbox" name="delivery" id="req-imp-video-delivery"> delivery</label><br>
+                    <label><input type="checkbox" name="pos" id="req-imp-video-pos"> pos</label><br>
+                    <label><input type="checkbox" name="companionad" id="req-imp-video-companionad" class="feature-unsupported"> companionad</label><br>
+                    <label><input type="checkbox" name="api" id="req-imp-video-api"> api</label><br>
+                    <label><input type="checkbox" name="companiontype" id="req-imp-video-companiontype"> companiontype</label><br>
+                    <label><input type="checkbox" name="ext" id="req-imp-video-ext"> ext</label><br>
                 </fieldset>
-                <fieldset id="audio-fieldset" style="display:none">
+                <fieldset id="req-audio-fieldset" style="display:none">
                     <legend>Audio Attributes</legend>
-                    <label><input type="checkbox" name="mimes" id="imp-audio-mimes"> mimes</label><br>
-                    <label><input type="checkbox" name="minduration" id="imp-audio-minduration"> minduration</label><br>
-                    <label><input type="checkbox" name="maxduration" id="imp-audio-maxduration"> maxduration</label><br>
-                    <label><input type="checkbox" name="protocols" id="imp-audio-protocols"> protocols</label><br>
-                    <label><input type="checkbox" name="startdelay" id="imp-audio-startdelay"> startdelay</label><br>
-                    <label><input type="checkbox" name="sequence" id="imp-audio-sequence"> sequence</label><br>
-                    <label><input type="checkbox" name="battr" id="imp-audio-battr"> battr</label><br>
-                    <label><input type="checkbox" name="maxextended" id="imp-audio-maxextended"> maxextended</label><br>
-                    <label><input type="checkbox" name="minbitrate" id="imp-audio-minbitrate"> minbitrate</label><br>
-                    <label><input type="checkbox" name="maxbitrate" id="imp-audio-maxbitrate"> maxbitrate</label><br>
-                    <label><input type="checkbox" name="delivery" id="imp-audio-delivery"> delivery</label><br>
-                    <label><input type="checkbox" name="companionad" id="imp-audio-companionad"> companionad</label><br>
-                    <label><input type="checkbox" name="api" id="imp-audio-api"> api</label><br>
-                    <label><input type="checkbox" name="companiontype" id="imp-audio-companiontype"> companiontype</label><br>
-                    <label><input type="checkbox" name="maxseq" id="imp-audio-maxseq"> maxseq</label><br>
-                    <label><input type="checkbox" name="feed" id="imp-audio-feed"> feed</label><br>
-                    <label><input type="checkbox" name="stitched" id="imp-audio-stitched"> stitched</label><br>
-                    <label><input type="checkbox" name="nvol" id="imp-audio-nvol"> nvol</label><br>
-                    <label><input type="checkbox" name="ext" id="imp-audio-ext"> ext</label><br>
+                    <label><input type="checkbox" name="mimes" id="req-imp-audio-mimes"> mimes</label><br>
+                    <label><input type="checkbox" name="minduration" id="req-imp-audio-minduration"> minduration</label><br>
+                    <label><input type="checkbox" name="maxduration" id="req-imp-audio-maxduration"> maxduration</label><br>
+                    <label><input type="checkbox" name="protocols" id="req-imp-audio-protocols"> protocols</label><br>
+                    <label><input type="checkbox" name="startdelay" id="req-imp-audio-startdelay"> startdelay</label><br>
+                    <label><input type="checkbox" name="sequence" id="req-imp-audio-sequence"> sequence</label><br>
+                    <label><input type="checkbox" name="battr" id="req-imp-audio-battr"> battr</label><br>
+                    <label><input type="checkbox" name="maxextended" id="req-imp-audio-maxextended"> maxextended</label><br>
+                    <label><input type="checkbox" name="minbitrate" id="req-imp-audio-minbitrate"> minbitrate</label><br>
+                    <label><input type="checkbox" name="maxbitrate" id="req-imp-audio-maxbitrate"> maxbitrate</label><br>
+                    <label><input type="checkbox" name="delivery" id="req-imp-audio-delivery"> delivery</label><br>
+                    <label><input type="checkbox" name="companionad" id="req-imp-audio-companionad"> companionad</label><br>
+                    <label><input type="checkbox" name="api" id="req-imp-audio-api"> api</label><br>
+                    <label><input type="checkbox" name="companiontype" id="req-imp-audio-companiontype"> companiontype</label><br>
+                    <label><input type="checkbox" name="maxseq" id="req-imp-audio-maxseq"> maxseq</label><br>
+                    <label><input type="checkbox" name="feed" id="req-imp-audio-feed"> feed</label><br>
+                    <label><input type="checkbox" name="stitched" id="req-imp-audio-stitched"> stitched</label><br>
+                    <label><input type="checkbox" name="nvol" id="req-imp-audio-nvol"> nvol</label><br>
+                    <label><input type="checkbox" name="ext" id="req-imp-audio-ext"> ext</label><br>
                 </fieldset>
             </fieldset>
-            <fieldset id="imp-fieldset">
+            <fieldset id="req-imp-fieldset">
                 <legend>Imp Attributes</legend>
-                <label><input type="checkbox" name="id" checked disabled> id</label><br>
+                <label><input type="checkbox" name="id" checked disabled id="req-imp-id"> id</label><br>
                 <!-- Metric Object-->
-                <label><input type="checkbox" name="metric" id="imp-metric" class="rtb-object"> Metric</label><br>
-                <fieldset id="imp-metric-fieldset" style="display: none;">
+                <label><input type="checkbox" name="metric" id="req-imp-metric" class="rtb-object"> Metric</label><br>
+                <fieldset id="req-imp-metric-fieldset" style="display: none;">
                     <legend>Metric Attributes</legend>
-                    <label><input type="checkbox" name="type" id="imp-metric-type" checked disabled> type</label><br>
-                    <label><input type="checkbox" name="value" id="imp-metric-value" checked disabled> value</label><br>
-                    <label><input type="checkbox" name="event" id="imp-metric-vendor"> vendor</label><br>
-                    <label><input type="checkbox" name="ext" id="imp-metric-ext"> ext</label><br>
+                    <label><input type="checkbox" name="type" id="req-imp-metric-type" checked disabled> type</label><br>
+                    <label><input type="checkbox" name="value" id="req-imp-metric-value" checked disabled> value</label><br>
+                    <label><input type="checkbox" name="event" id="req-imp-metric-vendor"> vendor</label><br>
+                    <label><input type="checkbox" name="ext" id="req-imp-metric-ext"> ext</label><br>
                 </fieldset>
                 <script>
-                    document.getElementById("imp-metric").addEventListener("change", function() {
+                    document.getElementById("req-imp-metric").addEventListener("change", function() {
                         if (this.checked) {
-                            document.getElementById("imp-metric-fieldset").style.display = "block";
+                            document.getElementById("req-imp-metric-fieldset").style.display = "block";
                         } else {
-                            document.getElementById("imp-metric-fieldset").style.display = "none";
+                            document.getElementById("req-imp-metric-fieldset").style.display = "none";
                         }
                     });
                 </script>
                 <!-- End of Metric Object-->
-                <label><input type="checkbox" name="pmp" id="imp-pmp"> Pmp</label><br>
+                <label><input type="checkbox" name="pmp" id="req-imp-pmp"> Pmp</label><br>
                 <!-- Pmp Object-->
-                <fieldset id="imp-pmp-fieldset" style="display: none;">
+                <fieldset id="req-imp-pmp-fieldset" style="display: none;">
                     <legend>Pmp Attributes</legend>
-                    <label><input type="checkbox" name="private_auction" id="imp-pmp-private-auction"> private_auction</label><br>
-                    <fieldset id="imp-pmp-private-auction-deal-fieldset">
+                    <label><input type="checkbox" name="private_auction" id="req-imp-pmp-private_auction"> private_auction</label><br>
+                    <fieldset id="req-imp-pmp-deal-fieldset">
                         <legend>Deal</legend>
-                        <label><input type="checkbox" name="id" id="imp-pmp-private-auction-deal-id" checked disabled> id</label><br>
-                        <label><input type="checkbox" name="bidfloor" id="imp-pmp-private-auction-deal-bidfloor"> bidfloor</label><br>
-                        <label><input type="checkbox" name="bidfloorcur" id="imp-pmp-private-auction-deal-bidfloorcur"> bidfloorcur</label><br>
-                        <label><input type="checkbox" name="at" id="imp-pmp-private-auction-deal-at"> at</label><br>
-                        <label><input type="checkbox" name="wseat" id="imp-pmp-private-auction-deal-wseat"> wseat</label><br>
-                        <label><input type="checkbox" name="wadomain" id="imp-pmp-private-auction-deal-wadomain"> wadomain</label><br>
-                        <label><input type="checkbox" name="ext" id="imp-pmp-private-auction-deal-ext"> ext</label><br>
+                        <label><input type="checkbox" name="id" id="req-imp-pmp-deal-id" checked disabled> id</label><br>
+                        <label><input type="checkbox" name="bidfloor" id="req-imp-pmp-deal-bidfloor"> bidfloor</label><br>
+                        <label><input type="checkbox" name="bidfloorcur" id="req-imp-pmp-deal-bidfloorcur"> bidfloorcur</label><br>
+                        <label><input type="checkbox" name="at" id="req-imp-pmp-deal-at"> at</label><br>
+                        <label><input type="checkbox" name="wseat" id="req-imp-pmp-deal-wseat"> wseat</label><br>
+                        <label><input type="checkbox" name="wadomain" id="req-imp-pmp-deal-wadomain"> wadomain</label><br>
+                        <label><input type="checkbox" name="ext" id="req-imp-pmp-deal-ext"> ext</label><br>
                     </fieldset>
-                    <label><input type="checkbox" name="ext" id="imp-pmp-ext"> ext</label><br>
+                    <label><input type="checkbox" name="ext" id="req-imp-pmp-ext"> ext</label><br>
                 </fieldset>
                 <script>
-                    document.getElementById("imp-pmp").addEventListener("change", function() {
+                    document.getElementById("req-imp-pmp").addEventListener("change", function() {
                         if (this.checked) {
-                            document.getElementById("imp-pmp-fieldset").style.display = "block";
+                            document.getElementById("req-imp-pmp-fieldset").style.display = "block";
                         } else {
-                            document.getElementById("imp-pmp-fieldset").style.display = "none";
+                            document.getElementById("req-imp-pmp-fieldset").style.display = "none";
                         }
                     });
                 </script>
                 <!-- End of Pmp Object-->
-                <label><input type="checkbox" id="imp-displaymanager" name="displaymanager"> displaymanager</label><br>
-                <label><input type="checkbox" id="imp-displaymanagerver" name="displaymanagerver"> displaymanagerver</label><br>
-                <label><input type="checkbox" id="imp-instl" name="instl"> instl</label><br>
-                <label><input type="checkbox" id="imp-tagid" name="tagid"> tagid</label><br>
-                <label><input type="checkbox" id="imp-bidfloor" name="bidfloor"> bidfloor</label><br>
-                <label><input type="checkbox" id="imp-bidfloorcur" name="bidfloorcur"> bidfloorcur</label><br>
-                <label><input type="checkbox" id="imp-clickbrowser" name="clickbrowser"> clickbrowser</label><br>
-                <label><input type="checkbox" id="imp-secure" name="secure"> secure</label><br>
-                <label><input type="checkbox" id="imp-iframebuster" name="iframebuster"> iframebuster</label><br>
-                <label><input type="checkbox" id="imp-exp" name="exp"> exp</label><br>
-                <label><input type="checkbox" id="imp-ext" name="ext"> ext</label><br>
+                <label><input type="checkbox" id="req-imp-displaymanager" name="displaymanager"> displaymanager</label><br>
+                <label><input type="checkbox" id="req-imp-displaymanagerver" name="displaymanagerver"> displaymanagerver</label><br>
+                <label><input type="checkbox" id="req-imp-instl" name="instl"> instl</label><br>
+                <label><input type="checkbox" id="req-imp-tagid" name="tagid"> tagid</label><br>
+                <label><input type="checkbox" id="req-imp-bidfloor" name="bidfloor"> bidfloor</label><br>
+                <label><input type="checkbox" id="req-imp-bidfloorcur" name="bidfloorcur"> bidfloorcur</label><br>
+                <label><input type="checkbox" id="req-imp-clickbrowser" name="clickbrowser"> clickbrowser</label><br>
+                <label><input type="checkbox" id="req-imp-secure" name="secure"> secure</label><br>
+                <label><input type="checkbox" id="req-imp-iframebuster" name="iframebuster"> iframebuster</label><br>
+                <label><input type="checkbox" id="req-imp-exp" name="exp"> exp</label><br>
+                <label><input type="checkbox" id="req-imp-ext" name="ext"> ext</label><br>
             </fieldset>
             <!-- End of Imp Object-->
             <!-- Site Object-->
-            <label><input type="checkbox" id="site"> Site</label><br>
-            <fieldset id="site-fieldset" style="display:none">
+            <label class="app-site-label"><input type="checkbox" id="req-site"> Site</label><br>
+            <fieldset id="req-site-fieldset" style="display:none">
                 <legend>Site Attributes</legend>
-                <label><input type="checkbox" id="site-id" name="id" checked> id</label><br>
-                <label><input type="checkbox" id="site-name" name="name" checked> name</label><br>
-                <label><input type="checkbox" id="site-domain" name="domain" checked> domain</label><br>
-                <label><input type="checkbox" id="site-cat" name="cat" checked> cat</label><br>
-                <label><input type="checkbox" id="site-sectioncat" name="sectioncat"> sectioncat</label><br>
-                <label><input type="checkbox" id="site-pagecat" name="pagecat"> pagecat</label><br>
-                <label><input type="checkbox" id="site-page" name="page"> page</label><br>
-                <label><input type="checkbox" id="site-ref" name="ref"> ref</label><br>
-                <label><input type="checkbox" id="site-search" name="search"> search</label><br>
-                <label><input type="checkbox" id="site-mobile" name="mobile"> mobile</label><br>
-                <label><input type="checkbox" id="site-privacypolicy" name="privacypolicy"> privacypolicy</label><br>
-                <label><input type="checkbox" id="site-publisher" name="publisher"> publisher</label><br>
-                <fieldset id="site-publisher-fieldset" style="display:none">
+                <label><input type="checkbox" id="req-site-id" name="id" checked> id</label><br>
+                <label><input type="checkbox" id="req-site-name" name="name" checked> name</label><br>
+                <label><input type="checkbox" id="req-site-domain" name="domain" checked> domain</label><br>
+                <label><input type="checkbox" id="req-site-cat" name="cat" checked> cat</label><br>
+                <label><input type="checkbox" id="req-site-sectioncat" name="sectioncat"> sectioncat</label><br>
+                <label><input type="checkbox" id="req-site-pagecat" name="pagecat"> pagecat</label><br>
+                <label><input type="checkbox" id="req-site-page" name="page"> page</label><br>
+                <label><input type="checkbox" id="req-site-ref" name="ref"> ref</label><br>
+                <label><input type="checkbox" id="req-site-search" name="search"> search</label><br>
+                <label><input type="checkbox" id="req-site-mobile" name="mobile"> mobile</label><br>
+                <label><input type="checkbox" id="req-site-privacypolicy" name="privacypolicy"> privacypolicy</label><br>
+                <label><input type="checkbox" id="req-site-publisher" name="publisher"> publisher</label><br>
+                <fieldset id="req-site-publisher-fieldset" style="display:none">
                     <legend>Publisher Attributes</legend>
-                    <label><input type="checkbox" id="site-publisher-id" name="id" checked> id</label><br>
-                    <label><input type="checkbox" id="site-publisher-name" name="name" checked> name</label><br>
-                    <label><input type="checkbox" id="site-publisher-cat" name="cat"> cat</label><br>
-                    <label><input type="checkbox" id="site-publisher-domain" name="domain"> domain</label><br>
-                    <label><input type="checkbox" id="site-publisher-ext" name="ext"> ext</label><br>
+                    <label><input type="checkbox" id="req-site-publisher-id" name="id" checked> id</label><br>
+                    <label><input type="checkbox" id="req-site-publisher-name" name="name" checked> name</label><br>
+                    <label><input type="checkbox" id="req-site-publisher-cat" name="cat"> cat</label><br>
+                    <label><input type="checkbox" id="req-site-publisher-domain" name="domain"> domain</label><br>
+                    <label><input type="checkbox" id="req-site-publisher-ext" name="ext"> ext</label><br>
                 </fieldset>
                 <script>
-                    const sitePublisherCheckbox = document.getElementById('site-publisher');
-                    const sitePublisherFieldset = document.getElementById('site-publisher-fieldset');
+                    const reqSitePublisherCheckbox = document.getElementById('req-site-publisher');
+                    const reqSitePublisherFieldset = document.getElementById('req-site-publisher-fieldset');
                     
-                    sitePublisherCheckbox.addEventListener('change', function() {
-                        sitePublisherFieldset.style.display = this.checked ? 'block' : 'none';
+                    reqSitePublisherCheckbox.addEventListener('change', function() {
+                        reqSitePublisherFieldset.style.display = this.checked ? 'block' : 'none';
                     });
                 </script>
-                <label><input type="checkbox" id="site-content" name="content"> content</label><br>
-                <fieldset id="site-content-fieldset" style="display:none">
+                <label><input type="checkbox" id="req-site-content" name="content"> content</label><br>
+                <fieldset id="req-site-content-fieldset" style="display:none">
                     <legend>Content Attributes</legend>
-                    <label><input type="checkbox" id="site-content-id" name="id" checked> id</label><br>
-                    <label><input type="checkbox" id="site-content-episode" name="episode"> episode</label><br>
-                    <label><input type="checkbox" id="site-content-title" name="title" checked> title</label><br>
-                    <label><input type="checkbox" id="site-content-series" name="series"> series</label><br>
-                    <label><input type="checkbox" id="site-content-season" name="season"> season</label><br>
-                    <label><input type="checkbox" id="site-content-artist" name="artist"> artist</label><br>
-                    <label><input type="checkbox" id="site-content-genre" name="genre"> genre</label><br>
-                    <label><input type="checkbox" id="site-content-album" name="album"> album</label><br>
-                    <label><input type="checkbox" id="site-content-isrc" name="isrc"> isrc</label><br>
-                    <label><input type="checkbox" id="site-content-producer" name="producer"> producer</label><br>
-                    <label><input type="checkbox" id="site-content-url" name="url"> url</label><br>
-                    <label><input type="checkbox" id="site-content-cat" name="cat"> cat</label><br>
-                    <label><input type="checkbox" id="site-content-videoquality" name="videoquality"> videoquality</label><br>
-                    <label><input type="checkbox" id="site-content-context" name="context"> context</label><br>
-                    <label><input type="checkbox" id="site-content-contentrating" name="contentrating"> contentrating</label><br>
-                    <label><input type="checkbox" id="site-content-userrating" name="userrating"> userrating</label><br>
-                    <label><input type="checkbox" id="site-content-keywords" name="keywords"> keywords</label><br>
-                    <label><input type="checkbox" id="site-content-livestream" name="livestream"> livestream</label><br>
-                    <label><input type="checkbox" id="site-content-sourcerelationship" name="sourcerelationship"> sourcerelationship</label><br>
-                    <label><input type="checkbox" id="site-content-len" name="len"> len</label><br>
-                    <label><input type="checkbox" id="site-content-language" name="language"> language</label><br>
-                    <label><input type="checkbox" id="site-content-embeddable" name="embeddable"> embeddable</label><br>
-                    <label><input type="checkbox" id="site-content-data" name="data"> data</label><br>
-                    <label><input type="checkbox" id="site-content-ext" name="ext"> ext</label><br>
+                    <label><input type="checkbox" id="req-site-content-id" name="id" checked> id</label><br>
+                    <label><input type="checkbox" id="req-site-content-episode" name="episode"> episode</label><br>
+                    <label><input type="checkbox" id="req-site-content-title" name="title" checked> title</label><br>
+                    <label><input type="checkbox" id="req-site-content-series" name="series"> series</label><br>
+                    <label><input type="checkbox" id="req-site-content-season" name="season"> season</label><br>
+                    <label><input type="checkbox" id="req-site-content-artist" name="artist"> artist</label><br>
+                    <label><input type="checkbox" id="req-site-content-genre" name="genre"> genre</label><br>
+                    <label><input type="checkbox" id="req-site-content-album" name="album"> album</label><br>
+                    <label><input type="checkbox" id="req-site-content-isrc" name="isrc"> isrc</label><br>
+                    <label><input type="checkbox" id="req-site-content-producer" name="producer"> producer</label><br>
+                    <label><input type="checkbox" id="req-site-content-url" name="url"> url</label><br>
+                    <label><input type="checkbox" id="req-site-content-cat" name="cat"> cat</label><br>
+                    <label><input type="checkbox" id="req-site-content-videoquality" name="videoquality"> videoquality</label><br>
+                    <label><input type="checkbox" id="req-site-content-context" name="context"> context</label><br>
+                    <label><input type="checkbox" id="req-site-content-contentrating" name="contentrating"> contentrating</label><br>
+                    <label><input type="checkbox" id="req-site-content-userrating" name="userrating"> userrating</label><br>
+                    <label><input type="checkbox" id="req-site-content-keywords" name="keywords"> keywords</label><br>
+                    <label><input type="checkbox" id="req-site-content-livestream" name="livestream"> livestream</label><br>
+                    <label><input type="checkbox" id="req-site-content-sourcerelationship" name="sourcerelationship"> sourcerelationship</label><br>
+                    <label><input type="checkbox" id="req-site-content-len" name="len"> len</label><br>
+                    <label><input type="checkbox" id="req-site-content-language" name="language"> language</label><br>
+                    <label><input type="checkbox" id="req-site-content-embeddable" name="embeddable"> embeddable</label><br>
+                    <label><input type="checkbox" id="req-site-content-data" name="data"> data</label><br>
+                    <label><input type="checkbox" id="req-site-content-ext" name="ext"> ext</label><br>
                 </fieldset>
                 <script>
-                    const siteContentCheckbox = document.getElementById('site-content');
-                    const siteContentFieldset = document.getElementById('site-content-fieldset');
+                    const siteContentCheckbox = document.getElementById('req-site-content');
+                    const siteContentFieldset = document.getElementById('req-site-content-fieldset');
                     
                     siteContentCheckbox.addEventListener('change', function() {
                         siteContentFieldset.style.display = this.checked ? 'block' : 'none';
                     });
                 </script>
-                <label><input type="checkbox" id="site-keywords" name="keywords"> keywords</label><br>
-                <label><input type="checkbox" id="site-ext" name="ext"> ext</label><br>
+                <label><input type="checkbox" id="req-site-keywords" name="keywords"> keywords</label><br>
+                <label><input type="checkbox" id="req-site-ext" name="ext"> ext</label><br>
             </fieldset>
             <!-- End of Site Object-->
             <!-- App Object-->
-            <label><input type="checkbox" id="app"> App</label><br>
-            <fieldset id="app-fieldset" style="display:none">
+            <label class="app-site-label"><input type="checkbox" id="req-app"> App</label><br>
+            <fieldset id="req-app-fieldset" style="display:none">
                 <legend>App Attributes</legend>
-                <label><input type="checkbox" id="app-id" name="id" checked> id</label><br>
-                <label><input type="checkbox" id="app-name" name="name" checked> name</label><br>
-                <label><input type="checkbox" id="app-bundle" name="bundle" checked> bundle</label><br>
-                <label><input type="checkbox" id="app-domain" name="domain" checked> domain</label><br>
-                <label><input type="checkbox" id="app-storeurl" name="storeurl"> storeurl</label><br>
-                <label><input type="checkbox" id="app-cat" name="cat" checked> cat</label><br>
-                <label><input type="checkbox" id="app-sectioncat" name="sectioncat"> sectioncat</label><br>
-                <label><input type="checkbox" id="app-pagecat" name="pagecat"> pagecat</label><br>
-                <label><input type="checkbox" id="app-ver" name="ver"> ver</label><br>
-                <label><input type="checkbox" id="app-privacypolicy" name="privacypolicy"> privacypolicy</label><br>
-                <label><input type="checkbox" id="app-paid" name="paid"> paid</label><br>
-                <label><input type="checkbox" id="app-publisher" name="publisher"> publisher</label><br>
+                <label><input type="checkbox" id="req-app-id" name="id" checked> id</label><br>
+                <label><input type="checkbox" id="req-app-name" name="name" checked> name</label><br>
+                <label><input type="checkbox" id="req-app-bundle" name="bundle" checked> bundle</label><br>
+                <label><input type="checkbox" id="req-app-domain" name="domain" checked> domain</label><br>
+                <label><input type="checkbox" id="req-app-storeurl" name="storeurl"> storeurl</label><br>
+                <label><input type="checkbox" id="req-app-cat" name="cat" checked> cat</label><br>
+                <label><input type="checkbox" id="req-app-sectioncat" name="sectioncat"> sectioncat</label><br>
+                <label><input type="checkbox" id="req-app-pagecat" name="pagecat"> pagecat</label><br>
+                <label><input type="checkbox" id="req-app-ver" name="ver"> ver</label><br>
+                <label><input type="checkbox" id="req-app-privacypolicy" name="privacypolicy"> privacypolicy</label><br>
+                <label><input type="checkbox" id="req-app-paid" name="paid"> paid</label><br>
+                <label><input type="checkbox" id="req-app-publisher" name="publisher"> publisher</label><br>
                 <!-- App.Publisher Object-->
-                <fieldset id="app-publisher-fieldset" style="display:none">
+                <fieldset id="req-app-publisher-fieldset" style="display:none">
                     <legend>Publisher Attributes</legend>
-                    <label><input type="checkbox" id="app-publisher-id" name="id" checked> id</label><br>
-                    <label><input type="checkbox" id="app-publisher-name" name="name" checked> name</label><br>
-                    <label><input type="checkbox" id="app-publisher-cat" name="cat"> cat</label><br>
-                    <label><input type="checkbox" id="app-publisher-domain" name="domain"> domain</label><br>
-                    <label><input type="checkbox" id="app-publisher-ext" name="ext"> ext</label><br>
+                    <label><input type="checkbox" id="req-app-publisher-id" name="id" checked> id</label><br>
+                    <label><input type="checkbox" id="req-app-publisher-name" name="name" checked> name</label><br>
+                    <label><input type="checkbox" id="req-app-publisher-cat" name="cat"> cat</label><br>
+                    <label><input type="checkbox" id="req-app-publisher-domain" name="domain"> domain</label><br>
+                    <label><input type="checkbox" id="req-app-publisher-ext" name="ext"> ext</label><br>
                 </fieldset>
                 <script>
-                    const appPublisherCheckbox = document.getElementById('app-publisher');
-                    const appPublisherFieldset = document.getElementById('app-publisher-fieldset');
+                    const reqAppPublisherCheckbox = document.getElementById('req-app-publisher');
+                    const reqAppPublisherFieldset = document.getElementById('req-app-publisher-fieldset');
                     
-                    appPublisherCheckbox.addEventListener('change', function() {
-                        appPublisherFieldset.style.display = this.checked ? 'block' : 'none';
+                    reqAppPublisherCheckbox.addEventListener('change', function() {
+                        reqAppPublisherFieldset.style.display = this.checked ? 'block' : 'none';
                     });
                 </script>
                 <!-- End of App.Publisher Object-->
-                <label><input type="checkbox" id="app-content" name="content"> content</label><br>
-                <fieldset id="app-content-fieldset" style="display:none">
+                <label><input type="checkbox" id="req-app-content" name="content"> content</label><br>
+                <fieldset id="req-app-content-fieldset" style="display:none">
                     <legend>Content Attributes</legend>
-                    <label><input type="checkbox" id="app-content-id" name="id" checked> id</label><br>
-                    <label><input type="checkbox" id="app-content-episode" name="episode"> episode</label><br>
-                    <label><input type="checkbox" id="app-content-title" name="title" checked> title</label><br>
-                    <label><input type="checkbox" id="app-content-series" name="series"> series</label><br>
-                    <label><input type="checkbox" id="app-content-season" name="season"> season</label><br>
-                    <label><input type="checkbox" id="app-content-artist" name="artist"> artist</label><br>
-                    <label><input type="checkbox" id="app-content-genre" name="genre"> genre</label><br>
-                    <label><input type="checkbox" id="app-content-album" name="album"> album</label><br>
-                    <label><input type="checkbox" id="app-content-isrc" name="isrc"> isrc</label><br>
-                    <label><input type="checkbox" id="app-content-producer" name="producer"> producer</label><br>
-                    <label><input type="checkbox" id="app-content-url" name="url"> url</label><br>
-                    <label><input type="checkbox" id="app-content-cat" name="cat"> cat</label><br>
-                    <label><input type="checkbox" id="app-content-videoquality" name="videoquality"> videoquality</label><br>
-                    <label><input type="checkbox" id="app-content-context" name="context"> context</label><br>
-                    <label><input type="checkbox" id="app-content-contentrating" name="contentrating"> contentrating</label><br>
-                    <label><input type="checkbox" id="app-content-userrating" name="userrating"> userrating</label><br>
-                    <label><input type="checkbox" id="app-content-keywords" name="keywords"> keywords</label><br>
-                    <label><input type="checkbox" id="app-content-livestream" name="livestream"> livestream</label><br>
-                    <label><input type="checkbox" id="app-content-sourcerelationship" name="sourcerelationship"> sourcerelationship</label><br>
-                    <label><input type="checkbox" id="app-content-len" name="len"> len</label><br>
-                    <label><input type="checkbox" id="app-content-language" name="language"> language</label><br>
-                    <label><input type="checkbox" id="app-content-embeddable" name="embeddable"> embeddable</label><br>
-                    <label><input type="checkbox" id="app-content-data" name="data"> data</label><br>
-                    <label><input type="checkbox" id="app-content-ext" name="ext"> ext</label><br>
+                    <label><input type="checkbox" id="req-app-content-id" name="id" checked> id</label><br>
+                    <label><input type="checkbox" id="req-app-content-episode" name="episode"> episode</label><br>
+                    <label><input type="checkbox" id="req-app-content-title" name="title" checked> title</label><br>
+                    <label><input type="checkbox" id="req-app-content-series" name="series"> series</label><br>
+                    <label><input type="checkbox" id="req-app-content-season" name="season"> season</label><br>
+                    <label><input type="checkbox" id="req-app-content-artist" name="artist"> artist</label><br>
+                    <label><input type="checkbox" id="req-app-content-genre" name="genre"> genre</label><br>
+                    <label><input type="checkbox" id="req-app-content-album" name="album"> album</label><br>
+                    <label><input type="checkbox" id="req-app-content-isrc" name="isrc"> isrc</label><br>
+                    <label><input type="checkbox" id="req-app-content-producer" name="producer"> producer</label><br>
+                    <label><input type="checkbox" id="req-app-content-url" name="url"> url</label><br>
+                    <label><input type="checkbox" id="req-app-content-cat" name="cat"> cat</label><br>
+                    <label><input type="checkbox" id="req-app-content-videoquality" name="videoquality"> videoquality</label><br>
+                    <label><input type="checkbox" id="req-app-content-context" name="context"> context</label><br>
+                    <label><input type="checkbox" id="req-app-content-contentrating" name="contentrating"> contentrating</label><br>
+                    <label><input type="checkbox" id="req-app-content-userrating" name="userrating"> userrating</label><br>
+                    <label><input type="checkbox" id="req-app-content-keywords" name="keywords"> keywords</label><br>
+                    <label><input type="checkbox" id="req-app-content-livestream" name="livestream"> livestream</label><br>
+                    <label><input type="checkbox" id="req-app-content-sourcerelationship" name="sourcerelationship"> sourcerelationship</label><br>
+                    <label><input type="checkbox" id="req-app-content-len" name="len"> len</label><br>
+                    <label><input type="checkbox" id="req-app-content-language" name="language"> language</label><br>
+                    <label><input type="checkbox" id="req-app-content-embeddable" name="embeddable"> embeddable</label><br>
+                    <label><input type="checkbox" id="req-app-content-data" name="data"> data</label><br>
+                    <label><input type="checkbox" id="req-app-content-ext" name="ext"> ext</label><br>
                 </fieldset>
                 <script>
-                    const appContentCheckbox = document.getElementById('app-content');
-                    const appContentFieldset = document.getElementById('app-content-fieldset');
+                    const reqAppContentCheckbox = document.getElementById('req-app-content');
+                    const reqAppContentFieldset = document.getElementById('req-app-content-fieldset');
                     
-                    appContentCheckbox.addEventListener('change', function() {
-                        appContentFieldset.style.display = this.checked ? 'block' : 'none';
+                    reqAppContentCheckbox.addEventListener('change', function() {
+                        reqAppContentFieldset.style.display = this.checked ? 'block' : 'none';
                     });
                 </script>
-                <label><input type="checkbox" id="app-keywords" name="keywords"> keywords</label><br>
-                <label><input type="checkbox" id="app-ext" name="ext"> ext</label><br>
+                <label><input type="checkbox" id="req-app-keywords" name="keywords"> keywords</label><br>
+                <label><input type="checkbox" id="req-app-ext" name="ext"> ext</label><br>
             </fieldset>
             <script>
-                const siteFieldset = document.getElementById('site-fieldset');
-                const appFieldset = document.getElementById('app-fieldset');
-                const siteCheckbox = document.getElementById('site');
-                const appCheckbox = document.getElementById('app');
+                const siteFieldset = document.getElementById('req-site-fieldset');
+                const appFieldset = document.getElementById('req-app-fieldset');
+                const siteCheckbox = document.getElementById('req-site');
+                const appCheckbox = document.getElementById('req-app');
                 
-                document.getElementById('site').addEventListener('change', function() {
+                document.getElementById('req-site').addEventListener('change', function() {
                     siteFieldset.style.display = this.checked ? 'block' : 'none';
                     appCheckbox.disabled = this.checked;
                     if (appFieldset.style.display == 'block' && this.checked) {
@@ -358,7 +358,7 @@
                     }
                 });
                 
-                document.getElementById('app').addEventListener('change', function() {
+                document.getElementById('req-app').addEventListener('change', function() {
                     appFieldset.style.display = this.checked ? 'block' : 'none';
                     siteCheckbox.disabled = this.checked;
                     if (siteFieldset.style.display == 'block' && this.checked) {
@@ -368,69 +368,69 @@
             </script>
             <!-- End of App Object-->
             <!-- Device Object-->
-            <label><input type="checkbox" id="device" checked> Device</label><br>
-            <fieldset id="device-fieldset" style="display:block">
+            <label><input type="checkbox" id="req-device" checked> Device</label><br>
+            <fieldset id="req-device-fieldset" style="display:block">
                 <legend>Device Attributes</legend>
-                <label><input type="checkbox" id="device-ua" name="ua" checked> ua</label><br>
-                <label><input type="checkbox" id="device-geo" name="geo" checked> Geo</label><br>
+                <label><input type="checkbox" id="req-device-ua" name="ua" checked> ua</label><br>
+                <label><input type="checkbox" id="req-device-geo" name="geo" checked> Geo</label><br>
                 <!-- Device.Geo Object-->
-                <fieldset id="device-geo-fieldset">
+                <fieldset id="req-device-geo-fieldset">
                     <legend>Geo Attributes</legend>
-                    <label><input type="checkbox" id="device-geo-lat" name="lat"> lat</label><br>
-                    <label><input type="checkbox" id="device-geo-lon" name="lon"> lon</label><br>
-                    <label><input type="checkbox" id="device-geo-type" name="type"> type</label><br>
-                    <label><input type="checkbox" id="device-geo-accuracy" name="accuracy"> accuracy</label><br>
-                    <label><input type="checkbox" id="device-geo-lastfix" name="lastfix"> lastfix</label><br>
-                    <label><input type="checkbox" id="device-geo-country" name="country" checked> country</label><br>
-                    <label><input type="checkbox" id="device-geo-region" name="region" checked> region</label><br>
-                    <label><input type="checkbox" id="device-geo-regionfips104" name="regionfips104"> regionfips104</label><br>
-                    <label><input type="checkbox" id="device-geo-metro" name="metro" checked> metro</label><br>
-                    <label><input type="checkbox" id="device-geo-city" name="city" checked> city</label><br>
-                    <label><input type="checkbox" id="device-geo-zip" name="zip" checked> zip</label><br>
-                    <label><input type="checkbox" id="device-geo-utcoffset" name="utcoffset"> utcoffset</label><br>
+                    <label><input type="checkbox" id="req-device-geo-lat" name="lat"> lat</label><br>
+                    <label><input type="checkbox" id="req-device-geo-lon" name="lon"> lon</label><br>
+                    <label><input type="checkbox" id="req-device-geo-type" name="type"> type</label><br>
+                    <label><input type="checkbox" id="req-device-geo-accuracy" name="accuracy"> accuracy</label><br>
+                    <label><input type="checkbox" id="req-device-geo-lastfix" name="lastfix"> lastfix</label><br>
+                    <label><input type="checkbox" id="req-device-geo-country" name="country" checked> country</label><br>
+                    <label><input type="checkbox" id="req-device-geo-region" name="region" checked> region</label><br>
+                    <label><input type="checkbox" id="req-device-geo-regionfips104" name="regionfips104"> regionfips104</label><br>
+                    <label><input type="checkbox" id="req-device-geo-metro" name="metro" checked> metro</label><br>
+                    <label><input type="checkbox" id="req-device-geo-city" name="city" checked> city</label><br>
+                    <label><input type="checkbox" id="req-device-geo-zip" name="zip" checked> zip</label><br>
+                    <label><input type="checkbox" id="req-device-geo-utcoffset" name="utcoffset"> utcoffset</label><br>
                 </fieldset>
                 <script>
-                    const deviceGeoCheckbox = document.getElementById('device-geo');
-                    const deviceGeoFieldset = document.getElementById('device-geo-fieldset');
+                    const reqDeviceGeoCheckbox = document.getElementById('req-device-geo');
+                    const reqDeviceGeoFieldset = document.getElementById('req-device-geo-fieldset');
                     
-                    deviceGeoCheckbox.addEventListener('change', function() {
-                        deviceGeoFieldset.style.display = this.checked ? 'block' : 'none';
+                    reqDeviceGeoCheckbox.addEventListener('change', function() {
+                        reqDeviceGeoFieldset.style.display = this.checked ? 'block' : 'none';
                     });
                 </script>
                 <!-- End of Device.Geo Object-->
-                <label><input type="checkbox" name="dnt" id="device-dnt"> dnt</label><br>
-                <label><input type="checkbox" name="lmt" id="device-lmt"> lmt</label><br>
-                <label><input type="checkbox" name="ip" id="device-ip"> ip</label><br>
-                <label><input type="checkbox" name="ipv6" id="device-ipv6"> ipv6</label><br>
-                <label><input type="checkbox" name="devicetype" id="device-devicetype"> devicetype</label><br>
-                <label><input type="checkbox" name="make" id="device-make"> make</label><br>
-                <label><input type="checkbox" name="model" id="device-model"> model</label><br>
-                <label><input type="checkbox" name="os" id="device-os"> os</label><br>
-                <label><input type="checkbox" name="osv" id="device-osv"> osv</label><br>
-                <label><input type="checkbox" name="hwv" id="device-hwv"> hwv</label><br>
-                <label><input type="checkbox" name="h" id="device-h"> h</label><br>
-                <label><input type="checkbox" name="w" id="device-w"> w</label><br>
-                <label><input type="checkbox" name="ppi" id="device-ppi"> ppi</label><br>
-                <label><input type="checkbox" name="pxratio" id="device-pxratio"> pxratio</label><br>
-                <label><input type="checkbox" name="js" id="device-js"> js</label><br>
-                <label><input type="checkbox" name="geofetch" id="device-geofetch"> geofetch</label><br>
-                <label><input type="checkbox" name="flashver" id="device-flashver"> flashver</label><br>
-                <label><input type="checkbox" name="language" id="device-language"> language</label><br>
-                <label><input type="checkbox" name="carrier" id="device-carrier"> carrier</label><br>
-                <label><input type="checkbox" name="mccmnc" id="device-mccmnc"> mccmnc</label><br>
-                <label><input type="checkbox" name="connectiontype" id="device-connectiontype"> connectiontype</label><br>
-                <label><input type="checkbox" name="ifa" id="device-ifa"> ifa</label><br>
-                <label><input type="checkbox" name="didsha1" id="device-didsha1"> didsha1</label><br>
-                <label><input type="checkbox" name="didmd5" id="device-didmd5"> didmd5</label><br>
-                <label><input type="checkbox" name="dpidsha1" id="device-dpidsha1"> dpidsha1</label><br>
-                <label><input type="checkbox" name="dpidmd5" id="device-dpidmd5"> dpidmd5</label><br>
-                <label><input type="checkbox" name="macsha1" id="device-macsha1"> macsha1</label><br>
-                <label><input type="checkbox" name="macmd5" id="device-macmd5"> macmd5</label><br>
-                <label><input type="checkbox" name="ext" id="device-ext"> ext</label><br>
+                <label><input type="checkbox" id="req-device-dnt" name="dnt"> dnt</label><br>
+                <label><input type="checkbox" id="req-device-lmt" name="lmt"> lmt</label><br>
+                <label><input type="checkbox" id="req-device-ip" name="ip"> ip</label><br>
+                <label><input type="checkbox" id="req-device-ipv6" name="ipv6"> ipv6</label><br>
+                <label><input type="checkbox" id="req-device-devicetype" name="devicetype"> devicetype</label><br>
+                <label><input type="checkbox" id="req-device-make" name="make"> make</label><br>
+                <label><input type="checkbox" id="req-device-model" name="model"> model</label><br>
+                <label><input type="checkbox" id="req-device-os" name="os"> os</label><br>
+                <label><input type="checkbox" id="req-device-osv" name="osv"> osv</label><br>
+                <label><input type="checkbox" id="req-device-hwv" name="hwv"> hwv</label><br>
+                <label><input type="checkbox" id="req-device-h" name="h"> h</label><br>
+                <label><input type="checkbox" id="req-device-w" name="w"> w</label><br>
+                <label><input type="checkbox" id="req-device-ppi" name="ppi"> ppi</label><br>
+                <label><input type="checkbox" id="req-device-pxratio" name="pxratio"> pxratio</label><br>
+                <label><input type="checkbox" id="req-device-js" name="js"> js</label><br>
+                <label><input type="checkbox" id="req-device-geofetch" name="geofetch"> geofetch</label><br>
+                <label><input type="checkbox" id="req-device-flashver" name="flashver"> flashver</label><br>
+                <label><input type="checkbox" id="req-device-language" name="language"> language</label><br>
+                <label><input type="checkbox" id="req-device-carrier" name="carrier"> carrier</label><br>
+                <label><input type="checkbox" id="req-device-mccmnc" name="mccmnc"> mccmnc</label><br>
+                <label><input type="checkbox" id="req-device-connectiontype" name="connectiontype"> connectiontype</label><br>
+                <label><input type="checkbox" id="req-device-ifa" name="ifa"> ifa</label><br>
+                <label><input type="checkbox" id="req-device-didsha1" name="didsha1"> didsha1</label><br>
+                <label><input type="checkbox" id="req-device-didmd5" name="didmd5"> didmd5</label><br>
+                <label><input type="checkbox" id="req-device-dpidsha1" name="dpidsha1"> dpidsha1</label><br>
+                <label><input type="checkbox" id="req-device-dpidmd5" name="dpidmd5"> dpidmd5</label><br>
+                <label><input type="checkbox" id="req-device-macsha1" name="macsha1"> macsha1</label><br>
+                <label><input type="checkbox" id="req-device-macmd5" name="macmd5"> macmd5</label><br>
+                <label><input type="checkbox" id="req-device-ext" name="ext"> ext</label><br>
             </fieldset>
             <script>
-                const deviceCheckbox = document.getElementById('device');
-                const deviceFieldset = document.getElementById('device-fieldset');
+                const deviceCheckbox = document.getElementById('req-device');
+                const deviceFieldset = document.getElementById('req-device-fieldset');
                 
                 deviceCheckbox.addEventListener('change', function() {
                     deviceFieldset.style.display = this.checked ? 'block' : 'none';
@@ -438,47 +438,48 @@
             </script>
             <!-- End of Device Object-->
             <!-- User Object-->
-            <label><input type="checkbox" id="user" checked> User</label><br>
-            <fieldset id="user-fieldset">
+            <label><input type="checkbox" id="req-user" checked> User</label><br>
+            <fieldset id="req-user-fieldset">
                 <legend>User Attributes</legend>
-                <label><input type="checkbox" id="user-id" name="id" checked> id</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('user-id', 40)"/><br>
-                <label><input type="checkbox" id="user-buyeruid" name="buyeruid"> buyeruid</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('user-buyeruid', 40)"/><br>
-                <label><input type="checkbox" id="user-yob" name="yob"> yob</label><br>
-                <label><input type="checkbox" id="user-gender" name="gender"> gender</label><br>
-                <label><input type="checkbox" id="user-keywords" name="keywords"> keywords</label><br>
-                <label><input type="checkbox" id="user-customdata" name="customdata"> customdata</label><br>
-                <label><input type="checkbox" id="user-geo" name="geo"> Geo</label><br>
+                <label><input type="checkbox" id="req-user-id" name="id" checked> id</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('req-user-id', 40)"/><br>
+                <label><input type="checkbox" id="req-user-buyeruid" name="buyeruid"> buyeruid</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('req-user-buyeruid', 40)"/><br>
+                <label><input type="checkbox" id="req-user-yob" name="yob"> yob</label><br>
+                <label><input type="checkbox" id="req-user-gender" name="gender"> gender</label><br>
+                <label><input type="checkbox" id="req-user-keywords" name="keywords"> keywords</label><br>
+                <label><input type="checkbox" id="req-user-customdata" name="customdata"> customdata</label><br>
+                <label><input type="checkbox" id="req-user-geo" name="geo"> Geo</label><br>
                 <!-- User.Geo Object-->
-                <fieldset id="user-geo-fieldset" style="display:none">
+                <fieldset id="req-user-geo-fieldset" style="display:none">
                     <legend>Geo Attributes</legend>
-                    <label><input type="checkbox" id="user-geo-lat" name="lat"> lat</label><br>
-                    <label><input type="checkbox" id="user-geo-lon" name="lon"> lon</label><br>
-                    <label><input type="checkbox" id="user-geo-type" name="type"> type</label><br>
-                    <label><input type="checkbox" id="user-geo-accuracy" name="accuracy"> accuracy</label><br>
-                    <label><input type="checkbox" id="user-geo-lastfix" name="lastfix"> lastfix</label><br>
-                    <label><input type="checkbox" id="user-geo-country" name="country" checked> country</label><br>
-                    <label><input type="checkbox" id="user-geo-region" name="region" checked> region</label><br>
-                    <label><input type="checkbox" id="user-geo-regionfips104" name="regionfips104"> regionfips104</label><br>
-                    <label><input type="checkbox" id="user-geo-metro" name="metro" checked> metro</label><br>
-                    <label><input type="checkbox" id="user-geo-city" name="city" checked> city</label><br>
-                    <label><input type="checkbox" id="user-geo-zip" name="zip" checked> zip</label><br>
-                    <label><input type="checkbox" id="user-geo-utcoffset" name="utcoffset"> utcoffset</label><br>
+                    <label><input type="checkbox" id="req-user-geo-lat" name="lat"> lat</label><br>
+                    <label><input type="checkbox" id="req-user-geo-lon" name="lon"> lon</label><br>
+                    <label><input type="checkbox" id="req-user-geo-type" name="type"> type</label><br>
+                    <label><input type="checkbox" id="req-user-geo-accuracy" name="accuracy"> accuracy</label><br>
+                    <label><input type="checkbox" id="req-user-geo-lastfix" name="lastfix"> lastfix</label><br>
+                    <label><input type="checkbox" id="req-user-geo-country" name="country" checked> country</label><br>
+                    <label><input type="checkbox" id="req-user-geo-region" name="region" checked> region</label><br>
+                    <label><input type="checkbox" id="req-user-geo-regionfips104" name="regionfips104"> regionfips104</label><br>
+                    <label><input type="checkbox" id="req-user-geo-metro" name="metro" checked> metro</label><br>
+                    <label><input type="checkbox" id="req-user-geo-city" name="city" checked> city</label><br>
+                    <label><input type="checkbox" id="req-user-geo-zip" name="zip" checked> zip</label><br>
+                    <label><input type="checkbox" id="req-user-geo-utcoffset" name="utcoffset"> utcoffset</label><br>
+                    <label><input type="checkbox" id="req-user-geo-ext" name="ext"> ext</label><br>
                 </fieldset>
                 <script>
-                    const userGeoCheckbox = document.getElementById('user-geo');
-                    const userGeoFieldset = document.getElementById('user-geo-fieldset');
+                    const userGeoCheckbox = document.getElementById('req-user-geo');
+                    const userGeoFieldset = document.getElementById('req-user-geo-fieldset');
                     
                     userGeoCheckbox.addEventListener('change', function() {
                         userGeoFieldset.style.display = this.checked ? 'block' : 'none';
                     });
                 </script>
                 <!-- End of User.Geo Object-->
-                <label><input type="checkbox" id="user-data" name="data"> data</label><br>
-                <label><input type="checkbox" id="user-ext" name="ext"> ext</label><br>
+                <label><input type="checkbox" id="req-user-data" name="data"> data</label><br>
+                <label><input type="checkbox" id="req-user-ext" name="ext"> ext</label><br>
             </fieldset>
             <script>
-                const userCheckbox = document.getElementById('user');
-                const userFieldset = document.getElementById('user-fieldset');
+                const userCheckbox = document.getElementById('req-user');
+                const userFieldset = document.getElementById('req-user-fieldset');
                 
                 userCheckbox.addEventListener('change', function() {
                     userFieldset.style.display = this.checked ? 'block' : 'none';
@@ -486,17 +487,17 @@
             </script>
             <!-- End of User Object-->
             <!-- Source Object-->
-            <label><input type="checkbox" name="source" id="source"> Source</label><br>
-            <fieldset id="source-fieldset" style="display:none">
+            <label><input type="checkbox" name="req-source" id="req-source"> Source</label><br>
+            <fieldset id="req-source-fieldset" style="display:none">
                 <legend>Source Attributes</legend>
-                <label><input type="checkbox" id="source-fd" name="fd"> fd</label><br>
-                <label><input type="checkbox" id="source-tid" name="tid"> tid</label><br>
-                <label><input type="checkbox" id="source-pchain" name="pchain"> pchain</label><br>
-                <label><input type="checkbox" id="source-ext" name="ext"> ext</label><br>
+                <label><input type="checkbox" id="req-source-fd" name="fd"> fd</label><br>
+                <label><input type="checkbox" id="req-source-tid" name="tid"> tid</label><br>
+                <label><input type="checkbox" id="req-source-pchain" name="pchain"> pchain</label><br>
+                <label><input type="checkbox" id="req-source-ext" name="ext"> ext</label><br>
             </fieldset>
             <script>
-                const sourceCheckbox = document.getElementById('source');
-                const sourceFieldset = document.getElementById('source-fieldset');
+                const sourceCheckbox = document.getElementById('req-source');
+                const sourceFieldset = document.getElementById('req-source-fieldset');
                 
                 sourceCheckbox.addEventListener('change', function() {
                     sourceFieldset.style.display = this.checked ? 'block' : 'none';
@@ -504,15 +505,15 @@
             </script>
             <!-- End of Source Object-->
             <!-- Regs Object-->
-            <label><input type="checkbox" name="regs" id="regs"> Regs</label><br>
-            <fieldset id="regs-fieldset" style="display:none">
+            <label><input type="checkbox" name="req-regs" id="req-regs"> Regs</label><br>
+            <fieldset id="req-regs-fieldset" style="display:none">
                 <legend>Regs Attributes</legend>
-                <label><input type="checkbox" id="regs-coppa" name="coppa"> coppa</label><br>
-                <label><input type="checkbox" id="regs-ext" name="ext"> ext</label><br>
+                <label><input type="checkbox" id="req-regs-coppa" name="req-coppa"> coppa</label><br>
+                <label><input type="checkbox" id="req-regs-ext" name="req-ext"> ext</label><br>
             </fieldset>
             <script>
-                const regsCheckbox = document.getElementById('regs');
-                const regsFieldset = document.getElementById('regs-fieldset');
+                const regsCheckbox = document.getElementById('req-regs');
+                const regsFieldset = document.getElementById('req-regs-fieldset');
                 
                 regsCheckbox.addEventListener('change', function() {
                     regsFieldset.style.display = this.checked ? 'block' : 'none';
@@ -520,18 +521,18 @@
             </script>
             <!-- End of Regs Object-->
             <hr>
-            <label><input type="checkbox" id="test" name="test"> test</label><br>
-            <label><input type="checkbox" id="at" name="at"> at</label><br>
-            <label><input type="checkbox" id="tmax" name="tmax"> tmax</label><br> 
-            <label><input type="checkbox" id="wseat" name="wseat"> wseat</label><br>
-            <label><input type="checkbox" id="bseat" name="bseat"> bseat</label><br>
-            <label><input type="checkbox" id="allimps" name="allimps"> allimps</label><br>
-            <label><input type="checkbox" id="cur" name="cur"> cur</label><br>
-            <label><input type="checkbox" id="wlang" name="wlang"> wlang</label><br>
-            <label><input type="checkbox" id="bcat" name="bcat"> bcat</label><br>
-            <label><input type="checkbox" id="badv" name="badv"> badv</label><br>
-            <label><input type="checkbox" id="bapp" name="bapp"> bapp</label><br>
-            <label><input type="checkbox" id="ext" name="ext"> ext</label><br>
+            <label><input type="checkbox" id="req-test" name="test"> test</label><br>
+            <label><input type="checkbox" id="req-at" name="at"> at</label><br>
+            <label><input type="checkbox" id="req-tmax" name="tmax"> tmax</label><br> 
+            <label><input type="checkbox" id="req-wseat" name="wseat"> wseat</label><br>
+            <label><input type="checkbox" id="req-bseat" name="bseat"> bseat</label><br>
+            <label><input type="checkbox" id="req-allimps" name="allimps"> allimps</label><br>
+            <label><input type="checkbox" id="req-cur" name="cur"> cur</label><br>
+            <label><input type="checkbox" id="req-wlang" name="wlang"> wlang</label><br>
+            <label><input type="checkbox" id="req-bcat" name="bcat"> bcat</label><br>
+            <label><input type="checkbox" id="req-badv" name="badv"> badv</label><br>
+            <label><input type="checkbox" id="req-bapp" name="bapp"> bapp</label><br>
+            <label><input type="checkbox" id="req-ext" name="ext"> ext</label><br>
         </fieldset>
         <button type="button" onclick="createBidRequest()">Create Bid Request</button>
     </form>
@@ -542,29 +543,39 @@
             if (!checkbox) {
                 return;
             }
-            inputDataValue = inputData.hasOwnProperty(checkbox.id.toString()) ? inputData[checkbox.id.toString()] : null;
-            if (!inputDataValue) {
-                if (!defaultData.hasOwnProperty(checkbox.id.toString())) {
-                    return;
-                }
-                inputDataValue = defaultData[checkbox.id.toString()];
-            }
+            
             const parent = checkbox.parentNode;
-            inputbox = parent.querySelectorAll('.input-default-value');
-            inputbox.forEach(box => box.remove());
-            inputData[checkbox.id] = null;
-
-            if (checkbox.checked) {
-                inputData[checkbox.id] = inputDataValue;
-                const inputbox = document.createElement('input');
-                inputbox.className = 'input-default-value';
-                inputbox.value = inputDataValue;
-                inputbox.addEventListener('input', function() {
-                    inputData[checkbox.id] = inputbox.value;
+            // remove any existing inputbox
+            let existingInputbox = parent.querySelectorAll('.input-value-box');
+            existingInputbox.forEach(box => box.remove());
+            if (!checkbox.checked) {
+                // attribute not selected. clear inputData's attribute
+                delete inputData[checkbox.id.toString()];
+            } else {
+                // attribute selected. 
+                // 1. check if inputData has the attribute:
+                //    - if yes, apply it to the inputbox
+                //    - if not, apply the default value
+                let inputDataValue = inputData.hasOwnProperty(checkbox.id.toString()) ? inputData[checkbox.id.toString()] : null;
+                if (!inputDataValue) {
+                    // if defaultData also has no such attribute, return
+                    // as this is not part of openRTB. Or it's not supported by this app yet.
+                    if (!defaultData.hasOwnProperty(checkbox.id.toString())) {
+                        return;
+                    }
+                    inputDataValue = defaultData[checkbox.id.toString()][2];
+                    inputData[checkbox.id.toString()] = inputDataValue;
+                }
+                // 2. apply the value to inputbox
+                // create new inputbox containing the data from above
+                let newInputbox = document.createElement('input');
+                newInputbox.className = 'input-value-box';
+                newInputbox.value = inputDataValue;
+                newInputbox.addEventListener('input', function() {
                     // convert the input value to the correct data type
-                    dataTypeConvert(checkbox.id);
+                    applyToInputData(checkbox.id);
                 });
-                parent.appendChild(inputbox);
+                parent.appendChild(newInputbox);
             }
         }
 
