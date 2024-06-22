@@ -413,7 +413,7 @@ const impTemplate =
 `
     <!-- Imp Object -->
     <fieldset id="req-imp-idx-{{INDEX}}">
-        <legend> Imp {{INDEX}} </legend>
+        <legend> Imp <img src="assets/circle-xmark-regular.svg" class="field-removal-btn" onclick="this.parentNode.parentNode.remove();"></legend>
         <fieldset id="req-imp-idx-{{INDEX}}-type-fieldset">
             <legend>Select Type</legend>
             <select id="req-imp-idx-{{INDEX}}-type-selection">
@@ -426,7 +426,7 @@ const impTemplate =
             <fieldset id="req-imp-idx-{{INDEX}}-banner-fieldset" style="display:none">
                 <legend>Banner Attributes</legend>
                 <!-- Banner Format Object-->
-                <label><input type="checkbox" name="format" value="format" id="req-imp-idx-{{INDEX}}-banner-format"> format</label><br>
+                <label><input type="checkbox" name="format" value="format" id="req-imp-idx-{{INDEX}}-banner-format"> Format</label><br>
                 <fieldset id="req-imp-idx-{{INDEX}}-banner-format-fieldset" style="display:none">
                     <legend>Format Attributes</legend>
                     <label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{INDEX}}-banner-format-w"> w</label><br>
@@ -559,6 +559,7 @@ function addImpHTML() {
     impObjectLastIndex++;
     const newImp = createNodeFromString(impTemplate, newImpIndex);
     const addImpButton = document.getElementById('add-imp');
+    addImpButton.classList.add('general-btn');
     addImpButton.parentNode.insertBefore(newImp, addImpButton);
     // change the imp.id in inputData, this will be picked up by applyDefaultData
     inputData['req-imp-idx-' + newImpIndex + '-id'] = newImpIndex;

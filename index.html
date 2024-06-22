@@ -424,7 +424,7 @@ SOFTWARE.
             <label><input type="checkbox" id="req-bapp" name="bapp"> bapp</label><br>
             <label><input type="checkbox" id="req-ext" name="ext"> ext</label><br>
         </fieldset>
-        <button type="button" onclick="createBidRequest()">Create Bid Request</button>
+        <button type="button" onclick="createBidRequest()" class="general-btn">Create Bid Request</button>
     </form>
     <script>
         // Display the default value generated at page landing. 
@@ -437,11 +437,11 @@ SOFTWARE.
         });
     </script>
     <textarea id="output" style="display:none;"></textarea>
-    <button id="output-json-prettify-button" type="button" style="display:none;" onclick="document.getElementById('output').value = JSON.stringify(JSON.parse(document.getElementById('output').value), null, 2)">Prettify JSON</button>
+    <button id="output-json-prettify-button" type="button" style="display:none;" onclick="document.getElementById('output').value = JSON.stringify(JSON.parse(document.getElementById('output').value), null, 2)" class="general-btn">Prettify JSON</button>
     
-    <div id="footer-bar" style="height: 5vh; width: 100%;"></div>
+    <div id="footer-bar"></div>
     <footer id="footer">
-        <p>Made in <span style="color: #1DA1F2;">🗽</span> New York <span>❤️</span>  |  Suggestions, Bugs? <a href="https://github.com/bid-request/bid-request.github.io/issues">Create an issue here!</a> | v0.2.0</p>
+        <p>Made in <span style="color: #1DA1F2;">🗽</span> New York <span>❤️</span>  <br> Suggestions, Bugs? <a href="https://github.com/bid-request/bid-request.github.io/issues">Create an issue here!</a> | v0.3.0</p>
     </footer>
 </body>
 </html>

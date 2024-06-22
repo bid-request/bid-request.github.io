@@ -21,10 +21,20 @@
     right: 5%;
 }
 
+.field-removal-btn {
+    height: 1em;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
 .feature-unsupported {
     color: lightgray;
     font-style: italic;
     text-decoration: line-through;
+}
+
+.general-btn {
+    margin-top: 0.5em;
 }
 
 @media (min-width: 960px) {
@@ -48,8 +58,28 @@
     background-color: black;
     color: white;
     text-align: center;
-    line-height: 0.5vh;
+    line-height: 1.2em;
     height: 4vh;
+}
+
+#footer-bar {
+    width: 100%;
+    height: 4vh;
+}
+
+@media (max-width: 959px) {
+    #footer {
+        height: auto;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        line-height: normal;
+    }
+
+    #footer-bar {
+        width: 100%;
+        height: 10vh;
+    }
 }
 
 #footer a {
