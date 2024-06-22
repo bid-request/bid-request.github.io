@@ -322,7 +322,291 @@ const defaultData = {
 // User input
 const inputData = {}
 
-// Helper Functions, random string generator
+function checkboxOnChange(id) {
+    const checkbox = document.getElementById(id);
+    if (!checkbox) {
+        return;
+    }
+    const dataKey = checkbox.id.toString();
+    const parent = checkbox.parentNode;
+    // remove any existing inputbox
+    let existingInputbox = parent.querySelectorAll('.input-value-box');
+    existingInputbox.forEach(box => box.remove());
+    if (!checkbox.checked) {
+        // attribute not selected. clear inputData's attribute
+        delete inputData[dataKey];
+    } else {
+        // attribute selected. 
+        // 1. check if inputData has the attribute:
+        //    - if yes, apply it to the inputbox
+        //    - if not, apply the default value
+        let inputDataValue = inputData.hasOwnProperty(dataKey) ? inputData[dataKey] : null;
+        if (!inputDataValue) {
+            // if defaultData also has no such attribute, return
+            // as this is not part of openRTB. Or it's not supported by this app yet.
+            let defaultKey = dataKey.replace(/-idx-\d+-/g, '-');
+            if (!defaultData.hasOwnProperty(defaultKey)) {
+                return;
+            } else {
+                inputDataValue = defaultData[defaultKey][2];
+                inputData[dataKey] = inputDataValue;
+            }
+        }
+        // 2. apply the value to inputbox
+        // create new inputbox containing the data from above
+        let newInputbox = document.createElement('input');
+        // logic to support dropdown for predefined attributes
+        if (checkbox.getAttribute('pre-defined-options')) {
+            const optionsAttr = checkbox.getAttribute('pre-defined-options');
+            const optionsArray = optionsAttr.split(',');
+            newInputbox = document.createElement('select');
+            maxwidth = 0;
+            for (let i = 0; i < optionsArray.length; i++) {
+                let newOption = document.createElement('option');
+                newOption.value = optionsArray[i];
+                newOption.text = optionsArray[i];
+                newInputbox.appendChild(newOption);
+                if (inputDataValue === optionsArray[i]) {
+                    newInputbox.selectedIndex = i;
+                }
+                maxwidth = Math.max(maxwidth, optionsArray[i].length);
+            }
+            if (newInputbox.selectedIndex === -1) {
+                newInputbox.selectedIndex = 0;
+            }
+            newInputbox.style.width = maxwidth + 3 + 'ch';
+        }
+
+        newInputbox.className = 'input-value-box';
+        newInputbox.value = inputDataValue;
+        newInputbox.addEventListener('input', function() {
+            // convert the input value to the correct data type
+            applyToInputData(checkbox.id);
+        });
+        parent.appendChild(newInputbox);
+    }
+}
+
+function createNodeFromString(str, idx) {
+    str = str.replace(/{{INDEX}}/g, idx);
+    var temp = document.createElement('template');
+    temp.innerHTML = str.trim();
+    return temp.content;
+}
+
+function applyDefaultData(id) {
+    const node = document.getElementById(id);
+    if (!node) return;
+    // apply listerns to checkboxes
+    const checkboxes = node.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkboxOnChange(checkbox.id);
+        checkbox.addEventListener('change', function() {
+            checkboxOnChange(this.id);
+        });
+    });
+}
+// Array Objects Indexes
+let impObjectLastIndex = 1;
+
+const impTemplate = 
+`
+    <!-- Imp Object -->
+    <fieldset id="req-imp-idx-{{INDEX}}">
+        <legend> Imp {{INDEX}} </legend>
+        <fieldset id="req-imp-idx-{{INDEX}}-type-fieldset">
+            <legend>Select Type</legend>
+            <select id="req-imp-idx-{{INDEX}}-type-selection">
+                <option value="">Select Type</option>
+                <option value="banner">Banner</option>
+                <option value="video">Video</option>
+                <option value="audio">Audio</option>
+                <option value="native" disabled>Native</option>
+            </select>
+            <fieldset id="req-imp-idx-{{INDEX}}-banner-fieldset" style="display:none">
+                <legend>Banner Attributes</legend>
+                <!-- Banner Format Object-->
+                <label><input type="checkbox" name="format" value="format" id="req-imp-idx-{{INDEX}}-banner-format"> format</label><br>
+                <fieldset id="req-imp-idx-{{INDEX}}-banner-format-fieldset" style="display:none">
+                    <legend>Format Attributes</legend>
+                    <label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{INDEX}}-banner-format-w"> w</label><br>
+                    <label><input type="checkbox" name="h" value="h" id="req-imp-idx-{{INDEX}}-banner-format-h"> h</label><br>
+                    <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{INDEX}}-banner-format-wratio"> wratio</label><br>
+                    <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-idx-{{INDEX}}-banner-format-hratio"> hratio</label><br>
+                    <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-idx-{{INDEX}}-banner-format-wmin"> wmin</label><br>
+                    <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-idx-{{INDEX}}-banner-format-ext"> ext</label><br>
+                </fieldset>
+                <!-- End of Banner Format Object-->
+                <label><input type="checkbox" name="w" value="w" checked id="req-imp-idx-{{INDEX}}-banner-w"> w</label><br>
+                <label><input type="checkbox" name="h" value="h" checked id="req-imp-idx-{{INDEX}}-banner-h"> h</label><br>
+                <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{INDEX}}-banner-wmax"> wmax (deprecated)</label><br>
+                <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-idx-{{INDEX}}-banner-hmax"> hmax (deprecated)</label><br>
+                <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-idx-{{INDEX}}-banner-wmin"> wmin (deprecated)</label><br>
+                <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-idx-{{INDEX}}-banner-hmin"> hmin (deprecated)</label><br>
+                <label><input type="checkbox" name="btype" value="btype" id="req-imp-idx-{{INDEX}}-banner-btype"> btype</label><br>
+                <label><input type="checkbox" name="battr" value="battr" id="req-imp-idx-{{INDEX}}-banner-battr" id="req-imp-idx-{{INDEX}}-banner-battr-id"> battr</label><br>
+                <label><input type="checkbox" name="pos" value="pos" id="req-imp-idx-{{INDEX}}-banner-pos" pre-defined-options="0,1,2,3,4,5,6,7"> pos</label><br>
+                <label><input type="checkbox" name="mimes" value="mimes" id="req-imp-idx-{{INDEX}}-banner-mimes"> mimes</label><br>
+                <label><input type="checkbox" name="topframe" value="topframe" id="req-imp-idx-{{INDEX}}-banner-topframe" pre-defined-options="0,1"> topframe</label><br>
+                <label><input type="checkbox" name="expdir" value="expdir" id="req-imp-idx-{{INDEX}}-banner-expdir"> expdir</label><br>
+                <label><input type="checkbox" name="api" value="api" id="req-imp-idx-{{INDEX}}-banner-api"> api</label><br>
+                <label><input type="checkbox" name="id" value="id" id="req-imp-idx-{{INDEX}}-banner-id"> id</label><br>
+                <label><input type="checkbox" name="vcm" value="vcm" id="req-imp-idx-{{INDEX}}-banner-vcm" pre-defined-options="0,1"> vcm</label><br>
+                <label><input type="checkbox" name="ext" value="ext" id="req-imp-idx-{{INDEX}}-banner-ext"> ext</label><br>
+            </fieldset>
+            <fieldset id="req-imp-idx-{{INDEX}}-video-fieldset" style="display:none">
+                <legend>Video Attributes</legend>
+                <label><input type="checkbox" name="mimes" id="req-imp-idx-{{INDEX}}-video-mimes" checked disabled> mimes</label><br>
+                <label><input type="checkbox" name="minduration" checked id="req-imp-idx-{{INDEX}}-video-minduration"> minduration</label><br>
+                <label><input type="checkbox" name="maxduration" checked id="req-imp-idx-{{INDEX}}-video-maxduration"> maxduration</label><br>
+                <label><input type="checkbox" name="protocols" id="req-imp-idx-{{INDEX}}-video-protocols"> protocols</label><br>
+                <label><input type="checkbox" name="protocol" id="req-imp-idx-{{INDEX}}-video-protocol"> protocol (deprecated)</label><br>
+                <label><input type="checkbox" name="w" checked id="req-imp-idx-{{INDEX}}-video-w"> w</label><br>
+                <label><input type="checkbox" name="h" checked id="req-imp-idx-{{INDEX}}-video-h"> h</label><br>
+                <label><input type="checkbox" name="startdelay" id="req-imp-idx-{{INDEX}}-video-startdelay"> startdelay</label><br>
+                <label><input type="checkbox" name="placement" id="req-imp-idx-{{INDEX}}-video-placement" pre-defined-options="1,2,3,4,5"> placement</label><br>
+                <label><input type="checkbox" name="linearity" id="req-imp-idx-{{INDEX}}-video-linearity" pre-defined-options="1,2"> linearity</label><br>
+                <label><input type="checkbox" name="skip" id="req-imp-idx-{{INDEX}}-video-skip" pre-defined-options="0,1"> skip</label><br>
+                <label><input type="checkbox" name="skipmin" id="req-imp-idx-{{INDEX}}-video-skipmin"> skipmin</label><br>
+                <label><input type="checkbox" name="skipafter" id="req-imp-idx-{{INDEX}}-video-skipafter"> skipafter</label><br>
+                <label><input type="checkbox" name="sequence" id="req-imp-idx-{{INDEX}}-video-sequence"> sequence</label><br>
+                <label><input type="checkbox" name="battr" id="req-imp-idx-{{INDEX}}-video-battr"> battr</label><br>
+                <label><input type="checkbox" name="maxextended" id="req-imp-idx-{{INDEX}}-video-maxextended"> maxextended</label><br>
+                <label><input type="checkbox" name="minbitrate" id="req-imp-idx-{{INDEX}}-video-minbitrate"> minbitrate</label><br>
+                <label><input type="checkbox" name="maxbitrate" id="req-imp-idx-{{INDEX}}-video-maxbitrate"> maxbitrate</label><br>
+                <label><input type="checkbox" name="boxingallowed" id="req-imp-idx-{{INDEX}}-video-boxingallowed" pre-defined-options="0,1"> boxingallowed</label><br>
+                <label><input type="checkbox" name="playbackmethod" id="req-imp-idx-{{INDEX}}-video-playbackmethod"> playbackmethod</label><br>
+                <label><input type="checkbox" name="playbackend" id="req-imp-idx-{{INDEX}}-video-playbackend" pre-defined-options="1,2,3"> playbackend</label><br>
+                <label><input type="checkbox" name="delivery" id="req-imp-idx-{{INDEX}}-video-delivery"> delivery</label><br>
+                <label><input type="checkbox" name="pos" id="req-imp-idx-{{INDEX}}-video-pos" pre-defined-options="1,2,3,4,5,6,7"> pos</label><br>
+                <label><input type="checkbox" name="companionad" id="req-imp-idx-{{INDEX}}-video-companionad" class="feature-unsupported"> companionad</label><br>
+                <label><input type="checkbox" name="api" id="req-imp-idx-{{INDEX}}-video-api"> api</label><br>
+                <label><input type="checkbox" name="companiontype" id="req-imp-idx-{{INDEX}}-video-companiontype"> companiontype</label><br>
+                <label><input type="checkbox" name="ext" id="req-imp-idx-{{INDEX}}-video-ext"> ext</label><br>
+            </fieldset>
+            <fieldset id="req-imp-idx-{{INDEX}}-audio-fieldset" style="display:none">
+                <legend>Audio Attributes</legend>
+                <label><input type="checkbox" name="mimes" id="req-imp-idx-{{INDEX}}-audio-mimes"> mimes</label><br>
+                <label><input type="checkbox" name="minduration" id="req-imp-idx-{{INDEX}}-audio-minduration"> minduration</label><br>
+                <label><input type="checkbox" name="maxduration" id="req-imp-idx-{{INDEX}}-audio-maxduration"> maxduration</label><br>
+                <label><input type="checkbox" name="protocols" id="req-imp-idx-{{INDEX}}-audio-protocols"> protocols</label><br>
+                <label><input type="checkbox" name="startdelay" id="req-imp-idx-{{INDEX}}-audio-startdelay"> startdelay</label><br>
+                <label><input type="checkbox" name="sequence" id="req-imp-idx-{{INDEX}}-audio-sequence"> sequence</label><br>
+                <label><input type="checkbox" name="battr" id="req-imp-idx-{{INDEX}}-audio-battr"> battr</label><br>
+                <label><input type="checkbox" name="maxextended" id="req-imp-idx-{{INDEX}}-audio-maxextended"> maxextended</label><br>
+                <label><input type="checkbox" name="minbitrate" id="req-imp-idx-{{INDEX}}-audio-minbitrate"> minbitrate</label><br>
+                <label><input type="checkbox" name="maxbitrate" id="req-imp-idx-{{INDEX}}-audio-maxbitrate"> maxbitrate</label><br>
+                <label><input type="checkbox" name="delivery" id="req-imp-idx-{{INDEX}}-audio-delivery"> delivery</label><br>
+                <label><input type="checkbox" name="companionad" id="req-imp-idx-{{INDEX}}-audio-companionad"> companionad</label><br>
+                <label><input type="checkbox" name="api" id="req-imp-idx-{{INDEX}}-audio-api"> api</label><br>
+                <label><input type="checkbox" name="companiontype" id="req-imp-idx-{{INDEX}}-audio-companiontype"> companiontype</label><br>
+                <label><input type="checkbox" name="maxseq" id="req-imp-idx-{{INDEX}}-audio-maxseq"> maxseq</label><br>
+                <label><input type="checkbox" name="feed" id="req-imp-idx-{{INDEX}}-audio-feed"> feed</label><br>
+                <label><input type="checkbox" name="stitched" id="req-imp-idx-{{INDEX}}-audio-stitched" pre-defined-options="0,1"> stitched</label><br>
+                <label><input type="checkbox" name="nvol" id="req-imp-idx-{{INDEX}}-audio-nvol"> nvol</label><br>
+                <label><input type="checkbox" name="ext" id="req-imp-idx-{{INDEX}}-audio-ext"> ext</label><br>
+            </fieldset>
+        </fieldset>
+        <fieldset id="req-imp-idx-{{INDEX}}-fieldset">
+            <legend>Imp Attributes</legend>
+            <label><input type="checkbox" name="id" checked disabled id="req-imp-idx-{{INDEX}}-id"> id</label><br>
+            <!-- Metric Object-->
+            <label><input type="checkbox" name="metric" id="req-imp-idx-{{INDEX}}-metric" class="rtb-object"> Metric</label><br>
+            <fieldset id="req-imp-idx-{{INDEX}}-metric-fieldset" style="display: none;">
+                <legend>Metric Attributes</legend>
+                <label><input type="checkbox" name="type" id="req-imp-idx-{{INDEX}}-metric-type" checked disabled> type</label><br>
+                <label><input type="checkbox" name="value" id="req-imp-idx-{{INDEX}}-metric-value" checked disabled> value</label><br>
+                <label><input type="checkbox" name="event" id="req-imp-idx-{{INDEX}}-metric-vendor"> vendor</label><br>
+                <label><input type="checkbox" name="ext" id="req-imp-idx-{{INDEX}}-metric-ext"> ext</label><br>
+            </fieldset>
+            <!-- End of Metric Object-->
+            <label><input type="checkbox" name="pmp" id="req-imp-idx-{{INDEX}}-pmp"> Pmp</label><br>
+            <!-- Pmp Object-->
+            <fieldset id="req-imp-idx-{{INDEX}}-pmp-fieldset" style="display: none;">
+                <legend>Pmp Attributes</legend>
+                <label><input type="checkbox" name="private_auction" id="req-imp-idx-{{INDEX}}-pmp-private_auction" pre-defined-options="0,1"> private_auction</label><br>
+                <fieldset id="req-imp-idx-{{INDEX}}-pmp-deal-fieldset">
+                    <legend>Deal</legend>
+                    <label><input type="checkbox" name="id" id="req-imp-idx-{{INDEX}}-pmp-deal-id" checked disabled> id</label><br>
+                    <label><input type="checkbox" name="bidfloor" id="req-imp-idx-{{INDEX}}-pmp-deal-bidfloor"> bidfloor</label><br>
+                    <label><input type="checkbox" name="bidfloorcur" id="req-imp-idx-{{INDEX}}-pmp-deal-bidfloorcur"> bidfloorcur</label><br>
+                    <label><input type="checkbox" name="at" id="req-imp-idx-{{INDEX}}-pmp-deal-at" pre-defined-options="1,2,3"> at</label><br>
+                    <label><input type="checkbox" name="wseat" id="req-imp-idx-{{INDEX}}-pmp-deal-wseat"> wseat</label><br>
+                    <label><input type="checkbox" name="wadomain" id="req-imp-idx-{{INDEX}}-pmp-deal-wadomain"> wadomain</label><br>
+                    <label><input type="checkbox" name="ext" id="req-imp-idx-{{INDEX}}-pmp-deal-ext"> ext</label><br>
+                </fieldset>
+                <label><input type="checkbox" name="ext" id="req-imp-idx-{{INDEX}}-pmp-ext"> ext</label><br>
+            </fieldset>
+            <!-- End of Pmp Object-->
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-displaymanager" name="displaymanager"> displaymanager</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-displaymanagerver" name="displaymanagerver"> displaymanagerver</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-instl" name="instl" pre-defined-options="0,1"> instl</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-tagid" name="tagid"> tagid</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-bidfloor" name="bidfloor"> bidfloor</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-bidfloorcur" name="bidfloorcur"> bidfloorcur</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-clickbrowser" name="clickbrowser" pre-defined-options="0,1"> clickbrowser</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-secure" name="secure" pre-defined-options="0,1"> secure</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-iframebuster" name="iframebuster"> iframebuster</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-exp" name="exp"> exp</label><br>
+            <label><input type="checkbox" id="req-imp-idx-{{INDEX}}-ext" name="ext"> ext</label><br>
+        </fieldset>
+        <!-- End of Imp Object-->
+    </fieldset>
+    <!-- End of Imp Object -->
+`
+function addImpHTML() {
+    const newImpIndex = impObjectLastIndex;
+    impObjectLastIndex++;
+    const newImp = createNodeFromString(impTemplate, newImpIndex);
+    const addImpButton = document.getElementById('add-imp');
+    addImpButton.parentNode.insertBefore(newImp, addImpButton);
+    // change the imp.id in inputData, this will be picked up by applyDefaultData
+    inputData['req-imp-idx-' + newImpIndex + '-id'] = newImpIndex;
+    applyDefaultData('req-imp-idx-' + newImpIndex);
+    // listen to Imp type selection
+    document.getElementById('req-imp-idx-' + newImpIndex + '-type-selection').addEventListener('change', function() {
+        const selectedValue = this.value;
+        const bannerFieldset = document.getElementById('req-imp-idx-' + newImpIndex + '-banner-fieldset');
+        const videoFieldset = document.getElementById('req-imp-idx-' + newImpIndex + '-video-fieldset');
+        const audioFieldset = document.getElementById('req-imp-idx-' + newImpIndex + '-audio-fieldset');
+
+        bannerFieldset.style.display = selectedValue === 'banner' ? 'block' : 'none';
+        videoFieldset.style.display = selectedValue === 'video' ? 'block' : 'none';
+        audioFieldset.style.display = selectedValue === 'audio' ? 'block' : 'none';
+
+        if (selectedValue) {
+            // mark imp object active
+            document.getElementById('req-imp-idx-' + newImpIndex).setAttribute('active', 1);
+        }
+    });
+
+    // listen to Banner format check
+    document.getElementById('req-imp-idx-' + newImpIndex + '-banner-format').addEventListener('change', function() {
+        document.getElementById('req-imp-idx-' + newImpIndex + '-banner-format-fieldset').style.display = this.checked ? 'block' : 'none';
+    });
+
+    // listen to Pmp check
+    document.getElementById('req-imp-idx-' + newImpIndex + '-pmp').addEventListener("change", function() {
+        if (this.checked) {
+            document.getElementById('req-imp-idx-' + newImpIndex + '-pmp-fieldset').style.display = "block";
+        } else {
+            document.getElementById('req-imp-idx-' + newImpIndex + '-pmp-fieldset').style.display = "none";
+        }
+    });
+
+    // listen to Metric check
+    document.getElementById('req-imp-idx-' + newImpIndex + '-metric').addEventListener("change", function() {
+        if (this.checked) {
+            document.getElementById('req-imp-idx-' + newImpIndex + '-metric-fieldset').style.display = "block";
+        } else {
+            document.getElementById('req-imp-idx-' + newImpIndex + '-metric-fieldset').style.display = "none";
+        }
+    });
+
+    applyDefaultData('req-imp-' + newImpIndex);
+}
+
+// Helper function, random string generator
 function stringRandom(id, length) {
     let result = '';
     const weightedCharacters = '01234567890123456789012345678901234567890123456789012345678901234567890123456789abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
@@ -350,108 +634,124 @@ function integerRandom(id, length) {
 
 function createImpsObject() {
     let imps = []; // imps is an array
-    let imp = {};
-    imps[0] = imp; // currently support 1 imp only.
-    
-    // Basic Attributes
-    Object.keys(defaultData).forEach(key => {
-        if (key.startsWith('req-imp') && key.split('-').length === 3) {
-            const element = document.getElementById(key);
-            if (element && element.type === 'checkbox' && element.checked) {
-                const [, field] = key.split('-imp-');
-                imp[field] = inputData[key];
-            }
+    for (let i = 0; i <= impObjectLastIndex; i++) {
+        const impElement = document.getElementById('req-imp-idx-' + i);
+        if (!impElement || impElement.getAttribute('active') != 1) {
+            // ignore inactive imp
+            continue;
         }
-
-        // metric
-        if (key.startsWith('req-imp-metric') && document.getElementById('req-imp-metric').checked) {
-            const element = document.getElementById(key);
-            if (element && element.type === 'checkbox' && element.checked) {
-                imp["metric"] = [];
-                let metric = {};
-                imp["metric"][0] = metric; // currently support 1 metric only
-                const [, field] = key.split('imp-metric-');
-                metric[field] = inputData[key];
-            }
-        }
-
-        // pmp
-        if (document.getElementById('req-imp-pmp').checked) {
-            imp["pmp"] = {}
-            let pmp = imp["pmp"]
-            if (document.getElementById('req-imp-pmp-private_auction').checked) {
-                pmp['private_auction'] = inputData['req-imp-pmp-private_auction'];
-            }
-            pmp["deals"] = [{}]; // currently only support 1 deal
-            deal = pmp["deals"][0];
-            Object.keys(defaultData).forEach(key => {
-                if (key.startsWith('req-imp-pmp-deal-')) {
-                    const element = document.getElementById(key);
-                    if (element && element.type === 'checkbox' && element.checked) {
-                        const [ ,field] = key.split('deal-');
-                        deal[field] = inputData[key];
-                    }
+        let imp = {};
+        // Basic Attributes
+        Object.keys(defaultData).forEach(key => {
+            if (key.startsWith('req-imp') && key.split('-').length === 3) {
+                const inputDataKey = key.replace('req-imp', 'req-imp-idx-' + i);
+                const element = document.getElementById(inputDataKey);
+                if (element && element.type === 'checkbox' && element.checked) {
+                    const [, field] = key.split('-imp-');
+                    // rebuild the inputData key
+                    // the defaultData's key looks like req-imp-secure
+                    // the inputData's key looks like req-imp-idx-1-secure
+                    imp[field] = inputData[inputDataKey];
                 }
-            })
-        }
-    });
+            }
 
-    // Banner/Video/Audio Attributes
-    const selectedType = document.getElementById('req-impTypeSelect').value;
-    if (!selectedType) {
-        return imps;
-    }
-    switch (selectedType) {
-        case 'banner':
-            imp["banner"] = {};
-            Object.keys(defaultData).forEach(key => {
-                if (key.startsWith('req-imp-banner') && key.split('-').length === 4) { // banner top leve lattributes
-                    const element = document.getElementById(key);
-                    if (element && element.type === 'checkbox' && element.checked) {
-                        const [, field] = key.split('-banner-');
-                        imp["banner"][field] = inputData[key];
-                    }
+            // metric
+            if (key.startsWith('req-imp-metric') && document.getElementById('req-imp-idx-' + i + '-metric').checked) {
+                const inputDataKey = key.replace('req-imp-metric', 'req-imp-idx-' + i + '-metric');
+                const element = document.getElementById(inputDataKey);
+                if (element && element.type === 'checkbox' && element.checked) {
+                    imp["metric"] = [];
+                    let metric = {};
+                    imp["metric"][0] = metric; // currently support 1 metric only
+                    const [, field] = key.split('imp-metric-');
+                    metric[field] = inputData[key];
                 }
-                if (key.startsWith('req-imp-banner-format')) {
-                    const element = document.getElementById(key);
-                    if (element && element.type === 'checkbox' && element.checked) {
-                        if (!imp["banner"]["format"]) {
-                            imp["banner"]["format"] = [{}];
+            }
+            // pmp
+            if (document.getElementById('req-imp-idx-'+ i + '-pmp').checked) {
+                imp["pmp"] = {}
+                let pmp = imp["pmp"]
+                if (document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').checked) {
+                    pmp['private_auction'] = inputData['req-imp-idx-' + i + '-pmp-private_auction'];
+                }
+                pmp["deals"] = [{}]; // currently only support 1 deal
+                // TODO: support multiple deals
+                deal = pmp["deals"][0];
+                Object.keys(defaultData).forEach(key => {
+                    if (key.startsWith('req-imp-pmp-deal-')) {
+                        const inputDataKey = key.replace('req-imp-pmp-deal-', 'req-imp-idx-' + i + '-pmp-deal-');
+                        const element = document.getElementById(inputDataKey);
+                        if (element && element.type === 'checkbox' && element.checked) {
+                            const [ ,field] = key.split('deal-');
+                            deal[field] = inputData[inputDataKey];
                         }
-                        const [, field] = key.split('-format-');
-                        imp["banner"]["format"][0][field] = inputData[key];
                     }
-                }
-            });
-            break;
-        case 'video':
-            imp["video"] = {};
-            Object.keys(defaultData).forEach(key => {
-                if (key.startsWith('req-imp-video') && key.split('-').length === 4) { // video top leve lattributes
-                    const element = document.getElementById(key);
-                    if (element && element.type === 'checkbox' && element.checked) {
-                        const [, field] = key.split('-video-');
-                        imp["video"][field] = inputData[key];
+                })
+            }
+        });
+        // Banner/Video/Audio Attributes
+        const selectedType = document.getElementById('req-imp-idx-' + i + '-type-selection').value;
+        if (!selectedType) {
+            return imps;
+        }
+        switch (selectedType) {
+            case 'banner':
+                imp["banner"] = {};
+                Object.keys(defaultData).forEach(key => {
+                    if (key.startsWith('req-imp-banner') && key.split('-').length === 4) { // banner top leve lattributes
+                        const inputDataKey = key.replace('req-imp-banner', 'req-imp-idx-' + i + '-banner');
+                        const element = document.getElementById(inputDataKey);
+                        if (element && element.type === 'checkbox' && element.checked) {
+                            const [, field] = key.split('-banner-');
+                            imp["banner"][field] = inputData[inputDataKey];
+                        }
                     }
-                }
-            })
-            break;
-        case 'audio':
-            imp["audio"] = {};
-            Object.keys(defaultData).forEach(key => {
-                if (key.startsWith('req-imp-audio') && key.split('-').length === 4) { // audio top leve lattributes
-                    const element = document.getElementById(key);
-                    if (element && element.type === 'checkbox' && element.checked) {
-                        const [, field] = key.split('-audio-');
-                        imp["audio"][field] = inputData[key];
+                    if (key.startsWith('req-imp-banner-format')) {
+                        const inputDataKey = key.replace('req-imp-banner-format', 'req-imp-idx-' + i + '-banner-format');
+                        const element = document.getElementById(inputDataKey);
+                        if (element && element.type === 'checkbox' && element.checked) {
+                            if (!imp["banner"]["format"]) {
+                                imp["banner"]["format"] = [{}];
+                            }
+                            const [, field] = key.split('-format-');
+                            imp["banner"]["format"][0][field] = inputData[inputDataKey];
+                        }
                     }
-                }
-            })
-            break;
-        default:
-            break;
-    }
+                });
+                break;
+            case 'video':
+                imp["video"] = {};
+                Object.keys(defaultData).forEach(key => {
+                    if (key.startsWith('req-imp-video') && key.split('-').length === 4) { // video top leve lattributes
+                        const inputDataKey = key.replace('req-imp-video', 'req-imp-idx-' + i + '-video');
+                        const element = document.getElementById(inputDataKey);
+                        if (element && element.type === 'checkbox' && element.checked) {
+                            const [, field] = key.split('-video-');
+                            imp["video"][field] = inputData[inputDataKey];
+                        }
+                    }
+                })
+                break;
+            case 'audio':
+                imp["audio"] = {};
+                Object.keys(defaultData).forEach(key => {
+                    if (key.startsWith('req-imp-audio') && key.split('-').length === 4) { // audio top leve lattributes
+                        const inputDataKey = key.replace('req-imp-audio', 'req-imp-idx-' + i + '-audio');
+                        const element = document.getElementById(inputDataKey);
+                        if (element && element.type === 'checkbox' && element.checked) {
+                            const [, field] = key.split('-audio-');
+                            imp["audio"][field] = inputData[inputDataKey];
+                        }
+                    }
+                })
+                break;
+            default:
+                break;
+        }
 
+        imps.push(imp);
+    }
+    
     return imps;
 }
 
@@ -620,9 +920,10 @@ function createRegsObject() {
 
 function applyToInputData(id) {
     const fieldName = id.toString();
+    const defaultFieldName = fieldName.replace(/-idx-\d+-/g, '-');
     const element = document.getElementById(id);
     // get the default data, as defined in defaultData
-    const dataMeta = defaultData[fieldName];
+    const dataMeta = defaultData[defaultFieldName];
     if (!element || !dataMeta) return;
     const valueFromInputBox = element.parentNode.querySelector('.input-value-box').value;
     const typeOfData = dataMeta[0];
@@ -659,17 +960,19 @@ function applyToInputData(id) {
 
 function createBidRequest() {
     // valid Imp
-    const impTypeSelect = document.getElementById('req-impTypeSelect');
-    if (!['banner', 'video', 'audio'].includes(impTypeSelect.value)) {
-        impTypeSelect.focus();
-        impTypeSelect.style.backgroundColor = 'red';
-        setTimeout(() => {
-            impTypeSelect.style.backgroundColor = 'white';
-        }, 2000);
-        alert('Hey! You need at least one imp object!');
-        return
+    let hasImp = false;
+    for (let i = 0; i <= impObjectLastIndex; i++) {
+        let element = document.getElementById(`req-imp-idx-${i}`);
+        if (element) {
+            hasImp = hasImp || element.getAttribute('active') == 1;
+        }
+        console.log(hasImp);
     }
-
+    if (!hasImp) {
+        document.getElementById('req-imps').focus();
+        alert('Hey! At least one Imp is required.');
+        return;
+    }
     // valid App/Site
     const selectedApp = document.getElementById('req-app').checked;
     const selectedSite = document.getElementById('req-site').checked;
