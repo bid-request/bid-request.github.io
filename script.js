@@ -319,8 +319,31 @@ const defaultData = {
     // GDPR-related attributes
     // TODO
 };
-// User input
-const inputData = {}
+
+function dataConvert(element) {
+    let value = element.getAttribute('rtb-value');
+    let valueType = element.getAttribute('rtb-type');
+    try {
+        switch (valueType) {
+            case 'string':
+                return String(value);
+            case 'float':
+               return Number(value);
+            case 'integer':
+                return Number(value);
+            case 'string array':
+                return value.split(',').map(item => String(item.trim()));
+            case 'integer array':
+                return value.split(',').map(item => Number(item.trim()));
+            default:
+                console.error(`Failed to convert ${id} to a ${typeOfData}`);
+                return;
+        }
+    } catch (error) {
+        console.error(`Failed to convert ${value} to a ${valueType}: ${error}`);
+    }
+    return null;
+}
 
 function checkboxOnChange(id) {
     const checkbox = document.getElementById(id);
@@ -329,61 +352,73 @@ function checkboxOnChange(id) {
     }
     const dataKey = checkbox.id.toString();
     const parent = checkbox.parentNode;
-    // remove any existing inputbox
-    let existingInputbox = parent.querySelectorAll('.input-value-box');
-    existingInputbox.forEach(box => box.remove());
+    const inputboxId = id + '-inputbox';   
+
     if (!checkbox.checked) {
-        // attribute not selected. clear inputData's attribute
-        delete inputData[dataKey];
+        // attribute not selected. clear the rtb value
+        if (checkbox.getAttribute('rtb-value')) {
+            checkbox.removeAttribute('rtb-value');
+            let inputBox = document.getElementById(inputboxId);
+            if (inputBox) {
+                parent.removeChild(inputBox);
+            }
+        }
     } else {
         // attribute selected. 
         // 1. check if inputData has the attribute:
         //    - if yes, apply it to the inputbox
         //    - if not, apply the default value
-        let inputDataValue = inputData.hasOwnProperty(dataKey) ? inputData[dataKey] : null;
-        if (!inputDataValue) {
+        if (!checkbox.getAttribute('rtb-value')) {
             // if defaultData also has no such attribute, return
             // as this is not part of openRTB. Or it's not supported by this app yet.
             let defaultKey = dataKey.replace(/-idx-\d+-/g, '-');
             if (!defaultData.hasOwnProperty(defaultKey)) {
                 return;
             } else {
-                inputDataValue = defaultData[defaultKey][2];
-                inputData[dataKey] = inputDataValue;
+                checkbox.setAttribute('rtb-value', defaultData[defaultKey][2]);
+                checkbox.setAttribute('rtb-type', defaultData[defaultKey][0]);
             }
-        }
-        // 2. apply the value to inputbox
-        // create new inputbox containing the data from above
-        let newInputbox = document.createElement('input');
-        // logic to support dropdown for predefined attributes
-        if (checkbox.getAttribute('pre-defined-options')) {
-            const optionsAttr = checkbox.getAttribute('pre-defined-options');
-            const optionsArray = optionsAttr.split(',');
-            newInputbox = document.createElement('select');
-            maxwidth = 0;
-            for (let i = 0; i < optionsArray.length; i++) {
-                let newOption = document.createElement('option');
-                newOption.value = optionsArray[i];
-                newOption.text = optionsArray[i];
-                newInputbox.appendChild(newOption);
-                if (inputDataValue === optionsArray[i]) {
-                    newInputbox.selectedIndex = i;
-                }
-                maxwidth = Math.max(maxwidth, optionsArray[i].length);
-            }
-            if (newInputbox.selectedIndex === -1) {
-                newInputbox.selectedIndex = 0;
-            }
-            newInputbox.style.width = maxwidth + 3 + 'ch';
         }
 
-        newInputbox.className = 'input-value-box';
-        newInputbox.value = inputDataValue;
-        newInputbox.addEventListener('input', function() {
+        // 2. apply the value to inputbox
+        // create new inputbox containing the data from above
+        let inputBox = document.getElementById(inputboxId);
+        if (!inputBox) {
+            // logic to support dropdown for predefined attributes
+            if (checkbox.getAttribute('pre-defined-options')) {
+                const optionsAttr = checkbox.getAttribute('pre-defined-options');
+                const optionsArray = optionsAttr.split(',');
+                inputBox = document.createElement('select');
+                inputBox.id = inputboxId;
+                maxwidth = 0;
+                for (let i = 0; i < optionsArray.length; i++) {
+                    let newOption = document.createElement('option');
+                    newOption.value = optionsArray[i];
+                    newOption.text = optionsArray[i];
+                    inputBox.appendChild(newOption);
+                    if (checkbox.getAttribute('rtb-value') === optionsArray[i]) {
+                        inputBox.selectedIndex = i;
+                    }
+                    maxwidth = Math.max(maxwidth, optionsArray[i].length);
+                }
+                if (inputBox.selectedIndex === -1) {
+                    inputBox.selectedIndex = 0;
+                }
+                inputBox.style.width = maxwidth + 3 + 'ch';
+            } else {
+                inputBox = document.createElement('input');
+                inputBox.type = 'text';
+                inputBox.id = inputboxId;
+                inputBox.value = checkbox.getAttribute('rtb-value');
+                inputBox.className = 'input-value-box';
+            }
+        }
+
+        inputBox.addEventListener('input', function() {
             // convert the input value to the correct data type
-            applyToInputData(checkbox.id);
+            checkbox.setAttribute('rtb-value', inputBox.value);
         });
-        parent.appendChild(newInputbox);
+        parent.appendChild(inputBox);
     }
 }
 
@@ -562,7 +597,6 @@ function addImpHTML() {
     addImpButton.classList.add('general-btn');
     addImpButton.parentNode.insertBefore(newImp, addImpButton);
     // change the imp.id in inputData, this will be picked up by applyDefaultData
-    inputData['req-imp-idx-' + newImpIndex + '-id'] = newImpIndex;
     applyDefaultData('req-imp-idx-' + newImpIndex);
     // listen to Imp type selection
     document.getElementById('req-imp-idx-' + newImpIndex + '-type-selection').addEventListener('change', function() {
@@ -605,6 +639,7 @@ function addImpHTML() {
     });
 
     applyDefaultData('req-imp-' + newImpIndex);
+    document.getElementById('req-imp-idx-' + newImpIndex + '-id').setAttribute('rtb-value', newImpIndex);
 }
 
 // Helper function, random string generator
@@ -616,8 +651,8 @@ function stringRandom(id, length) {
         result += weightedCharacters.charAt(Math.floor(Math.random() * weightedCharactersLength));
     }
     document.getElementById(id).value = result;
-    inputData[id] = result;
-    checkboxOnChange(id);
+    document.getElementById(id).setAttribute('rtb-value', result);
+    document.getElementById(id + '-inputbox').value = result;
 }
 
 function integerRandom(id, length) {
@@ -629,8 +664,8 @@ function integerRandom(id, length) {
     }
     result = parseInt(result);
     document.getElementById(id).value = result;
-    inputData[id] = result;
-    checkboxOnChange(id);
+    document.getElementById(id).setAttribute('rtb-value', result);
+    document.getElementById(id + '-inputbox').value = result;
 }
 
 function createImpsObject() {
@@ -652,7 +687,7 @@ function createImpsObject() {
                     // rebuild the inputData key
                     // the defaultData's key looks like req-imp-secure
                     // the inputData's key looks like req-imp-idx-1-secure
-                    imp[field] = inputData[inputDataKey];
+                    imp[field] = dataConvert(element);
                 }
             }
 
@@ -665,7 +700,7 @@ function createImpsObject() {
                     let metric = {};
                     imp["metric"][0] = metric; // currently support 1 metric only
                     const [, field] = key.split('imp-metric-');
-                    metric[field] = inputData[key];
+                    metric[field] = dataConvert(element);
                 }
             }
             // pmp
@@ -673,7 +708,7 @@ function createImpsObject() {
                 imp["pmp"] = {}
                 let pmp = imp["pmp"]
                 if (document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').checked) {
-                    pmp['private_auction'] = inputData['req-imp-idx-' + i + '-pmp-private_auction'];
+                    pmp['private_auction'] = dataConvert(document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').getAttribute('rtb-value'), document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').getAttribute('rtb-type'));
                 }
                 pmp["deals"] = [{}]; // currently only support 1 deal
                 // TODO: support multiple deals
@@ -684,7 +719,7 @@ function createImpsObject() {
                         const element = document.getElementById(inputDataKey);
                         if (element && element.type === 'checkbox' && element.checked) {
                             const [ ,field] = key.split('deal-');
-                            deal[field] = inputData[inputDataKey];
+                            deal[field] = dataConvert(element);
                         }
                     }
                 })
@@ -704,7 +739,7 @@ function createImpsObject() {
                         const element = document.getElementById(inputDataKey);
                         if (element && element.type === 'checkbox' && element.checked) {
                             const [, field] = key.split('-banner-');
-                            imp["banner"][field] = inputData[inputDataKey];
+                            imp["banner"][field] = dataConvert(element);
                         }
                     }
                     if (key.startsWith('req-imp-banner-format')) {
@@ -715,7 +750,7 @@ function createImpsObject() {
                                 imp["banner"]["format"] = [{}];
                             }
                             const [, field] = key.split('-format-');
-                            imp["banner"]["format"][0][field] = inputData[inputDataKey];
+                            imp["banner"]["format"][0][field] = dataConvert(element);
                         }
                     }
                 });
@@ -728,7 +763,7 @@ function createImpsObject() {
                         const element = document.getElementById(inputDataKey);
                         if (element && element.type === 'checkbox' && element.checked) {
                             const [, field] = key.split('-video-');
-                            imp["video"][field] = inputData[inputDataKey];
+                            imp["video"][field] = dataConvert(element);
                         }
                     }
                 })
@@ -741,7 +776,7 @@ function createImpsObject() {
                         const element = document.getElementById(inputDataKey);
                         if (element && element.type === 'checkbox' && element.checked) {
                             const [, field] = key.split('-audio-');
-                            imp["audio"][field] = inputData[inputDataKey];
+                            imp["audio"][field] = dataConvert(element);
                         }
                     }
                 })
@@ -763,7 +798,7 @@ function createSiteObject() {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-site-');
-                site[field] = inputData[key];
+                site[field] = dataConvert(element);
             }
         }
     })
@@ -776,7 +811,7 @@ function createSiteObject() {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
                     const [, field] = key.split('-pubslisher-');
-                    site["publisher"][field] = inputData[key];
+                    site["publisher"][field] = dataConvert(element);
                 }
             }
         })
@@ -790,7 +825,7 @@ function createSiteObject() {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
                     const [, field] = key.split('-content-');
-                    site["content"][field] = inputData[key];
+                    site["content"][field] = dataConvert(element);
                 }
             }
         })
@@ -805,7 +840,7 @@ function createAppObject() {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-app-');
-                app[field] = inputData[key];
+                app[field] = dataConvert(element);
             }
         }
     })
@@ -818,7 +853,7 @@ function createAppObject() {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
                     const [, field] = key.split('-pubslisher-');
-                    app["publisher"][field] = inputData[key];
+                    app["publisher"][field] = dataConvert(element);
                 }
             }
         })
@@ -832,7 +867,7 @@ function createAppObject() {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
                     const [, field] = key.split('-content-');
-                    app["content"][field] = inputData[key];
+                    app["content"][field] = dataConvert(element);
                 }
             }
         })
@@ -847,7 +882,7 @@ function createDeviceObject() {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-device-');
-                device[field] = inputData[key];
+                device[field] = dataConvert(element);
             }
         }
 
@@ -859,7 +894,7 @@ function createDeviceObject() {
                     device["geo"] = {};
                 }
                 const [, field] = key.split('-geo-');
-                device["geo"][field] = inputData[key];
+                device["geo"][field] = dataConvert(element);
             }
         }
     })
@@ -873,7 +908,7 @@ function createUserObject() {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-user-');
-                user[field] = inputData[key];
+                user[field] = dataConvert(element);
             }
         }
         // geo
@@ -884,7 +919,7 @@ function createUserObject() {
                     user['geo'] = {};
                 }
                 const [, field] = key.split('-geo-');
-                user['geo'][field] = inputData[key];
+                user['geo'][field] = dataConvert(element);
             }
         }
     })
@@ -898,7 +933,7 @@ function createSourceObject() {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-source-');
-                source[field] = inputData[key];
+                source[field] = dataConvert(element);
             }
         }
     })
@@ -912,51 +947,11 @@ function createRegsObject() {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 const [, field] = key.split('-regs-');
-                regs[field] = inputData[key];
+                regs[field] = dataConvert(element);
             }
         }
     })
     return regs;
-}
-
-function applyToInputData(id) {
-    const fieldName = id.toString();
-    const defaultFieldName = fieldName.replace(/-idx-\d+-/g, '-');
-    const element = document.getElementById(id);
-    // get the default data, as defined in defaultData
-    const dataMeta = defaultData[defaultFieldName];
-    if (!element || !dataMeta) return;
-    const valueFromInputBox = element.parentNode.querySelector('.input-value-box').value;
-    const typeOfData = dataMeta[0];
-
-    try {
-        switch (typeOfData) {
-            case 'string':
-                inputData[fieldName] = String(valueFromInputBox);
-                break;
-            case 'float':
-                inputData[fieldName] = Number(valueFromInputBox);
-                break;
-            case 'integer':
-                inputData[fieldName] = parseInt(valueFromInputBox);
-                break;
-            case 'string array':
-                inputData[fieldName] = valueFromInputBox.split(',').map(item => item.trim());
-                break;
-            case 'integer array':
-                inputData[fieldName] = valueFromInputBox.split(',').map(item => Number(item.trim()));
-                break;
-            default:
-                inputData[id] = null;
-                console.error(`Failed to convert ${id} to a ${typeOfData}`);
-                break;
-        }
-    } catch (error) {
-        console.error(`Failed to convert ${id} to a ${typeOfData}: ${error}`);
-        inputData[id] = null;
-    }
-
-    return;
 }
 
 function createBidRequest() {
@@ -967,7 +962,6 @@ function createBidRequest() {
         if (element) {
             hasImp = hasImp || element.getAttribute('active') == 1;
         }
-        console.log(hasImp);
     }
     if (!hasImp) {
         document.getElementById('req-imps').focus();
@@ -1007,7 +1001,7 @@ function createBidRequest() {
     const source = includeSource ? createSourceObject() : null;
 
     const bidRequest = {};
-    bidRequest["id"] = inputData['req-id'];
+    bidRequest["id"] = dataConvert(document.getElementById('req-id'));
     bidRequest["imp"] = imps;
     bidRequest["site"] = site;
     bidRequest["app"] = app;
@@ -1022,7 +1016,7 @@ function createBidRequest() {
             const element = document.getElementById(key);
             if (element && element.type === 'checkbox' && element.checked) {
                 [, field] = key.split('-');
-                bidRequest[field] = inputData[key];
+                bidRequest[field] = dataConvert(element);
             }
         }
     })
