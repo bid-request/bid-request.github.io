@@ -387,8 +387,16 @@ function checkboxOnChange(id) {
     }
 }
 
-function createNodeFromString(str, idx) {
-    str = str.replace(/{{INDEX}}/g, idx);
+function createNodeFromString(macros, idxes, template) {
+    let length = macros.length;
+    if (idxes.length !== length) {
+        console.error('macro and index arrays should be of same length');
+        return;
+    }
+    str = template;
+    for (let i = 0; i < length; i++) {
+        str = str.replace(new RegExp(macros[i], 'g'), idxes[i]);
+    }
     var temp = document.createElement('template');
     temp.innerHTML = str.trim();
     return temp.content;
@@ -408,7 +416,20 @@ function applyDefaultData(id) {
 }
 // Array Objects Indexes
 let impObjectLastIndex = 1;
+let impBannerFormatObjectLastIndex = 0; // start from 0
 
+// templates
+const impBannerFormatTemplate =
+`               <fieldset id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-fieldset">
+                <legend>Format Attributes</legend>
+                    <label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-w"> w</label><br>
+                    <label><input type="checkbox" name="h" value="h" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-h"> h</label><br>
+                    <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-wratio"> wratio</label><br>
+                    <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-hratio"> hratio</label><br>
+                    <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-wmin"> wmin</label><br>
+                    <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-ext"> ext</label><br>
+                </fieldset>
+`
 const impTemplate = 
 `
     <!-- Imp Object -->
@@ -428,13 +449,8 @@ const impTemplate =
                 <!-- Banner Format Object-->
                 <label><input type="checkbox" name="format" value="format" id="req-imp-idx-{{INDEX}}-banner-format"> Format</label><br>
                 <fieldset id="req-imp-idx-{{INDEX}}-banner-format-fieldset" style="display:none">
-                    <legend>Format Attributes</legend>
-                    <label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{INDEX}}-banner-format-w"> w</label><br>
-                    <label><input type="checkbox" name="h" value="h" id="req-imp-idx-{{INDEX}}-banner-format-h"> h</label><br>
-                    <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{INDEX}}-banner-format-wratio"> wratio</label><br>
-                    <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-idx-{{INDEX}}-banner-format-hratio"> hratio</label><br>
-                    <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-idx-{{INDEX}}-banner-format-wmin"> wmin</label><br>
-                    <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-idx-{{INDEX}}-banner-format-ext"> ext</label><br>
+                    <legend>Formats</legend>
+                    <button id="add-fmt" type="button" onclick="addFormatHTML({{INDEX}})" class="general-btn">Add Format</button>
                 </fieldset>
                 <!-- End of Banner Format Object-->
                 <label><input type="checkbox" name="w" value="w" checked id="req-imp-idx-{{INDEX}}-banner-w"> w</label><br>
@@ -557,7 +573,7 @@ const impTemplate =
 function addImpHTML() {
     const newImpIndex = impObjectLastIndex;
     impObjectLastIndex++;
-    const newImp = createNodeFromString(impTemplate, newImpIndex);
+    const newImp = createNodeFromString(['{{INDEX}}'], [newImpIndex], impTemplate);
     const addImpButton = document.getElementById('add-imp');
     addImpButton.classList.add('general-btn');
     addImpButton.parentNode.insertBefore(newImp, addImpButton);
@@ -605,6 +621,19 @@ function addImpHTML() {
     });
 
     applyDefaultData('req-imp-' + newImpIndex);
+}
+
+function addFormatHTML(impIndex) {
+    const newFormatIdx = impBannerFormatObjectLastIndex;
+    impBannerFormatObjectLastIndex++;
+    const newFormat = createNodeFromString(['{{IMP-INDEX}}', '{{FORMAT-INDEX}}'], [impIndex, newFormatIdx], impBannerFormatTemplate);
+    document.getElementById('req-imp-idx-' + impIndex + '-banner-format-fieldset').insertBefore(newFormat, document.getElementById('add-fmt'));
+    // add listener to input checkbox to parent and apply checkboxOnChange
+    document.getElementById('req-imp-idx-' + impIndex + '-banner-format-fieldset').querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            checkboxOnChange(this.id);
+        });  
+    });
 }
 
 // Helper function, random string generator
@@ -707,15 +736,21 @@ function createImpsObject() {
                             imp["banner"][field] = inputData[inputDataKey];
                         }
                     }
-                    if (key.startsWith('req-imp-banner-format')) {
-                        const inputDataKey = key.replace('req-imp-banner-format', 'req-imp-idx-' + i + '-banner-format');
-                        const element = document.getElementById(inputDataKey);
-                        if (element && element.type === 'checkbox' && element.checked) {
-                            if (!imp["banner"]["format"]) {
-                                imp["banner"]["format"] = [{}];
+                    // format
+                    if (key.startsWith('req-imp-banner-format') && impBannerFormatObjectLastIndex > 0) {
+                        for (let fidx = 0; fidx <= impBannerFormatObjectLastIndex; fidx++) {
+                            const inputDataKey = key.replace('req-imp-banner-format', 'req-imp-idx-' + i + '-banner-format').replace('format-', 'format-idx-' + fidx + '-');
+                            const element = document.getElementById(inputDataKey);
+                            if (element && element.type === 'checkbox' && element.checked) {
+                                if (!imp["banner"]["format"]) {
+                                    imp["banner"]["format"] = [];
+                                }
+                                if (!imp["banner"]["format"][fidx]) {
+                                    imp["banner"]["format"][fidx] = {};
+                                }
+                                const [, field] = key.split('-format-');
+                                imp["banner"]["format"][fidx][field] = inputData[inputDataKey];
                             }
-                            const [, field] = key.split('-format-');
-                            imp["banner"]["format"][0][field] = inputData[inputDataKey];
                         }
                     }
                 });
