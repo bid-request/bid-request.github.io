@@ -47,181 +47,13 @@ SOFTWARE.
         <fieldset>
             <legend>Bid Request</legend>
             <label><input type="checkbox" name="id" value="id" id="req-id" checked disabled> id</label><img src="assets/arrows-rotate-solid.svg" class="input-refresh-btn" onclick="stringRandom('req-id', 40)"/><br>
-            
-            <!-- Imp Object-->
-            <label><input type="checkbox" id="req-imp" checked disabled class="rtb-object"> Imp</label><br>
-            <fieldset id="req-imp-type-fieldset">
-                <legend>Select Type</legend>
-                <select id="req-impTypeSelect">
-                <script>
-                    document.getElementById('req-impTypeSelect').addEventListener('change', function() {
-                        const selectedValue = this.value;
-                        const bannerFieldset = document.getElementById('req-banner-fieldset');
-                        const videoFieldset = document.getElementById('req-video-fieldset');
-                        const audioFieldset = document.getElementById('req-audio-fieldset');
+            <!-- Imps Object -->
+            <fieldset id="req-imps">
+                <legend>Imps</legend>
+                <button id="add-imp" type="button" onclick="addImpHTML()">Add Imp</button>
+            </fieldset>
+            <!-- End of Imps Object-->
 
-                        bannerFieldset.style.display = selectedValue === 'banner' ? 'block' : 'none';
-                        videoFieldset.style.display = selectedValue === 'video' ? 'block' : 'none';
-                        audioFieldset.style.display = selectedValue === 'audio' ? 'block' : 'none';
-                    });
-                </script>
-                    <option value="">Select Type</option>
-                    <option value="banner">Banner</option>
-                    <option value="video">Video</option>
-                    <option value="audio">Audio</option>
-                    <option value="native" disabled>Native</option>
-                </select>
-                <fieldset id="req-banner-fieldset" style="display:none">
-                    <legend>Banner Attributes</legend>
-                    <!-- Banner Format Object-->
-                    <label><input type="checkbox" name="format" value="format" id="req-imp-banner-format"> format</label><br>
-                    <fieldset id="req-imp-banner-format-fieldset" style="display:none">
-                        <legend>Format Attributes</legend>
-                        <label><input type="checkbox" name="w" value="w" id="req-imp-banner-format-w"> w</label><br>
-                        <label><input type="checkbox" name="h" value="h" id="req-imp-banner-format-h"> h</label><br>
-                        <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-banner-format-wratio"> wratio</label><br>
-                        <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-banner-format-hratio"> hratio</label><br>
-                        <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-banner-format-wmin"> wmin</label><br>
-                        <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-banner-format-ext"> ext</label><br>
-                    </fieldset>
-                    <script>
-                        document.getElementById('req-imp-banner-format').addEventListener('change', function() {
-                            document.getElementById('req-imp-banner-format-fieldset').style.display = this.checked ? 'block' : 'none';
-                        });
-                    </script>
-                    <!-- End of Banner Format Object-->
-                    <label><input type="checkbox" name="w" value="w" checked id="req-imp-banner-w"> w</label><br>
-                    <label><input type="checkbox" name="h" value="h" checked id="req-imp-banner-h"> h</label><br>
-                    <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-banner-wmax"> wmax (deprecated)</label><br>
-                    <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-banner-hmax"> hmax (deprecated)</label><br>
-                    <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-banner-wmin"> wmin (deprecated)</label><br>
-                    <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-banner-hmin"> hmin (deprecated)</label><br>
-                    <label><input type="checkbox" name="btype" value="btype" id="req-imp-banner-btype"> btype</label><br>
-                    <label><input type="checkbox" name="battr" value="battr" id="req-imp-banner-battr" id="req-imp-banner-battr-id"> battr</label><br>
-                    <label><input type="checkbox" name="pos" value="pos" id="req-imp-banner-pos" pre-defined-options="0,1,2,3,4,5,6,7"> pos</label><br>
-                    <label><input type="checkbox" name="mimes" value="mimes" id="req-imp-banner-mimes"> mimes</label><br>
-                    <label><input type="checkbox" name="topframe" value="topframe" id="req-imp-banner-topframe" pre-defined-options="0,1"> topframe</label><br>
-                    <label><input type="checkbox" name="expdir" value="expdir" id="req-imp-banner-expdir"> expdir</label><br>
-                    <label><input type="checkbox" name="api" value="api" id="req-imp-banner-api"> api</label><br>
-                    <label><input type="checkbox" name="id" value="id" id="req-imp-banner-id"> id</label><br>
-                    <label><input type="checkbox" name="vcm" value="vcm" id="req-imp-banner-vcm" pre-defined-options="0,1"> vcm</label><br>
-                    <label><input type="checkbox" name="ext" value="ext" id="req-imp-banner-ext"> ext</label><br>
-                </fieldset>
-                <fieldset id="req-video-fieldset" style="display:none">
-                    <legend>Video Attributes</legend>
-                    <label><input type="checkbox" name="mimes" id="req-imp-video-mimes" checked disabled> mimes</label><br>
-                    <label><input type="checkbox" name="minduration" checked id="req-imp-video-minduration"> minduration</label><br>
-                    <label><input type="checkbox" name="maxduration" checked id="req-imp-video-maxduration"> maxduration</label><br>
-                    <label><input type="checkbox" name="protocols" id="req-imp-video-protocols"> protocols</label><br>
-                    <label><input type="checkbox" name="protocol" id="req-imp-video-protocol"> protocol (deprecated)</label><br>
-                    <label><input type="checkbox" name="w" checked id="req-imp-video-w"> w</label><br>
-                    <label><input type="checkbox" name="h" checked id="req-imp-video-h"> h</label><br>
-                    <label><input type="checkbox" name="startdelay" id="req-imp-video-startdelay"> startdelay</label><br>
-                    <label><input type="checkbox" name="placement" id="req-imp-video-placement" pre-defined-options="1,2,3,4,5"> placement</label><br>
-                    <label><input type="checkbox" name="linearity" id="req-imp-video-linearity" pre-defined-options="1,2">> linearity</label><br>
-                    <label><input type="checkbox" name="skip" id="req-imp-video-skip" pre-defined-options="0,1">> skip</label><br>
-                    <label><input type="checkbox" name="skipmin" id="req-imp-video-skipmin"> skipmin</label><br>
-                    <label><input type="checkbox" name="skipafter" id="req-imp-video-skipafter"> skipafter</label><br>
-                    <label><input type="checkbox" name="sequence" id="req-imp-video-sequence"> sequence</label><br>
-                    <label><input type="checkbox" name="battr" id="req-imp-video-battr"> battr</label><br>
-                    <label><input type="checkbox" name="maxextended" id="req-imp-video-maxextended"> maxextended</label><br>
-                    <label><input type="checkbox" name="minbitrate" id="req-imp-video-minbitrate"> minbitrate</label><br>
-                    <label><input type="checkbox" name="maxbitrate" id="req-imp-video-maxbitrate"> maxbitrate</label><br>
-                    <label><input type="checkbox" name="boxingallowed" id="req-imp-video-boxingallowed" pre-defined-options="0,1"> boxingallowed</label><br>
-                    <label><input type="checkbox" name="playbackmethod" id="req-imp-video-playbackmethod"> playbackmethod</label><br>
-                    <label><input type="checkbox" name="playbackend" id="req-imp-video-playbackend" pre-defined-options="1,2,3"> playbackend</label><br>
-                    <label><input type="checkbox" name="delivery" id="req-imp-video-delivery"> delivery</label><br>
-                    <label><input type="checkbox" name="pos" id="req-imp-video-pos" pre-defined-options="1,2,3,4,5,6,7"> pos</label><br>
-                    <label><input type="checkbox" name="companionad" id="req-imp-video-companionad" class="feature-unsupported"> companionad</label><br>
-                    <label><input type="checkbox" name="api" id="req-imp-video-api"> api</label><br>
-                    <label><input type="checkbox" name="companiontype" id="req-imp-video-companiontype"> companiontype</label><br>
-                    <label><input type="checkbox" name="ext" id="req-imp-video-ext"> ext</label><br>
-                </fieldset>
-                <fieldset id="req-audio-fieldset" style="display:none">
-                    <legend>Audio Attributes</legend>
-                    <label><input type="checkbox" name="mimes" id="req-imp-audio-mimes"> mimes</label><br>
-                    <label><input type="checkbox" name="minduration" id="req-imp-audio-minduration"> minduration</label><br>
-                    <label><input type="checkbox" name="maxduration" id="req-imp-audio-maxduration"> maxduration</label><br>
-                    <label><input type="checkbox" name="protocols" id="req-imp-audio-protocols"> protocols</label><br>
-                    <label><input type="checkbox" name="startdelay" id="req-imp-audio-startdelay"> startdelay</label><br>
-                    <label><input type="checkbox" name="sequence" id="req-imp-audio-sequence"> sequence</label><br>
-                    <label><input type="checkbox" name="battr" id="req-imp-audio-battr"> battr</label><br>
-                    <label><input type="checkbox" name="maxextended" id="req-imp-audio-maxextended"> maxextended</label><br>
-                    <label><input type="checkbox" name="minbitrate" id="req-imp-audio-minbitrate"> minbitrate</label><br>
-                    <label><input type="checkbox" name="maxbitrate" id="req-imp-audio-maxbitrate"> maxbitrate</label><br>
-                    <label><input type="checkbox" name="delivery" id="req-imp-audio-delivery"> delivery</label><br>
-                    <label><input type="checkbox" name="companionad" id="req-imp-audio-companionad"> companionad</label><br>
-                    <label><input type="checkbox" name="api" id="req-imp-audio-api"> api</label><br>
-                    <label><input type="checkbox" name="companiontype" id="req-imp-audio-companiontype"> companiontype</label><br>
-                    <label><input type="checkbox" name="maxseq" id="req-imp-audio-maxseq"> maxseq</label><br>
-                    <label><input type="checkbox" name="feed" id="req-imp-audio-feed"> feed</label><br>
-                    <label><input type="checkbox" name="stitched" id="req-imp-audio-stitched" pre-defined-options="0,1"> stitched</label><br>
-                    <label><input type="checkbox" name="nvol" id="req-imp-audio-nvol"> nvol</label><br>
-                    <label><input type="checkbox" name="ext" id="req-imp-audio-ext"> ext</label><br>
-                </fieldset>
-            </fieldset>
-            <fieldset id="req-imp-fieldset">
-                <legend>Imp Attributes</legend>
-                <label><input type="checkbox" name="id" checked disabled id="req-imp-id"> id</label><br>
-                <!-- Metric Object-->
-                <label><input type="checkbox" name="metric" id="req-imp-metric" class="rtb-object"> Metric</label><br>
-                <fieldset id="req-imp-metric-fieldset" style="display: none;">
-                    <legend>Metric Attributes</legend>
-                    <label><input type="checkbox" name="type" id="req-imp-metric-type" checked disabled> type</label><br>
-                    <label><input type="checkbox" name="value" id="req-imp-metric-value" checked disabled> value</label><br>
-                    <label><input type="checkbox" name="event" id="req-imp-metric-vendor"> vendor</label><br>
-                    <label><input type="checkbox" name="ext" id="req-imp-metric-ext"> ext</label><br>
-                </fieldset>
-                <script>
-                    document.getElementById("req-imp-metric").addEventListener("change", function() {
-                        if (this.checked) {
-                            document.getElementById("req-imp-metric-fieldset").style.display = "block";
-                        } else {
-                            document.getElementById("req-imp-metric-fieldset").style.display = "none";
-                        }
-                    });
-                </script>
-                <!-- End of Metric Object-->
-                <label><input type="checkbox" name="pmp" id="req-imp-pmp"> Pmp</label><br>
-                <!-- Pmp Object-->
-                <fieldset id="req-imp-pmp-fieldset" style="display: none;">
-                    <legend>Pmp Attributes</legend>
-                    <label><input type="checkbox" name="private_auction" id="req-imp-pmp-private_auction" pre-defined-options="0,1"> private_auction</label><br>
-                    <fieldset id="req-imp-pmp-deal-fieldset">
-                        <legend>Deal</legend>
-                        <label><input type="checkbox" name="id" id="req-imp-pmp-deal-id" checked disabled> id</label><br>
-                        <label><input type="checkbox" name="bidfloor" id="req-imp-pmp-deal-bidfloor"> bidfloor</label><br>
-                        <label><input type="checkbox" name="bidfloorcur" id="req-imp-pmp-deal-bidfloorcur"> bidfloorcur</label><br>
-                        <label><input type="checkbox" name="at" id="req-imp-pmp-deal-at" pre-defined-options="1,2,3"> at</label><br>
-                        <label><input type="checkbox" name="wseat" id="req-imp-pmp-deal-wseat"> wseat</label><br>
-                        <label><input type="checkbox" name="wadomain" id="req-imp-pmp-deal-wadomain"> wadomain</label><br>
-                        <label><input type="checkbox" name="ext" id="req-imp-pmp-deal-ext"> ext</label><br>
-                    </fieldset>
-                    <label><input type="checkbox" name="ext" id="req-imp-pmp-ext"> ext</label><br>
-                </fieldset>
-                <script>
-                    document.getElementById("req-imp-pmp").addEventListener("change", function() {
-                        if (this.checked) {
-                            document.getElementById("req-imp-pmp-fieldset").style.display = "block";
-                        } else {
-                            document.getElementById("req-imp-pmp-fieldset").style.display = "none";
-                        }
-                    });
-                </script>
-                <!-- End of Pmp Object-->
-                <label><input type="checkbox" id="req-imp-displaymanager" name="displaymanager"> displaymanager</label><br>
-                <label><input type="checkbox" id="req-imp-displaymanagerver" name="displaymanagerver"> displaymanagerver</label><br>
-                <label><input type="checkbox" id="req-imp-instl" name="instl" pre-defined-options="0,1"> instl</label><br>
-                <label><input type="checkbox" id="req-imp-tagid" name="tagid"> tagid</label><br>
-                <label><input type="checkbox" id="req-imp-bidfloor" name="bidfloor"> bidfloor</label><br>
-                <label><input type="checkbox" id="req-imp-bidfloorcur" name="bidfloorcur"> bidfloorcur</label><br>
-                <label><input type="checkbox" id="req-imp-clickbrowser" name="clickbrowser" pre-defined-options="0,1"> clickbrowser</label><br>
-                <label><input type="checkbox" id="req-imp-secure" name="secure" pre-defined-options="0,1"> secure</label><br>
-                <label><input type="checkbox" id="req-imp-iframebuster" name="iframebuster"> iframebuster</label><br>
-                <label><input type="checkbox" id="req-imp-exp" name="exp"> exp</label><br>
-                <label><input type="checkbox" id="req-imp-ext" name="ext"> ext</label><br>
-            </fieldset>
-            <!-- End of Imp Object-->
             <!-- Site Object-->
             <label class="app-site-label"><input type="checkbox" id="req-site"> Site</label><br>
             <fieldset id="req-site-fieldset" style="display:none">
@@ -592,76 +424,10 @@ SOFTWARE.
             <label><input type="checkbox" id="req-bapp" name="bapp"> bapp</label><br>
             <label><input type="checkbox" id="req-ext" name="ext"> ext</label><br>
         </fieldset>
-        <button type="button" onclick="createBidRequest()">Create Bid Request</button>
+        <button type="button" onclick="createBidRequest()" class="general-btn">Create Bid Request</button>
     </form>
     <script>
-        // Display the default value generated. 
-        function checkboxOnChange(id) {
-            const checkbox = document.getElementById(id);
-            if (!checkbox) {
-                return;
-            }
-            
-            const parent = checkbox.parentNode;
-            // remove any existing inputbox
-            let existingInputbox = parent.querySelectorAll('.input-value-box');
-            existingInputbox.forEach(box => box.remove());
-            if (!checkbox.checked) {
-                // attribute not selected. clear inputData's attribute
-                delete inputData[checkbox.id.toString()];
-            } else {
-                // attribute selected. 
-                // 1. check if inputData has the attribute:
-                //    - if yes, apply it to the inputbox
-                //    - if not, apply the default value
-                let inputDataValue = inputData.hasOwnProperty(checkbox.id.toString()) ? inputData[checkbox.id.toString()] : null;
-                if (!inputDataValue) {
-                    // if defaultData also has no such attribute, return
-                    // as this is not part of openRTB. Or it's not supported by this app yet.
-                    if (!defaultData.hasOwnProperty(checkbox.id.toString())) {
-                        return;
-                    }
-                    inputDataValue = defaultData[checkbox.id.toString()][2];
-
-
-
-                    inputData[checkbox.id.toString()] = inputDataValue;
-                }
-                // 2. apply the value to inputbox
-                // create new inputbox containing the data from above
-                let newInputbox = document.createElement('input');
-                // logic to support dropdown for predefined attributes
-                if (checkbox.getAttribute('pre-defined-options')) {
-                    const optionsAttr = checkbox.getAttribute('pre-defined-options');
-                    const optionsArray = optionsAttr.split(',');
-                    newInputbox = document.createElement('select');
-                    maxwidth = 0;
-                    for (let i = 0; i < optionsArray.length; i++) {
-                        let newOption = document.createElement('option');
-                        newOption.value = optionsArray[i];
-                        newOption.text = optionsArray[i];
-                        newInputbox.appendChild(newOption);
-                        if (inputDataValue === optionsArray[i]) {
-                            newInputbox.selectedIndex = i;
-                        }
-                        maxwidth = Math.max(maxwidth, optionsArray[i].length);
-                    }
-                    if (newInputbox.selectedIndex === -1) {
-                        newInputbox.selectedIndex = 0;
-                    }
-                    newInputbox.style.width = maxwidth + 3 + 'ch';
-                }
-
-                newInputbox.className = 'input-value-box';
-                newInputbox.value = inputDataValue;
-                newInputbox.addEventListener('input', function() {
-                    // convert the input value to the correct data type
-                    applyToInputData(checkbox.id);
-                });
-                parent.appendChild(newInputbox);
-            }
-        }
-
+        // Display the default value generated at page landing. 
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
             checkboxOnChange(checkbox.id);
@@ -671,11 +437,11 @@ SOFTWARE.
         });
     </script>
     <textarea id="output" style="display:none;"></textarea>
-    <button id="output-json-prettify-button" type="button" style="display:none;" onclick="document.getElementById('output').value = JSON.stringify(JSON.parse(document.getElementById('output').value), null, 2)">Prettify JSON</button>
+    <button id="output-json-prettify-button" type="button" style="display:none;" onclick="document.getElementById('output').value = JSON.stringify(JSON.parse(document.getElementById('output').value), null, 2)" class="general-btn">Prettify JSON</button>
     
-    <div id="footer-bar" style="height: 5vh; width: 100%;"></div>
+    <div id="footer-bar"></div>
     <footer id="footer">
-        <p>Made in <span style="color: #1DA1F2;">🗽</span> New York <span>❤️</span>  |  Suggestions, Bugs? <a href="https://github.com/bid-request/bid-request.github.io/issues">Create an issue here!</a> | v0.2.0</p>
+        <p>Made in <span style="color: #1DA1F2;">🗽</span> New York <span>❤️</span>  <br> Suggestions, Bugs? <a href="https://github.com/bid-request/bid-request.github.io/issues">Create an issue here!</a> | v0.3.0</p>
     </footer>
 </body>
 </html>
