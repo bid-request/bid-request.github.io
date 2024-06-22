@@ -419,9 +419,11 @@ let impObjectLastIndex = 1;
 let impBannerFormatObjectLastIndex = 0; // start from 0
 
 // templates
+const impPmpTemplate = ``
+
 const impBannerFormatTemplate =
 `               <fieldset id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-fieldset">
-                <legend>Format Attributes</legend>
+                <legend>Format Attributes <img src="assets/circle-xmark-regular.svg" class="field-removal-btn" onclick="this.parentNode.parentNode.remove();"></legend>
                     <label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-w"> w</label><br>
                     <label><input type="checkbox" name="h" value="h" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-h"> h</label><br>
                     <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{IMP-INDEX}}-banner-format-idx-{{FORMAT-INDEX}}-wratio"> wratio</label><br>
@@ -450,7 +452,7 @@ const impTemplate =
                 <label><input type="checkbox" name="format" value="format" id="req-imp-idx-{{INDEX}}-banner-format"> Format</label><br>
                 <fieldset id="req-imp-idx-{{INDEX}}-banner-format-fieldset" style="display:none">
                     <legend>Formats</legend>
-                    <button id="add-fmt" type="button" onclick="addFormatHTML({{INDEX}})" class="general-btn">Add Format</button>
+                    <button id="req-imp-idx-{{INDEX}}-add-fmt" type="button" onclick="addFormatHTML({{INDEX}})" class="general-btn">Add Format</button>
                 </fieldset>
                 <!-- End of Banner Format Object-->
                 <label><input type="checkbox" name="w" value="w" checked id="req-imp-idx-{{INDEX}}-banner-w"> w</label><br>
@@ -627,7 +629,7 @@ function addFormatHTML(impIndex) {
     const newFormatIdx = impBannerFormatObjectLastIndex;
     impBannerFormatObjectLastIndex++;
     const newFormat = createNodeFromString(['{{IMP-INDEX}}', '{{FORMAT-INDEX}}'], [impIndex, newFormatIdx], impBannerFormatTemplate);
-    document.getElementById('req-imp-idx-' + impIndex + '-banner-format-fieldset').insertBefore(newFormat, document.getElementById('add-fmt'));
+    document.getElementById('req-imp-idx-' + impIndex + '-banner-format-fieldset').insertBefore(newFormat, document.getElementById(`req-imp-idx-${impIndex}-add-fmt`));
     // add listener to input checkbox to parent and apply checkboxOnChange
     document.getElementById('req-imp-idx-' + impIndex + '-banner-format-fieldset').querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
@@ -742,6 +744,7 @@ function createImpsObject() {
                             const inputDataKey = key.replace('req-imp-banner-format', 'req-imp-idx-' + i + '-banner-format').replace('format-', 'format-idx-' + fidx + '-');
                             const element = document.getElementById(inputDataKey);
                             if (element && element.type === 'checkbox' && element.checked) {
+                                if (!inputData[inputDataKey]) continue;
                                 if (!imp["banner"]["format"]) {
                                     imp["banner"]["format"] = [];
                                 }
@@ -752,6 +755,7 @@ function createImpsObject() {
                                 imp["banner"]["format"][fidx][field] = inputData[inputDataKey];
                             }
                         }
+                        imp["banner"]["format"] = imp["banner"]["format"].filter(elem => Object.keys(elem).length !== 0);
                     }
                 });
                 break;
