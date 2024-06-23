@@ -53,9 +53,11 @@ SOFTWARE.
                 <button id="add-imp" type="button" onclick="addImpHTML()">Add Imp</button>
             </fieldset>
             <!-- End of Imps Object-->
-
+            <script>
+                addImpHTML(); // call it once by default since at least one Imp is required.
+            </script>
             <!-- Site Object-->
-            <label class="app-site-label"><input type="checkbox" id="req-site"> Site</label><br>
+            <label class="app-site-label"><input type="checkbox" id="req-site" checked> Site</label><br>
             <fieldset id="req-site-fieldset" style="display:none">
                 <legend>Site Attributes</legend>
                 <label><input type="checkbox" id="req-site-id" name="id" checked> id</label><br>
@@ -441,7 +443,7 @@ SOFTWARE.
     
     <div id="footer-bar"></div>
     <footer id="footer">
-        <p>Made in <span style="color: #1DA1F2;">🗽</span> New York <span>❤️</span>  <br> Suggestions, Bugs? <a href="https://github.com/bid-request/bid-request.github.io/issues">Create an issue here!</a> | v0.3.0</p>
+        <p>Made in <span style="color: #1DA1F2;">🗽</span> New York <span>❤️</span>  <br> Suggestions, Bugs? <a href="https://github.com/bid-request/bid-request.github.io/issues">Create an issue here!</a> | v0.4.0</p>
     </footer>
 </body>
 </html>

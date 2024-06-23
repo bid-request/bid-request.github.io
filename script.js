@@ -321,6 +321,7 @@ const defaultData = {
 };
 
 function dataConvert(element) {
+    if (!element) return null;
     let value = element.getAttribute('rtb-value');
     let valueType = element.getAttribute('rtb-type');
     try {
@@ -353,7 +354,6 @@ function checkboxOnChange(id) {
     const dataKey = checkbox.id.toString();
     const parent = checkbox.parentNode;
     const inputboxId = id + '-inputbox';   
-
     if (!checkbox.checked) {
         // attribute not selected. clear the rtb value
         if (checkbox.getAttribute('rtb-value')) {
@@ -423,7 +423,8 @@ function checkboxOnChange(id) {
 }
 
 function createNodeFromString(str, idx) {
-    str = str.replace(/{{INDEX}}/g, idx);
+    if (idx)
+        str = str.replace(/{{INDEX}}/g, idx);
     var temp = document.createElement('template');
     temp.innerHTML = str.trim();
     return temp.content;
@@ -448,7 +449,7 @@ const impTemplate =
 `
     <!-- Imp Object -->
     <fieldset id="req-imp-idx-{{INDEX}}">
-        <legend> Imp <img src="assets/circle-xmark-regular.svg" class="field-removal-btn" onclick="this.parentNode.parentNode.remove();"></legend>
+        <legend> Imp {{INDEX}} <img src="assets/circle-xmark-regular.svg" class="field-removal-btn" onclick="this.parentNode.parentNode.remove();"></legend>
         <fieldset id="req-imp-idx-{{INDEX}}-type-fieldset">
             <legend>Select Type</legend>
             <select id="req-imp-idx-{{INDEX}}-type-selection">
@@ -463,13 +464,7 @@ const impTemplate =
                 <!-- Banner Format Object-->
                 <label><input type="checkbox" name="format" value="format" id="req-imp-idx-{{INDEX}}-banner-format"> Format</label><br>
                 <fieldset id="req-imp-idx-{{INDEX}}-banner-format-fieldset" style="display:none">
-                    <legend>Format Attributes</legend>
-                    <label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{INDEX}}-banner-format-w"> w</label><br>
-                    <label><input type="checkbox" name="h" value="h" id="req-imp-idx-{{INDEX}}-banner-format-h"> h</label><br>
-                    <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{INDEX}}-banner-format-wratio"> wratio</label><br>
-                    <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-idx-{{INDEX}}-banner-format-hratio"> hratio</label><br>
-                    <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-idx-{{INDEX}}-banner-format-wmin"> wmin</label><br>
-                    <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-idx-{{INDEX}}-banner-format-ext"> ext</label><br>
+                    <button onclick="addFormatHTML({{INDEX}})" class="general-btn" type="button" id='req-imp-idx-{{INDEX}}-add-format-btn'>Add Format</button>
                 </fieldset>
                 <!-- End of Banner Format Object-->
                 <label><input type="checkbox" name="w" value="w" checked id="req-imp-idx-{{INDEX}}-banner-w"> w</label><br>
@@ -543,7 +538,7 @@ const impTemplate =
             </fieldset>
         </fieldset>
         <fieldset id="req-imp-idx-{{INDEX}}-fieldset">
-            <legend>Imp Attributes</legend>
+            <legend>Imp {{INDEX}} Attributes</legend>
             <label><input type="checkbox" name="id" checked disabled id="req-imp-idx-{{INDEX}}-id"> id</label><br>
             <!-- Metric Object-->
             <label><input type="checkbox" name="metric" id="req-imp-idx-{{INDEX}}-metric" class="rtb-object"> Metric</label><br>
@@ -558,18 +553,12 @@ const impTemplate =
             <label><input type="checkbox" name="pmp" id="req-imp-idx-{{INDEX}}-pmp"> Pmp</label><br>
             <!-- Pmp Object-->
             <fieldset id="req-imp-idx-{{INDEX}}-pmp-fieldset" style="display: none;">
+                <!-- Deals Object-->
+                <fieldset id="req-imp-idx-{{INDEX}}-pmp-deal-fieldset">
+                    <button onclick="addDealHTML({{INDEX}})" class="general-btn" type="button" id='req-imp-idx-{{INDEX}}-add-deal-btn'>Add Deal</button>
+                </fieldset>
                 <legend>Pmp Attributes</legend>
                 <label><input type="checkbox" name="private_auction" id="req-imp-idx-{{INDEX}}-pmp-private_auction" pre-defined-options="0,1"> private_auction</label><br>
-                <fieldset id="req-imp-idx-{{INDEX}}-pmp-deal-fieldset">
-                    <legend>Deal</legend>
-                    <label><input type="checkbox" name="id" id="req-imp-idx-{{INDEX}}-pmp-deal-id" checked disabled> id</label><br>
-                    <label><input type="checkbox" name="bidfloor" id="req-imp-idx-{{INDEX}}-pmp-deal-bidfloor"> bidfloor</label><br>
-                    <label><input type="checkbox" name="bidfloorcur" id="req-imp-idx-{{INDEX}}-pmp-deal-bidfloorcur"> bidfloorcur</label><br>
-                    <label><input type="checkbox" name="at" id="req-imp-idx-{{INDEX}}-pmp-deal-at" pre-defined-options="1,2,3"> at</label><br>
-                    <label><input type="checkbox" name="wseat" id="req-imp-idx-{{INDEX}}-pmp-deal-wseat"> wseat</label><br>
-                    <label><input type="checkbox" name="wadomain" id="req-imp-idx-{{INDEX}}-pmp-deal-wadomain"> wadomain</label><br>
-                    <label><input type="checkbox" name="ext" id="req-imp-idx-{{INDEX}}-pmp-deal-ext"> ext</label><br>
-                </fieldset>
                 <label><input type="checkbox" name="ext" id="req-imp-idx-{{INDEX}}-pmp-ext"> ext</label><br>
             </fieldset>
             <!-- End of Pmp Object-->
@@ -642,6 +631,58 @@ function addImpHTML() {
     document.getElementById('req-imp-idx-' + newImpIndex + '-id').setAttribute('rtb-value', newImpIndex);
 }
 
+let formatObjectLastIndex = -1;
+const formatTemplate = 
+`
+<fieldset id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-fieldset" style="display:none">
+<legend>Format Attributes <img src="assets/circle-xmark-regular.svg" class="field-removal-btn" onclick="this.parentNode.parentNode.remove();"></legend>
+<label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-w" checked> w</label><br>
+<label><input type="checkbox" name="h" value="h" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-h" checked> h</label><br>
+<label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-wratio"> wratio</label><br>
+<label><input type="checkbox" name="hmax" value="hmax" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-hratio"> hratio</label><br>
+<label><input type="checkbox" name="wmin" value="wmin" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-wmin"> wmin</label><br>
+<label><input type="checkbox" name="hmin" value="hmin" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-ext"> ext</label><br>
+</fieldset>
+`
+
+function addFormatHTML(impIdx) {
+    formatObjectLastIndex++;
+    let formatIdx = formatObjectLastIndex;
+    let newFormatNode = createNodeFromString(formatTemplate.replaceAll('{{IMPINDEX}}', impIdx).replaceAll('{{FORMATINDEX}}', formatIdx));
+    document.getElementById('req-imp-idx-' + impIdx + '-banner-format-fieldset')
+            .insertBefore(newFormatNode, document.getElementById('req-imp-idx-' + impIdx + '-add-format-btn'));
+    let formatFieldset = document.getElementById('req-imp-idx-' + impIdx + '-banner-format-idx-' + formatIdx + '-fieldset');
+    formatFieldset.style.display = 'block';
+    applyDefaultData('req-imp-idx-' + impIdx + '-banner-format-idx-' + formatIdx + '-fieldset');
+}
+
+let dealObjectLastIndex = -1;
+const dealTemplate =
+`
+<fieldset id="req-imp-idx-{{IMPINDEX}}-pmp-deal-idx-{{DEALINDEX}}-fieldset" style="display:none">
+<legend> Deal {{DEALINDEXDISPLAY}} <img src="assets/circle-xmark-regular.svg" class="field-removal-btn" onclick="this.parentNode.parentNode.remove();"></legend>
+<label><input type="checkbox" name="id" id="req-imp-idx-{{IMPINDEX}}-pmp-deal-idx-{{DEALINDEX}}-id" checked> id</label><br>
+<label><input type="checkbox" name="bidfloor" id="req-imp-idx-{{IMPINDEX}}-pmp-deal-idx-{{DEALINDEX}}-bidfloor"> bidfloor</label><br>
+<label><input type="checkbox" name="bidfloorcur" id="req-imp-idx-{{IMPINDEX}}-pmp-deal-idx-{{DEALINDEX}}-bidfloorcur"> bidfloorcur</label><br>
+<label><input type="checkbox" name="at" id="req-imp-idx-{{IMPINDEX}}-pmp-deal-idx-{{DEALINDEX}}-at" pre-defined-options="1,2,3"> at</label><br>
+<label><input type="checkbox" name="wseat" id="req-imp-idx-{{IMPINDEX}}-pmp-deal-idx-{{DEALINDEX}}-wseat"> wseat</label><br>
+<label><input type="checkbox" name="wadomain" id="req-imp-idx-{{IMPINDEX}}-pmp-deal-idx-{{DEALINDEX}}-wadomain"> wadomain</label><br>
+<label><input type="checkbox" name="ext" id="req-imp-idx-{{IMPINDEX}}-pmp-deal-idx-{{DEALINDEX}}-ext"> ext</label><br>
+</fieldset>
+`
+function addDealHTML(impIdx) {
+    dealObjectLastIndex++;
+    let dealIdx = dealObjectLastIndex;
+    let newDealNode = createNodeFromString(dealTemplate.replaceAll('{{IMPINDEX}}', impIdx).replaceAll('{{DEALINDEX}}', dealIdx).replaceAll('{{DEALINDEXDISPLAY}}', dealIdx + 1));
+    document.getElementById('req-imp-idx-' + impIdx + '-pmp-deal-fieldset')
+            .insertBefore(newDealNode, document.getElementById('req-imp-idx-' + impIdx + '-add-deal-btn'));
+    let dealFieldset = document.getElementById('req-imp-idx-' + impIdx + '-pmp-deal-idx-' + dealIdx + '-fieldset');
+    dealFieldset.style.display = 'block';
+    applyDefaultData('req-imp-idx-' + impIdx + '-pmp-deal-idx-' + dealIdx + '-fieldset');
+    document.getElementById('req-imp-idx-' + impIdx + '-pmp-deal-idx-' + dealIdx + '-id').setAttribute('rtb-value', 'openrtb-test-deal-idx-' + (dealIdx + 1));
+    document.getElementById('req-imp-idx-' + impIdx + '-pmp-deal-idx-' + dealIdx + '-id-inputbox').value = 'openrtb-test-deal-idx-' + (dealIdx + 1);
+}
+
 // Helper function, random string generator
 function stringRandom(id, length) {
     let result = '';
@@ -711,18 +752,20 @@ function createImpsObject() {
                     pmp['private_auction'] = dataConvert(document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').getAttribute('rtb-value'), document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').getAttribute('rtb-type'));
                 }
                 pmp["deals"] = [{}]; // currently only support 1 deal
-                // TODO: support multiple deals
-                deal = pmp["deals"][0];
-                Object.keys(defaultData).forEach(key => {
-                    if (key.startsWith('req-imp-pmp-deal-')) {
-                        const inputDataKey = key.replace('req-imp-pmp-deal-', 'req-imp-idx-' + i + '-pmp-deal-');
-                        const element = document.getElementById(inputDataKey);
-                        if (element && element.type === 'checkbox' && element.checked) {
-                            const [ ,field] = key.split('deal-');
-                            deal[field] = dataConvert(element);
+                for (let j = 0; j <= dealObjectLastIndex; j++) {
+                    if (!pmp["deals"][j]) pmp["deals"][j] = {};
+                    deal = pmp["deals"][j];
+                    Object.keys(defaultData).forEach(key => {
+                        if (key.startsWith('req-imp-pmp-deal-')) {
+                            const inputDataKey = key.replace('req-imp-pmp-deal-', 'req-imp-idx-' + i + '-pmp-deal-idx-' + j + '-');
+                            const element = document.getElementById(inputDataKey);
+                            if (element && element.type === 'checkbox' && element.checked) {
+                                const [ ,field] = key.split('deal-');
+                                deal[field] = dataConvert(element);
+                            }
                         }
-                    }
-                })
+                    })
+                }
             }
         });
         // Banner/Video/Audio Attributes
@@ -742,15 +785,23 @@ function createImpsObject() {
                             imp["banner"][field] = dataConvert(element);
                         }
                     }
+                    // format
                     if (key.startsWith('req-imp-banner-format')) {
-                        const inputDataKey = key.replace('req-imp-banner-format', 'req-imp-idx-' + i + '-banner-format');
-                        const element = document.getElementById(inputDataKey);
-                        if (element && element.type === 'checkbox' && element.checked) {
-                            if (!imp["banner"]["format"]) {
-                                imp["banner"]["format"] = [{}];
+                        // finding all configed format
+                        for (let j = 0; j <= formatObjectLastIndex; j++) { 
+                            // searching the added format under the current imp index i
+                            const inputDataKey = key.replace('req-imp-banner-format', `req-imp-idx-${i}-banner-format-idx-${j}`);
+                            const element = document.getElementById(inputDataKey);
+                            if (element && element.type === 'checkbox' && element.checked) {
+                                if (!imp["banner"]["format"]) {
+                                    imp["banner"]["format"] = [{}];
+                                }
+                                if (!imp["banner"]["format"][j]) {
+                                    imp["banner"]["format"][j] = {};
+                                }
+                                const [, field] = key.split('-format-');
+                                imp["banner"]["format"][j][field] = dataConvert(element);
                             }
-                            const [, field] = key.split('-format-');
-                            imp["banner"]["format"][0][field] = dataConvert(element);
                         }
                     }
                 });
@@ -785,6 +836,13 @@ function createImpsObject() {
                 break;
         }
 
+        // section to remove empty element generated during the loops
+        if (imp["banner"] && imp["banner"]["format"]) {
+            imp["banner"]["format"] = imp["banner"]["format"].filter(format => Object.keys(format).length !== 0);
+        }
+        if (imp["pmp"] && imp["pmp"]["deals"]) {
+            imp["pmp"]["deals"] = imp["pmp"]["deals"].filter(deal => Object.keys(deal).length !== 0); 
+        }
         imps.push(imp);
     }
     
