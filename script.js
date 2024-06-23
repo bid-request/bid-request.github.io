@@ -353,7 +353,6 @@ function checkboxOnChange(id) {
     const dataKey = checkbox.id.toString();
     const parent = checkbox.parentNode;
     const inputboxId = id + '-inputbox';   
-
     if (!checkbox.checked) {
         // attribute not selected. clear the rtb value
         if (checkbox.getAttribute('rtb-value')) {
@@ -463,13 +462,7 @@ const impTemplate =
                 <!-- Banner Format Object-->
                 <label><input type="checkbox" name="format" value="format" id="req-imp-idx-{{INDEX}}-banner-format"> Format</label><br>
                 <fieldset id="req-imp-idx-{{INDEX}}-banner-format-fieldset" style="display:none">
-                    <legend>Format Attributes</legend>
-                    <label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{INDEX}}-banner-format-w"> w</label><br>
-                    <label><input type="checkbox" name="h" value="h" id="req-imp-idx-{{INDEX}}-banner-format-h"> h</label><br>
-                    <label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{INDEX}}-banner-format-wratio"> wratio</label><br>
-                    <label><input type="checkbox" name="hmax" value="hmax" id="req-imp-idx-{{INDEX}}-banner-format-hratio"> hratio</label><br>
-                    <label><input type="checkbox" name="wmin" value="wmin" id="req-imp-idx-{{INDEX}}-banner-format-wmin"> wmin</label><br>
-                    <label><input type="checkbox" name="hmin" value="hmin" id="req-imp-idx-{{INDEX}}-banner-format-ext"> ext</label><br>
+                    <button onclick="addFormatHTML({{INDEX}})" class="general-btn" type="button" id='req-imp-idx-{{INDEX}}-add-format-btn'>Add Format</button>
                 </fieldset>
                 <!-- End of Banner Format Object-->
                 <label><input type="checkbox" name="w" value="w" checked id="req-imp-idx-{{INDEX}}-banner-w"> w</label><br>
@@ -642,6 +635,31 @@ function addImpHTML() {
     document.getElementById('req-imp-idx-' + newImpIndex + '-id').setAttribute('rtb-value', newImpIndex);
 }
 
+let formatObjectLastIndex = -1;
+const formatTemplate = 
+`
+<fieldset id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-fieldset" style="display:none">
+<legend>Format Attributes <img src="assets/circle-xmark-regular.svg" class="field-removal-btn" onclick="this.parentNode.parentNode.remove();"></legend>
+<label><input type="checkbox" name="w" value="w" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-w" checked> w</label><br>
+<label><input type="checkbox" name="h" value="h" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-h" checked> h</label><br>
+<label><input type="checkbox" name="wmax" value="wmax" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-wratio"> wratio</label><br>
+<label><input type="checkbox" name="hmax" value="hmax" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-hratio"> hratio</label><br>
+<label><input type="checkbox" name="wmin" value="wmin" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-wmin"> wmin</label><br>
+<label><input type="checkbox" name="hmin" value="hmin" id="req-imp-idx-{{IMPINDEX}}-banner-format-idx-{{FORMATINDEX}}-ext"> ext</label><br>
+</fieldset>
+`
+
+function addFormatHTML(impIdx) {
+    formatObjectLastIndex++;
+    let formatIdx = formatObjectLastIndex;
+    let newFormatNode = createNodeFromString(formatTemplate.replaceAll('{{IMPINDEX}}', impIdx).replaceAll('{{FORMATINDEX}}', formatIdx));
+    document.getElementById('req-imp-idx-' + impIdx + '-banner-format-fieldset')
+            .insertBefore(newFormatNode, document.getElementById('req-imp-idx-' + impIdx + '-add-format-btn'));
+    let formatFieldset = document.getElementById('req-imp-idx-' + impIdx + '-banner-format-idx-' + formatIdx + '-fieldset');
+    formatFieldset.style.display = 'block';
+    applyDefaultData('req-imp-idx-' + impIdx + '-banner-format-idx-' + formatIdx + '-fieldset');
+}
+
 // Helper function, random string generator
 function stringRandom(id, length) {
     let result = '';
@@ -742,15 +760,23 @@ function createImpsObject() {
                             imp["banner"][field] = dataConvert(element);
                         }
                     }
+                    // format
                     if (key.startsWith('req-imp-banner-format')) {
-                        const inputDataKey = key.replace('req-imp-banner-format', 'req-imp-idx-' + i + '-banner-format');
-                        const element = document.getElementById(inputDataKey);
-                        if (element && element.type === 'checkbox' && element.checked) {
-                            if (!imp["banner"]["format"]) {
-                                imp["banner"]["format"] = [{}];
+                        // finding all configed format
+                        for (let j = 0; j <= formatObjectLastIndex; j++) { 
+                            // searching the added format under the current imp index i
+                            const inputDataKey = key.replace('req-imp-banner-format', `req-imp-idx-${i}-banner-format-idx-${j}`);
+                            const element = document.getElementById(inputDataKey);
+                            if (element && element.type === 'checkbox' && element.checked) {
+                                if (!imp["banner"]["format"]) {
+                                    imp["banner"]["format"] = [{}];
+                                }
+                                if (!imp["banner"]["format"][j]) {
+                                    imp["banner"]["format"][j] = {};
+                                }
+                                const [, field] = key.split('-format-');
+                                imp["banner"]["format"][j][field] = dataConvert(element);
                             }
-                            const [, field] = key.split('-format-');
-                            imp["banner"]["format"][0][field] = dataConvert(element);
                         }
                     }
                 });
@@ -785,6 +811,10 @@ function createImpsObject() {
                 break;
         }
 
+        // section to remove empty element generated during the loops
+        if (imp["banner"] && imp["banner"]["format"]) {
+            imp["banner"]["format"] = imp["banner"]["format"].filter(format => Object.keys(format).length !== 0);
+        }
         imps.push(imp);
     }
     
