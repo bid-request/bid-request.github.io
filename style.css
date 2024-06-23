@@ -34,7 +34,23 @@
 }
 
 .general-btn {
-    margin-top: 0.5em;
+    margin-top: 0.2em;
+    background-color: #247b2e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.4em;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+input {
+    accent-color: #247b2e;
+}
+
+fieldset {
+    border-radius: 0.5ch;
+    border-width: 0.2ch;
 }
 
 @media (min-width: 960px) {
