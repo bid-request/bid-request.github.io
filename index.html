@@ -53,9 +53,11 @@ SOFTWARE.
                 <button id="add-imp" type="button" onclick="addImpHTML()">Add Imp</button>
             </fieldset>
             <!-- End of Imps Object-->
-
+            <script>
+                addImpHTML(); // call it once by default since at least one Imp is required.
+            </script>
             <!-- Site Object-->
-            <label class="app-site-label"><input type="checkbox" id="req-site"> Site</label><br>
+            <label class="app-site-label"><input type="checkbox" id="req-site" checked> Site</label><br>
             <fieldset id="req-site-fieldset" style="display:none">
                 <legend>Site Attributes</legend>
                 <label><input type="checkbox" id="req-site-id" name="id" checked> id</label><br>
