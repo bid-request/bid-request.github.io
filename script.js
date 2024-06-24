@@ -354,6 +354,45 @@ function checkboxOnChange(id) {
     const dataKey = checkbox.id.toString();
     const parent = checkbox.parentNode;
     const inputboxId = id + '-inputbox';   
+    const defaultKey = dataKey.replace(/-idx-\d+-/g, '-');
+    if (!defaultData.hasOwnProperty(defaultKey)) {
+        return;
+    } else {
+        checkbox.setAttribute('rtb-type', defaultData[defaultKey][0]);
+        // hover effect for the labels for rtb description
+        parent.addEventListener('mouseenter', function(event) {
+            // Create the pop-up box element
+            const popup = document.createElement('p');
+            popup.id = 'description-box-temp';
+            popup.textContent = defaultData[defaultKey][3];
+            popup.style.position = 'fixed';
+            popup.style.top = '0px';
+            popup.style.right = '1.5vh';
+            popup.style.padding = '0.5em';
+            popup.style.color = 'white';
+            popup.style.background = '#247b2e';
+            popup.style.border = '1px solid gray';
+            popup.style.borderRadius = '5px';
+            popup.style.zIndex = '9999';
+            popup.style.width = '20vw';
+            popup.style.boxShadow = '0px 2px 4px rgba(0, 0, 0, 0.2)';
+            // popup.style.height = 5 + (popup.textContent.length / 80) + 'ch';
+            popup.style.display = 'none';
+            // Append the pop-up box to the document body
+            document.body.appendChild(popup);
+
+            setTimeout(function() {
+                popup.style.display = 'block';
+            }, 1000);
+        });
+        parent.addEventListener('mouseout', function() {
+            if (document.getElementById('description-box-temp'))
+                document.getElementById('description-box-temp').remove();
+        })
+
+    }
+
+
     if (!checkbox.checked) {
         // attribute not selected. clear the rtb value
         if (checkbox.getAttribute('rtb-value')) {
@@ -366,18 +405,9 @@ function checkboxOnChange(id) {
     } else {
         // attribute selected. 
         // 1. check if inputData has the attribute:
-        //    - if yes, apply it to the inputbox
         //    - if not, apply the default value
         if (!checkbox.getAttribute('rtb-value')) {
-            // if defaultData also has no such attribute, return
-            // as this is not part of openRTB. Or it's not supported by this app yet.
-            let defaultKey = dataKey.replace(/-idx-\d+-/g, '-');
-            if (!defaultData.hasOwnProperty(defaultKey)) {
-                return;
-            } else {
-                checkbox.setAttribute('rtb-value', defaultData[defaultKey][2]);
-                checkbox.setAttribute('rtb-type', defaultData[defaultKey][0]);
-            }
+            checkbox.setAttribute('rtb-value', defaultData[defaultKey][2]);
         }
 
         // 2. apply the value to inputbox
