@@ -898,7 +898,7 @@ function createSiteObject() {
             if (key.startsWith('req-site-publisher-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
-                    const [, field] = key.split('-pubslisher-');
+                    const [, field] = key.split('-publisher-');
                     site["publisher"][field] = dataConvert(element);
                 }
             }
@@ -940,7 +940,7 @@ function createAppObject() {
             if (key.startsWith('req-app-publisher-')) {
                 const element = document.getElementById(key);
                 if (element && element.type === 'checkbox' && element.checked) {
-                    const [, field] = key.split('-pubslisher-');
+                    const [, field] = key.split('-publisher-');
                     app["publisher"][field] = dataConvert(element);
                 }
             }
