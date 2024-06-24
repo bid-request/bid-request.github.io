@@ -10,8 +10,8 @@
     transition: color 0.2s ease-in-out;
 }
 
-.input-default-value:hover {
-    color: darkblue;
+.input-value-box:hover {
+    color: #247b2e;
 }
 
 .input-refresh-btn {
