@@ -779,7 +779,7 @@ function createImpsObject() {
                 imp["pmp"] = {}
                 let pmp = imp["pmp"]
                 if (document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').checked) {
-                    pmp['private_auction'] = dataConvert(document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').getAttribute('rtb-value'), document.getElementById('req-imp-idx-' + i + '-pmp-private_auction').getAttribute('rtb-type'));
+                    pmp['private_auction'] = dataConvert(document.getElementById('req-imp-idx-' + i + '-pmp-private_auction'));
                 }
                 pmp["deals"] = [{}]; // currently only support 1 deal
                 for (let j = 0; j <= dealObjectLastIndex; j++) {
