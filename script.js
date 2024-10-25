@@ -294,6 +294,13 @@ const defaultData = {
     "req-user-geo-utcoffset": ["integer", false, -7, "integer | UTC offset."],
     "req-user-geo-ext": [ , , {}, ],
 
+    // User.Eids Object
+    "req-user-eid-source":  ["string", false, "example.com", "string | EID Source."],
+    "req-user-eid-uid-id":  ["string", false, "j8d1dkc0daegkcx0de", "string | EID UID ID."],
+    "req-user-eid-uid-atype":   ["integer", false, 2, "integer | EID UID Atype."],
+    "req-user-eid-uid-ext":  [ , , {}, ],
+    "req-user-eid-ext": [ , , {}, ],
+
     // PMP Object
     "req-imp-pmp-private_auction": ["integer", false, 1, "integer | Indicator of auction eligibility to seats named in the Direct Deals object, where 0 = all bids are accepted, 1 = bids are restricted to the deals specified and the terms thereof."], 
     "req-imp-pmp-ext": [ , , {}, ],
@@ -1010,7 +1017,34 @@ function createUserObject() {
                 user['geo'][field] = dataConvert(element);
             }
         }
+
+        // special case handling for user.eid top level attributes
+        if (key.startsWith('req-user-eid') && !key.startsWith('req-user-eid-uid') && document.getElementById('req-user-eids').checked) {
+            const element = document.getElementById(key);
+            if (element && element.type === 'checkbox' && element.checked) {
+                if (!user['eids']) user['eids'] = [];
+                // eid is an array, but we just want to support 1 for now
+                user['eids'][0] = {};
+                const eid = user['eids'][0];
+                const [, field] = key.split('-eid-');
+                eid[field] = dataConvert(element);
+            }
+        }
+        // special case handling for user.eid.uid attributes
+        if (key.startsWith('req-user-eid-uid') && document.getElementById('req-user-eids').checked) {
+            const element = document.getElementById(key);
+            if (element && element.type === 'checkbox' && element.checked) {
+                // user.eid and user.eid.uid are array, but we just want to support 1 for each now
+                // get the first element in eid, this has been created by above lines
+                const eid = user['eids'][0];
+                if (!eid['uids']) eid['uids'] = [{}];
+                const uid = eid['uids'][0];
+                const [, field] = key.split('-uid-');
+                uid[field] = dataConvert(element);
+            }
+        }
     })
+    console.log(user)
     return user;
 }
 

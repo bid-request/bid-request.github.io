@@ -366,6 +366,28 @@ SOFTWARE.
                     });
                 </script>
                 <!-- End of User.Geo Object-->
+                <!-- User.Eids Object-->
+                <label><input type="checkbox" id="req-user-eids" name="eids"> Eids</label><br>
+                <fieldset id="req-user-eids-fieldset" style="display:none">
+                    <legend>EID Attributes (Support 1 only)</legend>
+                    <label><input type="checkbox" id="req-user-eid-source" name="source"> source</label><br>
+                    <fieldset id="req-user-eid-uid-fieldset">
+                        <legend>UID Attributes (Support 1 only)</legend>
+                        <label><input type="checkbox" id="req-user-eid-uid-id" name="uid-id"> id</label><br>
+                        <label><input type="checkbox" id="req-user-eid-uid-atype" name="uid-atype"> atype</label><br>
+                        <label><input type="checkbox" id="req-user-eid-uid-ext" name="ext"> ext</label><br>
+                    </fieldset>
+                    <label><input type="checkbox" id="req-user-eid-ext" name="ext"> ext</label><br>
+                </fieldset>
+                <script>
+                    const userEidsCheckbox = document.getElementById('req-user-eids');
+                    const userEidsFieldset = document.getElementById('req-user-eids-fieldset');
+                    
+                    userEidsCheckbox.addEventListener('change', function() {
+                        userEidsFieldset.style.display = this.checked ? 'block' : 'none';
+                    });
+                </script>
+                <!-- End of User.Eids Object-->
                 <label><input type="checkbox" id="req-user-data" name="data"> data</label><br>
                 <label><input type="checkbox" id="req-user-ext" name="ext"> ext</label><br>
             </fieldset>
